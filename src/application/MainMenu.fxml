@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxWidth="400.0" prefHeight="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label prefHeight="100.0" prefWidth="61.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="Main Menu">
+         <VBox.margin>
+            <Insets left="165.0" />
+         </VBox.margin>
+      </Label>
+      <HBox prefHeight="40.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" text="Start">
+               <HBox.margin>
+                  <Insets left="175.0" />
+               </HBox.margin></Button>
+         </children>
+      </HBox>
+      <HBox prefHeight="40.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" text="Shop">
+               <HBox.margin>
+                  <Insets left="175.0" />
+               </HBox.margin></Button>
+         </children>
+      </HBox>
+      <HBox prefHeight="40.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" text="Upgrades">
+               <HBox.margin>
+                  <Insets left="165.0" />
+               </HBox.margin></Button>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets left="0.0" />
+   </padding>
+</VBox>
