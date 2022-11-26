@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 
@@ -17,8 +16,10 @@ public class Main extends Application {
 
 			FXMLLoader loader = new FXMLLoader();
 			VBox root = loader.load(new FileInputStream("src/application/MainMenu.fxml"));
-			Scene scene = new Scene(root,400,400);
+			MainMenuController controller = (MainMenuController)loader.getController();
+			controller.applicationStage = primaryStage;
 			
+			Scene scene = new Scene(root,400,400);			
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Main Menu");
 			primaryStage.show();

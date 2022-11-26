@@ -6,39 +6,48 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxWidth="400.0" prefHeight="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxWidth="400.0" prefHeight="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainMenuController">
    <children>
-      <Label prefHeight="100.0" prefWidth="61.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="Main Menu">
+      <Label prefHeight="33.0" prefWidth="61.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="Main Menu">
          <VBox.margin>
-            <Insets left="165.0" />
+            <Insets top="10.0" />
          </VBox.margin>
       </Label>
-      <HBox prefHeight="40.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" text="Start">
+            <Button fx:id="StartButton" mnemonicParsing="false" onAction="#startGame" text="Start">
                <HBox.margin>
-                  <Insets left="175.0" />
+                  <Insets left="0.0" />
                </HBox.margin></Button>
          </children>
       </HBox>
-      <HBox prefHeight="40.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" text="Shop">
+            <Button fx:id="ShopButton" mnemonicParsing="false" onAction="#goShop" text="Shop">
                <HBox.margin>
-                  <Insets left="175.0" />
+                  <Insets left="0.0" />
                </HBox.margin></Button>
          </children>
       </HBox>
-      <HBox prefHeight="40.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" text="Upgrades">
+            <Button fx:id="UpgradesButton" mnemonicParsing="false" onAction="#goUpgrades" text="Upgrades">
                <HBox.margin>
-                  <Insets left="165.0" />
+                  <Insets left="0.0" />
                </HBox.margin></Button>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="52.0" prefWidth="226.0">
+         <children>
+            <Label text="Enter Your Name:" />
+            <TextField fx:id="nameTextField" prefHeight="25.0" prefWidth="114.0" />
          </children>
       </HBox>
    </children>
    <padding>
       <Insets left="0.0" />
    </padding>
+   <opaqueInsets>
+      <Insets top="10.0" />
+   </opaqueInsets>
 </VBox>
