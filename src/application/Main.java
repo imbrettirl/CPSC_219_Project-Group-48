@@ -15,6 +15,7 @@ public class Main extends Application {
 		try {
 
 			FXMLLoader loader = new FXMLLoader();
+			
 			VBox root = loader.load(new FileInputStream("src/application/MainMenu.fxml"));
 			MainMenuController controller = (MainMenuController)loader.getController();
 			controller.applicationStage = primaryStage;

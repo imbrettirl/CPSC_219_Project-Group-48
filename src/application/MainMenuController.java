@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -83,6 +84,38 @@ public class MainMenuController {
     @FXML
     void goShop(ActionEvent event) {
     	System.out.println("Button Clicked");
+    	Scene mainScene = applicationStage.getScene();
+    	
+    	VBox mainScreenVbox = new VBox(10);
+    	
+    	VBox ItemNumber1VBox = new VBox(10);
+    	Button selectButton1 = new Button("Select");
+    	Label itemNumber1Label  = new Label("Item #1");
+
+
+    	VBox ItemNumber2VBox = new VBox(10);
+    	Button selectButton2 = new Button("Select");
+    	Label itemNumber2Label  = new Label("Item #2");
+    	
+    	VBox ItemNumber3VBox = new VBox(10);
+    	Button selectButton3 = new Button("Select");
+    	Label itemNumber3Label  = new Label("Item #3");
+    	
+    	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
+    	
+    	Button menuButton = new Button("Back to Menu");
+    	
+    	mainScreenVbox.getChildren().addAll(menuButton,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
+    	
+    	ItemNumber1VBox.getChildren().addAll(itemNumber1Label, selectButton1);
+    	ItemNumber2VBox.getChildren().addAll(itemNumber2Label, selectButton2);
+    	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,selectButton3,overallPurchaseLabel);
+    	
+    	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
+    	applicationStage.setScene(ShoppingScene);
+    
+    
+    	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
     }
 
     @FXML
