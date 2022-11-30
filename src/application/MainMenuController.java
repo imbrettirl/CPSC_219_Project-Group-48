@@ -63,7 +63,7 @@ public class MainMenuController {
     	int penergy = 100;
     	Player player = new Player(phealth, penergy);
     	
-    	String[] nameArray = {"BOB", "JACK", "CHRIS"};
+    	String[] nameArray = {"Bob", "Jack", "Chris"};
     	Random randomName = new Random();
     	int index = randomName.nextInt(nameArray.length);
     	String ename = nameArray[index];
