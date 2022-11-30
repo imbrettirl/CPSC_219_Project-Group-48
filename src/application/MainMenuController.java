@@ -1,6 +1,7 @@
 package application;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -23,6 +24,16 @@ public class MainMenuController {
 
     @FXML
     private Button StartButton;
+    
+    @FXML
+    private Button SelectButton1;
+    
+    @FXML
+    private Button SelectButton2;
+    
+    @FXML
+    private Button SelectButton3;
+    
     
     @FXML
     private TextField nameTextField;
@@ -89,19 +100,20 @@ public class MainMenuController {
     	VBox mainScreenVbox = new VBox(10);
     	
     	VBox ItemNumber1VBox = new VBox(10);
-    	Button selectButton1 = new Button("Select");
+    	Button selectButton1 = new Button("Add to Cart");
     	Label itemNumber1Label  = new Label("Item #1");
 
 
     	VBox ItemNumber2VBox = new VBox(10);
-    	Button selectButton2 = new Button("Select");
+    	Button selectButton2 = new Button("Add to Cart");
     	Label itemNumber2Label  = new Label("Item #2");
     	
     	VBox ItemNumber3VBox = new VBox(10);
-    	Button selectButton3 = new Button("Select");
+    	Button selectButton3 = new Button("Add to Cart");
     	Label itemNumber3Label  = new Label("Item #3");
     	
-    	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
+    	
+    	Label overallPurchaseLabel = new Label("Overall Purchase is: ");
     	
     	Button menuButton = new Button("Back to Menu");
     	
@@ -111,12 +123,18 @@ public class MainMenuController {
     	ItemNumber2VBox.getChildren().addAll(itemNumber2Label, selectButton2);
     	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,selectButton3,overallPurchaseLabel);
     	
+    	
+    	
+    	
+    	
     	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
     	applicationStage.setScene(ShoppingScene);
     
     
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
     }
+    
+    
 
     @FXML
     void goUpgrades(ActionEvent event) {
