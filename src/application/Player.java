@@ -3,6 +3,7 @@ package application;
 public class Player {
 	private int hp;
 	private int ep;
+	public int damage = 1;
 	
 	Player(int health, int energy) {
 		setHp(health);
