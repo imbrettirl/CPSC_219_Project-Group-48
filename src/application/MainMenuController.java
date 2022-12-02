@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.event.ActionEvent;
@@ -17,6 +18,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 public class MainMenuController {
+	private static final int numberOfItems = 0;
+
 	Stage applicationStage;
 
     @FXML
@@ -30,6 +33,18 @@ public class MainMenuController {
     
     @FXML
     private TextField nameTextField;
+    
+    @FXML
+    private TextField item1TextField;
+    
+    @FXML
+    private TextField item2TextField;
+    
+    @FXML
+    private TextField item3TextField;
+    
+    
+    
     
     
     @FXML
@@ -136,15 +151,17 @@ public class MainMenuController {
     	VBox ItemNumber1VBox = new VBox(10);
     	Button selectButton1 = new Button("Select");
     	Label itemNumber1Label  = new Label("Item #1");
-
+    	TextField item1TextField = new TextField();
 
     	VBox ItemNumber2VBox = new VBox(10);
     	Button selectButton2 = new Button("Select");
     	Label itemNumber2Label  = new Label("Item #2");
+    	TextField item2TextField = new TextField();
     	
     	VBox ItemNumber3VBox = new VBox(10);
     	Button selectButton3 = new Button("Select");
     	Label itemNumber3Label  = new Label("Item #3");
+    	TextField item3TextField = new TextField();
     	
     	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
     	
@@ -152,17 +169,49 @@ public class MainMenuController {
     	
     	mainScreenVbox.getChildren().addAll(menuButton,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
     	
-    	ItemNumber1VBox.getChildren().addAll(itemNumber1Label, selectButton1);
-    	ItemNumber2VBox.getChildren().addAll(itemNumber2Label, selectButton2);
-    	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,selectButton3,overallPurchaseLabel);
+    	ItemNumber1VBox.getChildren().addAll(itemNumber1Label,item1TextField, selectButton1);
+    	ItemNumber2VBox.getChildren().addAll(itemNumber2Label,item2TextField, selectButton2);
+    	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,item3TextField,selectButton3,overallPurchaseLabel);
     	
     	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
     	applicationStage.setScene(ShoppingScene);
-    
-    
+    	
+    	
+        
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
     }
-
+    
+    	
+    private void Action(ActionEvent event) {
+    	
+    	double totalPrice = 0.0;
+	String quantityEntered = item1TextField.getText();
+	 	
+		
+	}
+  
+//                 item 1 
+//    			   //health - 500
+//    			   //if health > 0 true
+//    			   //else "health points not enough
+//    		       
+//    		       System.out.println("You have clicked the button 1 " + count + " times");
+//    		       //total price = count*itemPrice
+//    		
+//    			   item 2
+//    			   //health - 300
+//    			   //if health > 0 true
+//    			   //else "health points not enough
+//    			   System.out.println("You have clicked the button 2 " + count + " times");
+//    			   //total price = count*itemPrice
+//    			   item 3
+//    			   //health - 200
+//    			   //if health > 0 true
+//    			   //else "health points not enough
+//    			   
+//    			  
+//    		
+//    		  
     @FXML
     void goUpgrades(ActionEvent event) {
     	System.out.println("Button Clicked");
