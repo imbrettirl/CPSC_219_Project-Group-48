@@ -66,6 +66,9 @@ public class MainMenuController {
 	int coins =0;
 	Label coinsEarned = new Label("Coins: " + coins);
 	
+	int xp =0;
+	Label xpEarned = new Label("EXP: "+xp);
+	
     @FXML
     void startGame(ActionEvent startGameEvent) {
     	Scene mainScene = applicationStage.getScene();
@@ -158,7 +161,7 @@ public class MainMenuController {
     	
     	// POSITIONING
     	startGameContainer.getChildren().addAll(menuButton, stats, options1, options2, moves);
-    	moves.getChildren().addAll(playerMove, enemyMove, coinsEarned);
+    	moves.getChildren().addAll(playerMove, enemyMove, coinsEarned, xpEarned);
     	itemBox.getChildren().addAll(itemsLabel, itemsChoiceBox, itemsButton);
     	options1.getChildren().addAll( attackButton, itemBox);
     	turnEnd.getChildren().addAll(endTurn);
@@ -192,6 +195,11 @@ public class MainMenuController {
     		coins += rand;
     		coinsEarned.setText("Coins: " + coins);
     		coinLabel.setText("Coins: "+ coins);
+    		Random randomXP = new Random();
+    		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
+    		xp += randXP;
+    		xpEarned.setText("EXP: "+xp);
+    		
     	}
     	else {
     		// enemies turn now, generates random value to decide enemies move
