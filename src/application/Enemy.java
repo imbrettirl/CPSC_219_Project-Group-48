@@ -7,6 +7,7 @@ public class Enemy {
 	private int hp;
 	private int ep;
 	private int enemyDamage;
+	private int energyDamage =3;
 	
 	Enemy(String name, int health, int energy) {
 		this.setName(name);
@@ -43,5 +44,9 @@ public class Enemy {
 		int rand = r.nextInt((5 - 1) + 1) + 1;
 		enemyDamage = rand;
 		return enemyDamage;
+	}
+
+	int getEnergyDamage() {
+		return energyDamage;
 	}
 }
