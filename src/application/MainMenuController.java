@@ -242,8 +242,8 @@ public class MainMenuController {
     	
     private void Action(ActionEvent event) {
     	
-    	double totalPrice = 0.0;
-	String quantityEntered = item1TextField.getText();
+    	//double totalPrice = 0.0;
+	    //String quantityEntered = item1TextField.getText();
 	 	
 		
 	}
