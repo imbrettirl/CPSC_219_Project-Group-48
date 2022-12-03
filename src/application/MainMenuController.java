@@ -1,7 +1,11 @@
 package application;
 
+
 import java.util.ArrayList;
+
 import java.util.Random;
+
+import javax.swing.JButton;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -47,12 +50,41 @@ public class MainMenuController {
     
     
     
+    Player player = new Player(10, 10);
+	Enemy enemy = new Enemy("test",10,10);
+    
+    private Button attackButton;
+    private Button specialAttackButton;
+	
+    //int phealth = 100;
+	//int penergy = 100;
+	
+	//Player player = new Player(phealth, penergy);
+	
+	//String[] nameArray = {"Bob", "Jack", "Chris"};
+	//Random randomName = new Random();
+	//int index = randomName.nextInt(nameArray.length);
+	//String ename = nameArray[index];
+	//int ehealth = 100;
+	//int eenergy = 100;
+	//Enemy enemy = new Enemy(ename, ehealth, eenergy);
+	
+	//int damageDelt = 0;
+	
+	Label playerMove = new Label("");
+	Label enemyMove = new Label("");
+	
+	Label playerHealthLabel = new Label("");
+	Label enemyHealthLabel = new Label("");
+	
     @FXML
     void startGame(ActionEvent startGameEvent) {
     	Scene mainScene = applicationStage.getScene();
     	
     	String playerName = nameTextField.getText();
-
+    	
+    	
+    	// WINDOW LAYOUT
     	System.out.println("Button Clicked");
     	// main container that contains all elements moving downwards
     	VBox startGameContainer = new VBox(10);
@@ -65,63 +97,56 @@ public class MainMenuController {
     	// next level after stats, contains the first set of options for player
     	HBox options1 = new HBox(10);
     	options1.setPadding(new Insets(30,0,0,25));
+    	options1.setAlignment(Pos.CENTER_LEFT);
     	HBox options2 = new HBox(10);
     	options2.setPadding(new Insets(0,0,0,25));
+    	options2.setAlignment(Pos.CENTER_LEFT);
     	HBox turnEnd = new HBox(0);
     	turnEnd.setPadding(new Insets(0,0,0,25));
     	VBox moves = new VBox(20);
     	moves.setPadding(new Insets(50,0,0,25));
     	Scene startGameScene = new Scene(startGameContainer, 400, 400);
-
+    	HBox itemBox = new HBox(5);
+    	itemBox.setPadding(new Insets(0,0,0,25));
     	
+    	// ALL PLAYER/ENEMY STATS 
+    	player.setHp(10);
+    	player.setEp(10);
     	
-    	int phealth = 100;
-    	int penergy = 100;
-    	Player player = new Player(phealth, penergy);
+    	enemy.setHp(10);
+    	enemy.setEp(10);
     	
-    	String[] nameArray = {"Bob", "Jack", "Chris"};
-    	Random randomName = new Random();
-    	int index = randomName.nextInt(nameArray.length);
-    	String ename = nameArray[index];
-    	int ehealth = 100;
-    	int eenergy = 100;
-    	Enemy enemy = new Enemy(ename, ehealth, eenergy);
-    	
-    	
+    	// ALL PLAYER/ENEMY STATS DISPLAY
     	Label enemyNameLabel = new Label("Enemy Name: " + enemy.getName());
-    	Label enemyHealthLabel = new Label("Enemy Health: " + enemy.getHp());
+    	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
      	Label enemyEnergyLabel = new Label("Enemy Energy: " + enemy.getEp());
     	Label playerNameLabel = new Label("Player Name: " + playerName);
-    	Label playerHealthLabel = new Label("Player Health: " + player.getHp());
+    	playerHealthLabel.setText("Player Health: " + player.getHp());
     	Label playerEnergyLabel = new Label("Player Energy: " + player.getEp());
     	applicationStage.setTitle("Started Game");
-    	    	
+    	
+    	// BACK TO MENU
     	Button menuButton = new Button("Back to Menu");
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
     	
     	//options1
-    	Label attackLabel = new Label("Attack");
-    	ChoiceBox<String> attackChoiceBox = new ChoiceBox<String>();
-    	attackChoiceBox.getItems().add("Basic Attack");
+    	this.attackButton = new Button("Attack");
+    	attackButton.setOnAction(attack -> attackEvent(attack));
     	
     	Label itemsLabel = new Label("Items");
+    	itemsLabel.setPadding(new Insets(5,0,0,0));
     	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
+    	Button itemsButton = new Button("Use Item");
     	
     	//options2
-    	Label specials = new Label("Specials");
-    	ChoiceBox<String> specialChoiceBox = new ChoiceBox<String>();
-    	specialChoiceBox.getItems().add("Basic Spell");
-    	
-    	Button endTurn = new Button("End Turn");
+    	this.specialAttackButton = new Button("Special Attack");
+    	Button endTurn = new Button("Do Nothing");
     	endTurn.setLayoutX(80);
     	
-    	
-    	Label playerMove = new Label("placeholder");
-    	Label enemyMove = new Label("placeholder");
     	playerMove.setLayoutX(20);
     	enemyMove.setLayoutX(20);
     	
-    	
+    	// MARGINS
     	VBox.setMargin(enemyNameLabel, new Insets(0,0,0,25));
     	VBox.setMargin(enemyHealthLabel, new Insets(0,0,0,25));
     	VBox.setMargin(enemyEnergyLabel, new Insets(0,0,0,25));
@@ -130,18 +155,51 @@ public class MainMenuController {
     	VBox.setMargin(playerHealthLabel, new Insets(0,0,0,25));
     	VBox.setMargin(playerEnergyLabel, new Insets(0,0,0,25));
     	
+    	// POSITIONING
     	startGameContainer.getChildren().addAll(menuButton, stats, options1, options2, moves);
     	moves.getChildren().addAll(playerMove, enemyMove);
-    	options1.getChildren().addAll(attackLabel, attackChoiceBox, itemsLabel, itemsChoiceBox);
+    	itemBox.getChildren().addAll(itemsLabel, itemsChoiceBox, itemsButton);
+    	options1.getChildren().addAll( attackButton, itemBox);
     	turnEnd.getChildren().addAll(endTurn);
-    	options2.getChildren().addAll(specials, specialChoiceBox, turnEnd);
+    	options2.getChildren().addAll(specialAttackButton, turnEnd);
     	enemyStats.getChildren().addAll(enemyNameLabel, enemyHealthLabel, enemyEnergyLabel);
     	playerStats.getChildren().addAll(playerNameLabel, playerHealthLabel, playerEnergyLabel);
     	stats.getChildren().addAll(playerStats, enemyStats);
     	applicationStage.setScene(startGameScene);
+
     }
 
-    @FXML
+    void attackEvent(ActionEvent attackEvent) {
+    	
+    	if (player.getHp() > 0 && enemy.getHp() > 0) {
+    	
+    	int damageTaken = enemy.getHp() - player.damage;
+    	enemy.setHp(damageTaken);
+    	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    	playerMove.setText("You did " + player.damage + " damage");
+    	
+    	if (enemy.getHp() <= 0) {
+    		playerMove.setText("You Won!");
+    		enemyMove.setText("");
+    	}
+    	else {
+    	int damageEnemy = player.getHp() - enemy.enemyDamage;
+    	player.setHp(damageEnemy);
+    	playerHealthLabel.setText("Player Health: " + player.getHp());
+    	enemyMove.setText("Enemy did " + enemy.enemyDamage + " damage");
+    	
+    	if (player.getHp() <=0) {
+    		enemyMove.setText("Enemy won!");
+    		playerMove.setText("");
+    			}
+    		}
+    	}
+    	else { playerMove.setText("Game is over, reset to start a new game");
+    		 enemyMove.setText("");
+    	}
+    }
+
+	@FXML
     void goShop(ActionEvent event) {
     	System.out.println("Button Clicked");
     	Scene mainScene = applicationStage.getScene();
@@ -216,5 +274,4 @@ public class MainMenuController {
     void goUpgrades(ActionEvent event) {
     	System.out.println("Button Clicked");
     }
-
 }
