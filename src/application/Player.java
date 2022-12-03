@@ -1,9 +1,11 @@
 package application;
 
+import java.util.Random;
+
 public class Player {
 	private int hp;
 	private int ep;
-	public int damage = 1;
+	private int damage;
 	
 	Player(int health, int energy) {
 		setHp(health);
@@ -24,6 +26,13 @@ public class Player {
 
 	void setEp(int ep) {
 		this.ep = ep;
+	}
+
+	public int getDamage() {
+		Random r = new Random();
+		int rand = r.nextInt((5 - 1) + 1) + 1;
+		damage = rand;
+		return damage;
 	}
 
 }

@@ -157,20 +157,20 @@ public class MainMenuController {
     	
     	if (player.getHp() > 0 && enemy.getHp() > 0) {
     	
-    	int damageTaken = enemy.getHp() - player.damage;
+    	int damageTaken = enemy.getHp() - player.getDamage();
     	enemy.setHp(damageTaken);
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
-    	playerMove.setText("You did " + player.damage + " damage");
+    	playerMove.setText("You did " + player.getDamage() + " damage");
     	
     	if (enemy.getHp() <= 0) {
     		playerMove.setText("You Won!");
     		enemyMove.setText("");
     	}
     	else {
-    	int damageEnemy = player.getHp() - enemy.enemyDamage;
+    	int damageEnemy = player.getHp() - enemy.getEnemyDamage();
     	player.setHp(damageEnemy);
     	playerHealthLabel.setText("Player Health: " + player.getHp());
-    	enemyMove.setText("Enemy did " + enemy.enemyDamage + " damage");
+    	enemyMove.setText("Enemy did " + enemy.getEnemyDamage() + " damage");
     	
     	if (player.getHp() <=0) {
     		enemyMove.setText("Enemy won!");
