@@ -36,6 +36,9 @@ public class MainMenuController {
     @FXML
     private Label coinLabel;
     
+    @FXML
+    private Label xpLabel;
+    
     
     Player player = new Player(10, 10);
 	Enemy enemy = new Enemy("",10,10);
@@ -199,6 +202,7 @@ public class MainMenuController {
     		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
     		xp += randXP;
     		xpEarned.setText("EXP: "+xp);
+    		xpLabel.setText("EXP: "+xp);
     		
     	}
     	else {
@@ -265,6 +269,11 @@ public class MainMenuController {
     	    		coins += rand;
     	    		coinsEarned.setText("Coins: " + coins);
     	    		coinLabel.setText("Coins: "+ coins);
+    	    		Random randomXP = new Random();
+    	    		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
+    	    		xp += randXP;
+    	    		xpEarned.setText("EXP: "+xp);
+    	    		xpLabel.setText("EXP: "+xp);
     	    	}
     	    	else {
     	    		Random r = new Random();

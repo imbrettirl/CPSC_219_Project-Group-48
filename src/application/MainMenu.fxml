@@ -44,6 +44,11 @@
          </children>
       </HBox>
       <Label fx:id="coinLabel" text="Coins: " />
+      <Label text="EXP: " fx:id="xpLabel">
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Label>
    </children>
    <padding>
       <Insets left="0.0" />
