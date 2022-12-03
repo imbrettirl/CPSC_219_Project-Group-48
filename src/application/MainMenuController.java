@@ -1,9 +1,6 @@
 package application;
 
-import java.awt.event.ActionListener;
 import java.util.Random;
-
-import javax.swing.JButton;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
