@@ -6,6 +6,7 @@ public class Player {
 	private int hp;
 	private int ep;
 	private int damage;
+	private int energyDamage = 3;
 	
 	Player(int health, int energy) {
 		setHp(health);
@@ -33,6 +34,10 @@ public class Player {
 		int rand = r.nextInt((5 - 1) + 1) + 1;
 		damage = rand;
 		return damage;
+	}
+
+	int getEnergyDamage() {
+		return energyDamage;
 	}
 
 }

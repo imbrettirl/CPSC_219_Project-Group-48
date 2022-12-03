@@ -59,6 +59,7 @@ public class MainMenuController {
 	Label enemyMove = new Label("");
 	
 	Label playerHealthLabel = new Label("");
+	Label playerEnergyLabel = new Label("");
 	Label enemyHealthLabel = new Label("");
 	
     @FXML
@@ -67,6 +68,8 @@ public class MainMenuController {
     	
     	String playerName = nameTextField.getText();
     	
+    	playerMove.setText("");
+    	enemyMove.setText("");
     	
     	// WINDOW LAYOUT
     	System.out.println("Button Clicked");
@@ -106,7 +109,7 @@ public class MainMenuController {
      	Label enemyEnergyLabel = new Label("Enemy Energy: " + enemy.getEp());
     	Label playerNameLabel = new Label("Player Name: " + playerName);
     	playerHealthLabel.setText("Player Health: " + player.getHp());
-    	Label playerEnergyLabel = new Label("Player Energy: " + player.getEp());
+    	playerEnergyLabel.setText("Player Energy: " + player.getEp());
     	applicationStage.setTitle("Started Game");
     	
     	// BACK TO MENU
@@ -124,6 +127,8 @@ public class MainMenuController {
     	
     	//options2
     	this.specialAttackButton = new Button("Special Attack");
+    	specialAttackButton.setOnAction(special -> specialAttack(special));
+    	
     	Button endTurn = new Button("Do Nothing");
     	endTurn.setLayoutX(80);
     	
@@ -158,29 +163,70 @@ public class MainMenuController {
     	if (player.getHp() > 0 && enemy.getHp() > 0) {
     	
     	int damageTaken = enemy.getHp() - player.getDamage();
+    	int damageDone = enemy.getHp() - damageTaken;
     	enemy.setHp(damageTaken);
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
-    	playerMove.setText("You did " + player.getDamage() + " damage");
+    	playerMove.setText("You did " + damageDone + " damage");
     	
     	if (enemy.getHp() <= 0) {
-    		playerMove.setText("You Won!");
-    		enemyMove.setText("");
+    		enemyMove.setText("You Won!");
+    		playerMove.setText("You did " + damageDone + " damage");
     	}
     	else {
     	int damageEnemy = player.getHp() - enemy.getEnemyDamage();
+    	int enemyDamageDone = player.getHp() - damageEnemy;
     	player.setHp(damageEnemy);
     	playerHealthLabel.setText("Player Health: " + player.getHp());
-    	enemyMove.setText("Enemy did " + enemy.getEnemyDamage() + " damage");
+    	enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
     	
     	if (player.getHp() <=0) {
     		enemyMove.setText("Enemy won!");
-    		playerMove.setText("");
+    		playerMove.setText("Enemy did " + enemyDamageDone + " damage");
     			}
     		}
     	}
     	else { playerMove.setText("Game is over, reset to start a new game");
     		 enemyMove.setText("");
     	}
+    }
+    
+    void specialAttack(ActionEvent specialAttackEvent) {
+    	
+    	if (player.getHp() > 0 && enemy.getHp() > 0) {
+    		
+    		if (player.getEp() >= 5) {
+    			
+    			int damageDone = enemy.getHp() - player.getEnergyDamage();
+    			enemy.setHp(damageDone);
+    			int energyUsed = player.getEp() - 5;
+    			player.setEp(energyUsed);
+    			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    			playerEnergyLabel.setText("Player Energy: " + player.getEp());
+    	    	playerMove.setText("You did " + player.getEnergyDamage() + " damage");
+    	    	
+    	    	if (enemy.getHp() <= 0) {
+    	    		playerMove.setText("You Won!");
+    	    		enemyMove.setText("");
+    	    	}
+    	    	else {
+    	    		int damageEnemy = player.getHp() - enemy.getEnemyDamage();
+    	        	player.setHp(damageEnemy);
+    	        	playerHealthLabel.setText("Player Health: " + player.getHp());
+    	        	enemyMove.setText("Enemy did " + enemy.getEnemyDamage() + " damage");
+    	        	
+    	        	if (player.getHp() <=0) {
+    	        		enemyMove.setText("Enemy won!");
+    	        		playerMove.setText("");
+    	        			}
+    	    		}
+    		}
+    		else {
+    			playerMove.setText("Not enough energy, choose another option");
+    		}
+    	}
+    	else { playerMove.setText("Game is over, reset to start a new game");
+		 enemyMove.setText("");
+    	} 
     }
 
 	@FXML
