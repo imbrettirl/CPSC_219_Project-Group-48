@@ -43,6 +43,7 @@
             <TextField fx:id="nameTextField" prefHeight="25.0" prefWidth="114.0" />
          </children>
       </HBox>
+      <Label fx:id="coinLabel" text="Coins: " />
    </children>
    <padding>
       <Insets left="0.0" />

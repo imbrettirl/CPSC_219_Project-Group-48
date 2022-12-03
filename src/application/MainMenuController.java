@@ -33,9 +33,12 @@ public class MainMenuController {
     @FXML
     private TextField nameTextField;
     
+    @FXML
+    private Label coinLabel;
+    
     
     Player player = new Player(10, 10);
-	Enemy enemy = new Enemy("test",10,10);
+	Enemy enemy = new Enemy("",10,10);
     
     private Button attackButton;
     private Button specialAttackButton;
@@ -44,11 +47,7 @@ public class MainMenuController {
 	//int penergy = 100;
 	
 	//Player player = new Player(phealth, penergy);
-	
-	//String[] nameArray = {"Bob", "Jack", "Chris"};
-	//Random randomName = new Random();
-	//int index = randomName.nextInt(nameArray.length);
-	//String ename = nameArray[index];
+    
 	//int ehealth = 100;
 	//int eenergy = 100;
 	//Enemy enemy = new Enemy(ename, ehealth, eenergy);
@@ -107,6 +106,13 @@ public class MainMenuController {
     	
     	enemy.setHp(10);
     	enemy.setEp(10);
+    	  
+        String[] nameArray = {"Bob", "Jack", "Chris", "Brett", "Nika"};
+    	Random randomName = new Random();
+    	int index = randomName.nextInt(nameArray.length);
+    	String ename = nameArray[index];
+    	
+    	enemy.setName(ename);
     	
     	// ALL PLAYER/ENEMY STATS DISPLAY
     	Label enemyNameLabel = new Label("Enemy Name: " + enemy.getName());
@@ -135,6 +141,7 @@ public class MainMenuController {
     	specialAttackButton.setOnAction(special -> specialAttack(special));
     	
     	Button endTurn = new Button("Do Nothing");
+    	endTurn.setOnAction(nothing -> doNothing(nothing));
     	endTurn.setLayoutX(80);
     	
     	playerMove.setLayoutX(20);
@@ -163,16 +170,20 @@ public class MainMenuController {
 
     }
 
+    // Random amount of damage between 1 and 5 dealt to enemy
     void attackEvent(ActionEvent attackEvent) {
     	
+    	// Checks to make sure player and enemy aren't dead, otherwise game has ended.
     	if (player.getHp() > 0 && enemy.getHp() > 0) {
     	
+    	// Player gets to go first, random number is generated as damage and dealt to enemy.
     	int damageTaken = enemy.getHp() - player.getDamage();
     	int damageDone = enemy.getHp() - damageTaken;
     	enemy.setHp(damageTaken);
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     	playerMove.setText("You did " + damageDone + " damage");
     	
+    	// If enemy dies, win game and coins
     	if (enemy.getHp() <= 0) {
     		enemyMove.setText("You Won!");
     		playerMove.setText("You did " + damageDone + " damage");
@@ -180,12 +191,14 @@ public class MainMenuController {
     		int rand = r.nextInt((5 - 1) + 1) + 1;
     		coins += rand;
     		coinsEarned.setText("Coins: " + coins);
+    		coinLabel.setText("Coins: "+ coins);
     	}
     	else {
-    		
+    		// enemies turn now, generates random value to decide enemies move
     		Random r = new Random();
     		int rand = r.nextInt((2 - 1) + 1) + 1;
     		
+    		// regular attack, random damage between 1-5
     		if (rand == 1) {
     		int damageEnemy = player.getHp() - enemy.getEnemyDamage();
     		int enemyDamageDone = player.getHp() - damageEnemy;
@@ -198,6 +211,7 @@ public class MainMenuController {
     				playerMove.setText("Enemy did " + enemyDamageDone + " damage");
     				}
     			}
+    		// energy attack, guaranteed 3 damage at the cost of 5 energy
     		else if (rand == 2 && enemy.getEp() >= 5){
     			int energyDamage = player.getHp() - enemy.getEnergyDamage();
     			int energyDamageDone = player.getHp() - energyDamage;
@@ -220,6 +234,7 @@ public class MainMenuController {
     	}
     }
     
+    // Guaranteed 3 damage attack at the cost of 5 energy
     void specialAttack(ActionEvent specialAttackEvent) {
     	
     	if (player.getHp() > 0 && enemy.getHp() > 0) {
@@ -235,23 +250,45 @@ public class MainMenuController {
     	    	playerMove.setText("You did " + player.getEnergyDamage() + " energy damage");
     	    	
     	    	if (enemy.getHp() <= 0) {
-    	    		playerMove.setText("You Won!");
-    	    		enemyMove.setText("");
+    	    		enemyMove.setText("You Won!");
+    	    		playerMove.setText("You did "+ player.getEnergyDamage() + " energy damage");
     	    		Random r = new Random();
     	    		int rand = r.nextInt((5 - 1) + 1) + 1;
     	    		coins += rand;
     	    		coinsEarned.setText("Coins: " + coins);
+    	    		coinLabel.setText("Coins: "+ coins);
     	    	}
     	    	else {
+    	    		Random r = new Random();
+    	    		int rand = r.nextInt((2 - 1) + 1) + 1;
+    	    		
+    	    		if (rand == 1) {
     	    		int damageEnemy = player.getHp() - enemy.getEnemyDamage();
-    	        	player.setHp(damageEnemy);
-    	        	playerHealthLabel.setText("Player Health: " + player.getHp());
-    	        	enemyMove.setText("Enemy did " + enemy.getEnemyDamage() + " damage");
-    	        	
-    	        	if (player.getHp() <=0) {
-    	        		enemyMove.setText("Enemy won!");
-    	        		playerMove.setText("");
-    	        			}
+    	    		int enemyDamageDone = player.getHp() - damageEnemy;
+    	    		player.setHp(damageEnemy);
+    	    		playerHealthLabel.setText("Player Health: " + player.getHp());
+    	    		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    	    	
+    	    			if (player.getHp() <=0) {
+    	    				enemyMove.setText("Enemy won!");
+    	    				playerMove.setText("Enemy did " + enemyDamageDone + " damage");
+    	    				}
+    	    			}
+    	    		else if (rand == 2 && enemy.getEp() >= 5){
+    	    			int energyDamage = player.getHp() - enemy.getEnergyDamage();
+    	    			int energyDamageDone = player.getHp() - energyDamage;
+    	    			int enemyEnergyUsed = enemy.getEp() - 5;
+    	    			enemy.setEp(enemyEnergyUsed);
+    	    			enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+    	    			player.setHp(energyDamage);
+    	    			playerHealthLabel.setText("Player Health: " + player.getHp());
+    	        		enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
+    	        		
+    	        		if (player.getHp() <=0) {
+    	    				enemyMove.setText("Enemy won!");
+    	    				playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
+    	    				}
+    	    			}
     	    		}
     		}
     		else {
@@ -262,7 +299,47 @@ public class MainMenuController {
 		 enemyMove.setText("");
     	} 
     }
-
+    
+    // Do nothing method, skips the players turn and lets the enemy attack
+    void doNothing(ActionEvent event) {
+    	Random r = new Random();
+		int rand = r.nextInt((2 - 1) + 1) + 1;
+		playerMove.setText("");
+		
+		if (player.getHp() > 0 && enemy.getHp() > 0) {
+		
+		if (rand == 1) {
+		int damageEnemy = player.getHp() - enemy.getEnemyDamage();
+		int enemyDamageDone = player.getHp() - damageEnemy;
+		player.setHp(damageEnemy);
+		playerHealthLabel.setText("Player Health: " + player.getHp());
+		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+	
+			if (player.getHp() <=0) {
+				enemyMove.setText("Enemy won!");
+				playerMove.setText("Enemy did " + enemyDamageDone + " damage");
+				}
+			}
+		else if (rand == 2 && enemy.getEp() >= 5){
+			int energyDamage = player.getHp() - enemy.getEnergyDamage();
+			int energyDamageDone = player.getHp() - energyDamage;
+			int enemyEnergyUsed = enemy.getEp() - 5;
+			enemy.setEp(enemyEnergyUsed);
+			enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+			player.setHp(energyDamage);
+			playerHealthLabel.setText("Player Health: " + player.getHp());
+    		enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
+    		
+    		if (player.getHp() <=0) {
+				enemyMove.setText("Enemy won!");
+				playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
+				}
+			}
+		} else { playerMove.setText("Game is over, reset to start a new game");
+		 enemyMove.setText("");
+		}
+    }
+    
 	@FXML
     void goShop(ActionEvent event) {
     	System.out.println("Button Clicked");
