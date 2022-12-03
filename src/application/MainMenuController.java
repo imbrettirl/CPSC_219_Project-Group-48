@@ -43,16 +43,6 @@ public class MainMenuController {
     private Button attackButton;
     private Button specialAttackButton;
 	
-    //int phealth = 100;
-	//int penergy = 100;
-	
-	//Player player = new Player(phealth, penergy);
-    
-	//int ehealth = 100;
-	//int eenergy = 100;
-	//Enemy enemy = new Enemy(ename, ehealth, eenergy);
-	
-	//int damageDelt = 0;
 	
 	Label playerMove = new Label("");
 	Label enemyMove = new Label("");
