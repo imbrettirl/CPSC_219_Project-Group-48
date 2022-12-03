@@ -55,8 +55,8 @@ public class MainMenuController {
 	
 	//int damageDelt = 0;
 	
-	Label playerMove = new Label("placeholder");
-	Label enemyMove = new Label("placeholder");
+	Label playerMove = new Label("");
+	Label enemyMove = new Label("");
 	
 	Label playerHealthLabel = new Label("");
 	Label enemyHealthLabel = new Label("");
@@ -154,16 +154,33 @@ public class MainMenuController {
     }
 
     void attackEvent(ActionEvent attackEvent) {
-    	System.out.print("attacked");
+    	
+    	if (player.getHp() > 0 && enemy.getHp() > 0) {
+    	
     	int damageTaken = enemy.getHp() - player.damage;
     	enemy.setHp(damageTaken);
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     	playerMove.setText("You did " + player.damage + " damage");
     	
+    	if (enemy.getHp() <= 0) {
+    		playerMove.setText("You Won!");
+    		enemyMove.setText("");
+    	}
+    	else {
     	int damageEnemy = player.getHp() - enemy.enemyDamage;
     	player.setHp(damageEnemy);
     	playerHealthLabel.setText("Player Health: " + player.getHp());
     	enemyMove.setText("Enemy did " + enemy.enemyDamage + " damage");
+    	
+    	if (player.getHp() <=0) {
+    		enemyMove.setText("Enemy won!");
+    		playerMove.setText("");
+    			}
+    		}
+    	}
+    	else { playerMove.setText("Game is over, reset to start a new game");
+    		 enemyMove.setText("");
+    	}
     }
 
 	@FXML
