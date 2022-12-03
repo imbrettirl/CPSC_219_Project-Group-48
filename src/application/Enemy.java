@@ -1,10 +1,13 @@
 package application;
 
+import java.util.Random;
+
 public class Enemy {
 	private String name;
 	private int hp;
 	private int ep;
-	public int enemyDamage = 1;
+	private int enemyDamage;
+	private int energyDamage =3;
 	
 	Enemy(String name, int health, int energy) {
 		this.setName(name);
@@ -34,5 +37,16 @@ public class Enemy {
 
 	void setName(String name) {
 		this.name = name;
+	}
+
+	public int getEnemyDamage() {
+		Random r = new Random();
+		int rand = r.nextInt((5 - 1) + 1) + 1;
+		enemyDamage = rand;
+		return enemyDamage;
+	}
+
+	int getEnergyDamage() {
+		return energyDamage;
 	}
 }
