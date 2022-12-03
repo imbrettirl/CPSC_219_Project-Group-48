@@ -6,8 +6,8 @@ public class ShoppingCart {
 	
 private	ArrayList<Item>  cart = new ArrayList<>();
 
-    private int itemCount;   
-    private double totalPrice;
+    public int itemCount;   
+    public double totalPrice;
     
     public ShoppingCart() {
     	

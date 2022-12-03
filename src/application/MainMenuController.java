@@ -200,7 +200,7 @@ public class MainMenuController {
     }
 
 	@FXML
-    void goShop(ActionEvent event) {
+    void goShop(ActionEvent shoppingEvent) {
     	System.out.println("Button Clicked");
     	Scene mainScene = applicationStage.getScene();
     	
@@ -233,37 +233,34 @@ public class MainMenuController {
     	
     	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
     	applicationStage.setScene(ShoppingScene);
-    	
-    	
-        
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
-    }
-    
     	
-    private void Action(ActionEvent event) {
+	}
+    	//if (totalPrice =< coins) {
+    		
+    	
     	
     	//double totalPrice = 0.0;
 	    //String quantityEntered = item1TextField.getText();
 	 	
 		
-	}
   
 //                 item 1 
 //    			   //health - 500
-//    			   //if health > 0 true
+//    			   //if coin > 0 
 //    			   //else "health points not enough
 //    		       
 //    		       System.out.println("You have clicked the button 1 " + count + " times");
 //    		       //total price = count*itemPrice
 //    		
 //    			   item 2
-//    			   //health - 300
-//    			   //if health > 0 true
+//    			   //coin - 300
+//    			   //if health > 0 
 //    			   //else "health points not enough
-//    			   System.out.println("You have clicked the button 2 " + count + " times");
+//    			   
 //    			   //total price = count*itemPrice
 //    			   item 3
-//    			   //health - 200
+//    			   //coin - 200
 //    			   //if health > 0 true
 //    			   //else "health points not enough
 //    			   
