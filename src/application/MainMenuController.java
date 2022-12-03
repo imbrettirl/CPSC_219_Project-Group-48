@@ -58,6 +58,7 @@ public class MainMenuController {
 	Label playerMove = new Label("placeholder");
 	Label enemyMove = new Label("placeholder");
 	
+	Label playerHealthLabel = new Label("");
 	Label enemyHealthLabel = new Label("");
 	
     @FXML
@@ -104,7 +105,7 @@ public class MainMenuController {
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
      	Label enemyEnergyLabel = new Label("Enemy Energy: " + enemy.getEp());
     	Label playerNameLabel = new Label("Player Name: " + playerName);
-    	Label playerHealthLabel = new Label("Player Health: " + player.getHp());
+    	playerHealthLabel.setText("Player Health: " + player.getHp());
     	Label playerEnergyLabel = new Label("Player Energy: " + player.getEp());
     	applicationStage.setTitle("Started Game");
     	
@@ -157,6 +158,12 @@ public class MainMenuController {
     	int damageTaken = enemy.getHp() - player.damage;
     	enemy.setHp(damageTaken);
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    	playerMove.setText("You did " + player.damage + " damage");
+    	
+    	int damageEnemy = player.getHp() - enemy.enemyDamage;
+    	player.setHp(damageEnemy);
+    	playerHealthLabel.setText("Player Health: " + player.getHp());
+    	enemyMove.setText("Enemy did " + enemy.enemyDamage + " damage");
     }
 
 	@FXML

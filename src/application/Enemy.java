@@ -4,6 +4,7 @@ public class Enemy {
 	private String name;
 	private int hp;
 	private int ep;
+	public int enemyDamage = 1;
 	
 	Enemy(String name, int health, int energy) {
 		this.setName(name);
