@@ -62,7 +62,6 @@ public class MainMenuController {
 	Label enemyHealthLabel = new Label("");
 	Label enemyEnergyLabel = new Label("");
 	
-	
 	int coins =0;
 	Label coinsEarned = new Label("Coins: " + coins);
 	
