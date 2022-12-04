@@ -30,10 +30,19 @@ public class Player {
 	}
 
 	public int getDamage() {
-		Random r = new Random();
-		int rand = r.nextInt((5 - 1) + 1) + 1;
-		damage = rand;
-		return damage;
+		Random dodge = new Random();
+		int dodgeChance = dodge.nextInt((10-1)+1)+1;
+		if (dodgeChance > 1) {
+			Random r = new Random();
+			int rand = r.nextInt((5 - 1) + 1) + 1;
+			damage = rand;
+			return damage;
+		}
+		else {
+			damage = 0;
+			return damage;
+		}
+		
 	}
 
 	int getEnergyDamage() {

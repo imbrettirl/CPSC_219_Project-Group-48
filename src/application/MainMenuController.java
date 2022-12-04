@@ -187,7 +187,12 @@ public class MainMenuController {
     	int damageDone = enemy.getHp() - damageTaken;
     	enemy.setHp(damageTaken);
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    	if (damageDone > 0) {
     	playerMove.setText("You did " + damageDone + " damage");
+    	}
+    	else {
+    		playerMove.setText("Your attack missed, you did 0 damage");
+    	}
     	
     	// If enemy dies, win game and coins
     	if (enemy.getHp() <= 0) {
@@ -216,7 +221,12 @@ public class MainMenuController {
     		int enemyDamageDone = player.getHp() - damageEnemy;
     		player.setHp(damageEnemy);
     		playerHealthLabel.setText("Player Health: " + player.getHp());
-    		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    		if (enemyDamageDone > 0) {
+    			enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    		} else {
+        		enemyMove.setText("Enemy attack missed, 0 damage taken");
+
+    		}
     	
     			if (player.getHp() <=0) {
     				enemyMove.setText("Enemy won!");
@@ -284,7 +294,12 @@ public class MainMenuController {
     	    		int enemyDamageDone = player.getHp() - damageEnemy;
     	    		player.setHp(damageEnemy);
     	    		playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    	    		if (enemyDamageDone > 0) {
+    	    			enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    	    		} else {
+    	        		enemyMove.setText("Enemy attack missed, 0 damage taken");
+
+    	    		}
     	    	
     	    			if (player.getHp() <=0) {
     	    				enemyMove.setText("Enemy won!");

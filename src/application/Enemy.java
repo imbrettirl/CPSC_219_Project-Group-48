@@ -40,10 +40,18 @@ public class Enemy {
 	}
 
 	public int getEnemyDamage() {
-		Random r = new Random();
-		int rand = r.nextInt((5 - 1) + 1) + 1;
-		enemyDamage = rand;
-		return enemyDamage;
+		Random dodge = new Random();
+		int dodgeChance = dodge.nextInt((10-1)+1)+1;
+		if (dodgeChance > 1) {
+			Random r = new Random();
+			int rand = r.nextInt((5 - 1) + 1) + 1;
+			enemyDamage = rand;
+			return enemyDamage;
+		}
+		else {
+			enemyDamage = 0;
+			return enemyDamage;
+		}
 	}
 
 	int getEnergyDamage() {
