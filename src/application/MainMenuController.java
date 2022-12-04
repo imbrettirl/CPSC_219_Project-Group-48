@@ -221,7 +221,12 @@ public class MainMenuController {
     		int enemyDamageDone = player.getHp() - damageEnemy;
     		player.setHp(damageEnemy);
     		playerHealthLabel.setText("Player Health: " + player.getHp());
-    		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    		if (enemyDamageDone > 0) {
+    			enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    		} else {
+        		enemyMove.setText("Enemy attack missed, 0 damage taken");
+
+    		}
     	
     			if (player.getHp() <=0) {
     				enemyMove.setText("Enemy won!");
@@ -289,7 +294,12 @@ public class MainMenuController {
     	    		int enemyDamageDone = player.getHp() - damageEnemy;
     	    		player.setHp(damageEnemy);
     	    		playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    	    		if (enemyDamageDone > 0) {
+    	    			enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    	    		} else {
+    	        		enemyMove.setText("Enemy attack missed, 0 damage taken");
+
+    	    		}
     	    	
     	    			if (player.getHp() <=0) {
     	    				enemyMove.setText("Enemy won!");
