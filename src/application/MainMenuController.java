@@ -69,7 +69,13 @@ public class MainMenuController {
 	int coins =0;
 	Label coinsEarned = new Label("Coins: " + coins);
 	
+	int healthMultiplier;
+	int energyMultiplier;
+	int damageMultiplier;
+	int enemyDamage;
+	
 	int xp =0;
+	ExperiencePoints experience = new ExperiencePoints(xp);
 	Label xpEarned = new Label("EXP: "+xp);
 	
     @FXML
@@ -107,11 +113,58 @@ public class MainMenuController {
     	itemBox.setPadding(new Insets(0,0,0,25));
     	
     	// ALL PLAYER/ENEMY STATS 
-    	player.setHp(10);
-    	player.setEp(10);
+    	player.setHp(10 + (5 * healthMultiplier));
+    	player.setEp(10 + (5 * energyMultiplier));
     	
-    	enemy.setHp(10);
-    	enemy.setEp(10);
+    	// Checking if player has upgraded at ALL
+    	if (healthMultiplier == 0 && energyMultiplier == 0 && damageMultiplier == 0) {
+    		System.out.print("default setup");
+    		enemy.setHp(10);
+    		enemy.setEp(10);
+    	}
+    	else if (healthMultiplier <= 1 && energyMultiplier <= 1 && damageMultiplier <= 1){
+    		Random rng = new Random();
+    		int eu = rng.nextInt((3-1)+1)+1;
+    		if (eu == 1) {
+    			System.out.print("enemyhealthupgraded");
+    			enemy.setHp(10 + (5 * 1));
+    			enemy.setEp(10);
+    		}
+    		else if (eu == 2) {
+    			System.out.print("enemyenergyupgraded");
+    			enemy.setEp(10 + (5 * 1));
+    			enemy.setHp(10);
+    		}
+    		else if (eu == 3) {
+    			System.out.print("enemydamageupgraded");
+    			enemy.setHp(10);
+    			enemy.setEp(10);
+    			enemyDamage = 1;
+    		}
+    	}
+    	// Picks a random stat to boost
+    	else {
+    		Random rng = new Random();
+    		int eu = rng.nextInt((3-1)+1)+1;
+    		if (eu == 1) {
+    			System.out.print("bighealthboost");
+    			enemy.setHp(10 + (10 * damageMultiplier));
+    			enemy.setEp(10 + (5 * energyMultiplier));
+    			enemyDamage = healthMultiplier /2;
+    		}
+    		else if (eu == 2) {
+    			System.out.print("bigenergyboost");
+    			enemy.setEp(10 + (10 * energyMultiplier));
+    			enemy.setHp(10+ (5 * damageMultiplier));
+    			enemyDamage = healthMultiplier;
+    		}
+    		else if (eu == 3) {
+    			System.out.print("bigattackboost");
+    			enemy.setHp(10+ (2 * damageMultiplier));
+    			enemy.setEp(10+ (3 * energyMultiplier));
+    			enemyDamage = healthMultiplier * 2;
+    		}
+    	}
     	  
         String[] nameArray = {"Bob", "Jack", "Chris", "Brett", "Nika"};
     	Random randomName = new Random();
@@ -183,7 +236,7 @@ public class MainMenuController {
     	if (player.getHp() > 0 && enemy.getHp() > 0) {
     	
     	// Player gets to go first, random number is generated as damage and dealt to enemy.
-    	int damageTaken = enemy.getHp() - player.getDamage();
+    	int damageTaken = enemy.getHp() - (player.getDamage() + damageMultiplier);
     	int damageDone = enemy.getHp() - damageTaken;
     	enemy.setHp(damageTaken);
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
@@ -205,9 +258,12 @@ public class MainMenuController {
     		coinLabel.setText("Coins: "+ coins);
     		Random randomXP = new Random();
     		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
+    		System.out.print("random = "+randXP);
     		xp += randXP;
-    		xpEarned.setText("EXP: "+xp);
-    		xpLabel.setText("EXP: "+xp);
+    		System.out.print("xp ="+xp);
+    		experience.setXp(xp);
+    		xpEarned.setText("EXP: "+experience.getXp());
+    		xpLabel.setText("EXP: "+experience.getXp());
     		
     	}
     	else {
@@ -217,7 +273,7 @@ public class MainMenuController {
     		
     		// regular attack, random damage between 1-5
     		if (rand == 1) {
-    		int damageEnemy = player.getHp() - enemy.getEnemyDamage();
+    		int damageEnemy = player.getHp() - (enemy.getEnemyDamage() + enemyDamage);
     		int enemyDamageDone = player.getHp() - damageEnemy;
     		player.setHp(damageEnemy);
     		playerHealthLabel.setText("Player Health: " + player.getHp());
@@ -235,7 +291,7 @@ public class MainMenuController {
     			}
     		// energy attack, guaranteed 3 damage at the cost of 5 energy
     		else if (rand == 2 && enemy.getEp() >= 5){
-    			int energyDamage = player.getHp() - enemy.getEnergyDamage();
+    			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
     			int energyDamageDone = player.getHp() - energyDamage;
     			int energyUsed = enemy.getEp() - 5;
     			enemy.setEp(energyUsed);
@@ -263,17 +319,18 @@ public class MainMenuController {
     		
     		if (player.getEp() >= 5) {
     			
-    			int damageDone = enemy.getHp() - player.getEnergyDamage();
+    			int damageDone = enemy.getHp() - (player.getEnergyDamage() + damageMultiplier);
+    			int damageDelt = enemy.getHp() - damageDone;
     			enemy.setHp(damageDone);
     			int energyUsed = player.getEp() - 5;
     			player.setEp(energyUsed);
     			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     			playerEnergyLabel.setText("Player Energy: " + player.getEp());
-    	    	playerMove.setText("You did " + player.getEnergyDamage() + " energy damage");
+    	    	playerMove.setText("You did " + damageDelt + " energy damage");
     	    	
     	    	if (enemy.getHp() <= 0) {
     	    		enemyMove.setText("You Won!");
-    	    		playerMove.setText("You did "+ player.getEnergyDamage() + " energy damage");
+    	    		playerMove.setText("You did "+ damageDelt + " energy damage");
     	    		Random r = new Random();
     	    		int rand = r.nextInt((5 - 1) + 1) + 1;
     	    		coins += rand;
@@ -282,15 +339,16 @@ public class MainMenuController {
     	    		Random randomXP = new Random();
     	    		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
     	    		xp += randXP;
-    	    		xpEarned.setText("EXP: "+xp);
-    	    		xpLabel.setText("EXP: "+xp);
+    	    		experience.setXp(xp);
+    	    		xpEarned.setText("EXP: "+experience.getXp());
+    	    		xpLabel.setText("EXP: "+experience.getXp());
     	    	}
     	    	else {
     	    		Random r = new Random();
     	    		int rand = r.nextInt((2 - 1) + 1) + 1;
     	    		
     	    		if (rand == 1) {
-    	    		int damageEnemy = player.getHp() - enemy.getEnemyDamage();
+    	    		int damageEnemy = player.getHp() - (enemy.getEnemyDamage()+enemyDamage);
     	    		int enemyDamageDone = player.getHp() - damageEnemy;
     	    		player.setHp(damageEnemy);
     	    		playerHealthLabel.setText("Player Health: " + player.getHp());
@@ -307,7 +365,7 @@ public class MainMenuController {
     	    				}
     	    			}
     	    		else if (rand == 2 && enemy.getEp() >= 5){
-    	    			int energyDamage = player.getHp() - enemy.getEnergyDamage();
+    	    			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
     	    			int energyDamageDone = player.getHp() - energyDamage;
     	    			int enemyEnergyUsed = enemy.getEp() - 5;
     	    			enemy.setEp(enemyEnergyUsed);
@@ -341,7 +399,7 @@ public class MainMenuController {
 		if (player.getHp() > 0 && enemy.getHp() > 0) {
 		
 		if (rand == 1) {
-		int damageEnemy = player.getHp() - enemy.getEnemyDamage();
+		int damageEnemy = player.getHp() - (enemy.getEnemyDamage()+enemyDamage);
 		int enemyDamageDone = player.getHp() - damageEnemy;
 		player.setHp(damageEnemy);
 		playerHealthLabel.setText("Player Health: " + player.getHp());
@@ -353,7 +411,7 @@ public class MainMenuController {
 				}
 			}
 		else if (rand == 2 && enemy.getEp() >= 5){
-			int energyDamage = player.getHp() - enemy.getEnergyDamage();
+			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
 			int energyDamageDone = player.getHp() - energyDamage;
 			int enemyEnergyUsed = enemy.getEp() - 5;
 			enemy.setEp(enemyEnergyUsed);
@@ -439,9 +497,106 @@ public class MainMenuController {
 //    			   
 //    			  
 //    		
-//    		  
+//    	
+	
+	
+	Label xpUpgrade = new Label("EXP: "+ experience.getXp());
+	Label description = new Label("placeholder");
+	
     @FXML
     void goUpgrades(ActionEvent event) {
+    	
+    	Scene mainScene = applicationStage.getScene();
+    	
+    	
+    	// WINDOW LAYOUT
     	System.out.println("Button Clicked");
+    	VBox mainContainer = new VBox(10);
+    	HBox topContainer = new HBox(10);
+    	HBox secondaryUpgradeContainer = new HBox(10);
+    	HBox cost = new HBox(40);
+    	cost.setPadding(new Insets(0,0,0,10));
+    	Scene startGameScene = new Scene(mainContainer, 350, 150);
+    	
+    	Button healthUpgrade = new Button("Increase Health");
+    	healthUpgrade.setOnAction(health -> healthIncrease(health));
+    	Button damageUpgrade = new Button("Increase Damage");
+    	damageUpgrade.setOnAction(damage -> damageIncrease(damage));
+    	Button energyUpgrade = new Button("Increase Energy");
+    	energyUpgrade.setOnAction(energy -> energyIncrease(energy));
+    	
+    	Label healthLabel = new Label("Cost: 15 EXP");
+    	Label damageLabel = new Label("Cost: 30 EXP");
+    	Label energyLabel = new Label("   Cost: 20 EXP");
+    	
+    	xpUpgrade.setText("EXP: "+ experience.getXp());
+    	xpUpgrade.setPadding(new Insets(5,0,0,0));
+    	description.setText("");
+    	
+    	// BACK TO MENU
+    	Button menuButton = new Button("Back to Menu");
+    	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));    	
+    	    	   	
+    	// POSITIONING
+    	mainContainer.getChildren().addAll(topContainer, secondaryUpgradeContainer, cost, description);
+    	topContainer.getChildren().addAll(menuButton, xpUpgrade);
+    	cost.getChildren().addAll(healthLabel, energyLabel, damageLabel);
+    	secondaryUpgradeContainer.getChildren().addAll(healthUpgrade, energyUpgrade, damageUpgrade);
+    	applicationStage.setScene(startGameScene);
+
+    }
+    
+    void healthIncrease(ActionEvent event) {
+    	if (experience.getXp() >= 15) {
+    	int xpLeft = experience.getXp() - 15;
+    	experience.setXp(xpLeft);
+    	xpUpgrade.setText("EXP: "+xpLeft);
+    	xp = xpLeft;
+    	
+    	xpEarned.setText("EXP: "+experience.getXp());
+		xpLabel.setText("EXP: "+experience.getXp());
+    	
+    	healthMultiplier +=1;
+    	description.setText("Health has been increased by 5!");
+    	}
+    	else {
+    		description.setText("Not enough EXP");
+    	}
+    }
+    
+    void energyIncrease(ActionEvent event) {
+    	if (experience.getXp() >= 20) {
+    	int xpLeft = experience.getXp() - 20;
+    	experience.setXp(xpLeft);
+    	xpUpgrade.setText("EXP: "+xpLeft);
+    	xp = xpLeft;
+    	
+    	xpEarned.setText("EXP: "+experience.getXp());
+		xpLabel.setText("EXP: "+experience.getXp());
+    	
+    	energyMultiplier +=1;
+    	description.setText("Energy has been increased by 5!");
+    	}
+    	else {
+    		description.setText("Not enough EXP");
+    	}
+    }
+    
+    void damageIncrease(ActionEvent event) {
+    	if (experience.getXp() >= 30) {
+    	int xpLeft = experience.getXp() - 30;
+    	experience.setXp(xpLeft);
+    	xpUpgrade.setText("EXP: "+xpLeft);
+    	xp = xpLeft;
+    	
+    	xpEarned.setText("EXP: "+experience.getXp());
+		xpLabel.setText("EXP: "+experience.getXp());
+    	
+    	damageMultiplier +=1;
+    	description.setText("Damage has been increased by 1!");
+    	}
+    	else {
+    		description.setText("Not enough EXP");
+    	}
     }
 }
