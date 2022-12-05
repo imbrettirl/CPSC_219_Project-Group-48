@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ShoppingCart {
 	
-private	ArrayList<Item>  cart = new ArrayList<>();
+private	ArrayList<Weapon>  cart = new ArrayList<>();
 
     public int itemCount;   
     public double totalPrice;
@@ -15,7 +15,7 @@ private	ArrayList<Item>  cart = new ArrayList<>();
         totalPrice = 0.0;
     }
 
-    public void addToCart(Item item, int quantityEntered) {
+    public void addToCart(Weapon item, int quantityEntered) {
     for (int i = 0;i<quantityEntered; i++) {
     		cart.add(item);
     		 totalPrice += (item.getPrice());

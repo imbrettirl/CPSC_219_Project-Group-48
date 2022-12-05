@@ -1,13 +1,13 @@
 package application;
 
-public class Item {
+public class Weapon {
 	
 	    private String name;
 	    private double price;
 	  
 
 	  
-	    public Item (String itemName, double itemPrice) {
+	    public Weapon (String itemName, double itemPrice) {
 	    	name = itemName;
 	    	price = itemPrice;
 
