@@ -48,5 +48,7 @@ public class Player {
 	int getEnergyDamage() {
 		return energyDamage;
 	}
-
+	void energyUse() {
+		this.ep = this.ep - 5;
+	}
 }

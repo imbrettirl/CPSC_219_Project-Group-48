@@ -274,7 +274,8 @@ public class MainMenuController {
 
     		}
     		else {
-    			if (enemy.getDecider() == 1) {
+    			int choice = enemy.getDecider();
+    			if (choice == 1) {
     				player.setHp(pAttack.enemyAttack());
     				playerHealthLabel.setText("Player Health: " + player.getHp());
     				if (pAttack.getEnemyDamage() > 0) {
@@ -287,7 +288,7 @@ public class MainMenuController {
     					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
     					}
     			}
-    			else if (enemy.getDecider() == 2 && enemy.getEp() >=5) {
+    			else if (choice == 2 && enemy.getEp() >=5) {
     				player.setHp(pAttack.enemyEnergyAttack());
     				playerHealthLabel.setText("Player Health: " + player.getHp());
     				enemy.energyUse();
@@ -310,8 +311,62 @@ public class MainMenuController {
     // Guaranteed 3 damage attack at the cost of 5 energy
     void specialAttack(ActionEvent specialAttackEvent) {
     	
-    	if (player.getHp() > 0 && enemy.getHp() > 0) {
-    	
+    	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+    	if (pAttack.win == false) {
+    		if (player.getEp() >= 5) {
+    			enemy.setHp(pAttack.energyAttack());
+    			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    			player.energyUse();
+    			playerEnergyLabel.setText("Player Energy: " + player.getEp());
+    			playerMove.setText("You did " + player.getEnergyDamage() + " energy damage");
+    			
+    			if (enemy.getHp() <= 0) {
+    				enemyMove.setText("You Won!");
+    	    		playerMove.setText("You did "+ player.getEnergyDamage() + " energy damage");
+    				
+    	    		Coins coinReward = new Coins(coins);
+    	    		coins = coinReward.getCoins();
+    	    		coinsEarned.setText("Coins: " + coins);
+    	    		coinLabel.setText("Coins: "+ coins);
+    	    		
+    	    		XP xpReward = new XP(xp);
+    	    		xp = xpReward.getXp();
+    	    		experience.setXp(xp);
+    	    		xpEarned.setText("EXP: "+experience.getXp());
+    	    		xpLabel.setText("EXP: "+experience.getXp());
+    	    	}
+    			else {
+    				int choice = enemy.getDecider();
+        			if (choice == 1) {
+        				player.setHp(pAttack.enemyAttack());
+        				playerHealthLabel.setText("Player Health: " + player.getHp());
+        				if (pAttack.getEnemyDamage() > 0) {
+        					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
+        				} else {
+        					enemyMove.setText("Enemy attack missed, 0 damage taken");
+        				}
+        				if (player.getHp() <=0) {
+        					enemyMove.setText("Enemy won!");
+        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        					}
+        			}
+        			else if (choice == 2 && enemy.getEp() >=5) {
+        				player.setHp(pAttack.enemyEnergyAttack());
+        				playerHealthLabel.setText("Player Health: " + player.getHp());
+        				enemy.energyUse();
+        				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+        				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        				if (player.getHp() <=0) {
+        					enemyMove.setText("Enemy won!");
+        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        				}
+        			}
+        		} 
+    		}
+    		else {
+    			playerMove.setText("Not enough energy, choose another option");
+    			enemyMove.setText("");
+    		}
     	}
     	else { playerMove.setText("Game is over, reset to start a new game");
 		 enemyMove.setText("");
