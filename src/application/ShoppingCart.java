@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class ShoppingCart {
 	
-private	ArrayList<Weapon>  cart = new ArrayList<>();
+private static	ArrayList<Weapon>  cart = new ArrayList<>();
 
     public int itemCount;   
-    public double totalPrice;
+    public static double totalPrice;
     
     public ShoppingCart() {
     	
@@ -15,12 +15,12 @@ private	ArrayList<Weapon>  cart = new ArrayList<>();
         totalPrice = 0.0;
     }
 
-    public void addToCart(Weapon item, int quantityEntered) {
+    public static void addToCart(Weapon weapon, int quantityEntered) {
     for (int i = 0;i<quantityEntered; i++) {
-    		cart.add(item);
-    		 totalPrice += (item.getPrice());
+    		cart.add(weapon);
+    		 totalPrice += (weapon.getPrice());
     	}
-
+    
     }
 
 	public int getItemCount() {
@@ -35,7 +35,6 @@ private	ArrayList<Weapon>  cart = new ArrayList<>();
 		return totalPrice;
 	}
 
-	
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}

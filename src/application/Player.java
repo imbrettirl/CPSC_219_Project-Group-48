@@ -1,5 +1,5 @@
 package application;
-
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Player {
@@ -7,6 +7,15 @@ public class Player {
 	private int ep;
 	private int damage;
 	private int energyDamage = 3;
+	int[] weapons = new int[3];
+	public String[] getPlayersWeapons() {
+	String[] str;
+		
+		// look at weapons -> 
+	//look at indexes -> fill str
+		return null;
+		
+	}
 	
 	Player(int health, int energy) {
 		setHp(health);
@@ -47,6 +56,17 @@ public class Player {
 
 	int getEnergyDamage() {
 		return energyDamage;
+	}
+	public void setWeapons(int[] weapons) {
+		this.weapons = weapons;
+	}
+
+	public int[] getWeapons() {
+		return weapons;
+	}
+
+	public void addWeapons(int index, int value) {
+		this.weapons[index] = this.weapons[index] + value;
 	}
 
 }
