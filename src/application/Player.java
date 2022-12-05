@@ -51,4 +51,13 @@ public class Player {
 	void energyUse() {
 		this.ep = this.ep - 5;
 	}
+	void healthUpgrade() {
+		this.hp = this.hp + 5;
+	}
+	void energyUpgrade() {
+		this.ep = this.ep + 5;
+	}
+	void attackUpgrade() {
+		this.damage = this.damage + 1;
+	}
 }

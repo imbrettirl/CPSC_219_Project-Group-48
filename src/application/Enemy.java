@@ -9,6 +9,7 @@ public class Enemy {
 	private int enemyDamage;
 	private int energyDamage =3;
 	private int decider;
+	private boolean boss = false;
 	
 	Enemy(String name, int health, int energy) {
 		this.setName(name);
@@ -41,6 +42,7 @@ public class Enemy {
 	}
 
 	public int getEnemyDamage() {
+		if (boss == false) {
 		Random dodge = new Random();
 		int dodgeChance = dodge.nextInt((10-1)+1)+1;
 		if (dodgeChance > 1) {
@@ -52,6 +54,21 @@ public class Enemy {
 		else {
 			enemyDamage = 0;
 			return enemyDamage;
+			}
+		}
+		else {
+			Random dodge = new Random();
+			int dodgeChance = dodge.nextInt((1-0)+1)+0;
+			if (dodgeChance > 1) {
+				Random r = new Random();
+				int rand = r.nextInt((5 - 1) + 1) + 1;
+				enemyDamage = rand;
+				return enemyDamage;
+			}
+			else {
+				enemyDamage = 0;
+				return enemyDamage;
+				}
 		}
 	}
 
@@ -66,5 +83,30 @@ public class Enemy {
 	
 	void energyUse() {
 		this.ep = this.ep -5;
+	}
+	void healthUpgrade(int health) {
+		health = health - 10;
+		System.out.print("health upgraded by "+ health);
+		this.hp += health;
+	}
+	void energyUpgrade(int energy) {
+		energy = energy - 10;
+		System.out.print("energy upgraded by "+ energy);
+		this.ep += energy;
+	}
+	void damageUpgrade(int damage) {
+		damage = damage -1;
+		System.out.print("damage upgraded by "+ damage);
+		this.enemyDamage = damage; 
+	}
+	int randomStat() {
+		Random r = new Random();
+		int rand = r.nextInt((4 - 1) + 1) + 1;
+		return rand;
+	}
+	void bossFight() {
+		boss = true;
+		this.hp = 100;
+		this.ep = 50;
 	}
 }
