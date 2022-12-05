@@ -375,37 +375,34 @@ public class MainMenuController {
     
     // Do nothing method, skips the players turn and lets the enemy attack
     void doNothing(ActionEvent event) {
-    	Random r = new Random();
-		int rand = r.nextInt((2 - 1) + 1) + 1;
+    	
 		playerMove.setText("");
+		Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+		if (pAttack.win == false) {
 		
-		if (player.getHp() > 0 && enemy.getHp() > 0) {
-		
-		if (rand == 1) {
-		int damageEnemy = player.getHp() - (enemy.getEnemyDamage()+enemyDamage);
-		int enemyDamageDone = player.getHp() - damageEnemy;
-		player.setHp(damageEnemy);
-		playerHealthLabel.setText("Player Health: " + player.getHp());
-		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
-	
-			if (player.getHp() <=0) {
-				enemyMove.setText("Enemy won!");
-				playerMove.setText("Enemy did " + enemyDamageDone + " damage");
+			int choice = enemy.getDecider();
+			if (choice == 1) {
+				player.setHp(pAttack.enemyAttack());
+				playerHealthLabel.setText("Player Health: " + player.getHp());
+				if (pAttack.getEnemyDamage() > 0) {
+					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
+				} else {
+					enemyMove.setText("Enemy attack missed, 0 damage taken");
 				}
+				if (player.getHp() <=0) {
+					enemyMove.setText("Enemy won!");
+					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+					}
 			}
-		else if (rand == 2 && enemy.getEp() >= 5){
-			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
-			int energyDamageDone = player.getHp() - energyDamage;
-			int enemyEnergyUsed = enemy.getEp() - 5;
-			enemy.setEp(enemyEnergyUsed);
-			enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-			player.setHp(energyDamage);
-			playerHealthLabel.setText("Player Health: " + player.getHp());
-    		enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    		
-    		if (player.getHp() <=0) {
-				enemyMove.setText("Enemy won!");
-				playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
+			else if (choice == 2 && enemy.getEp() >=5) {
+				player.setHp(pAttack.enemyEnergyAttack());
+				playerHealthLabel.setText("Player Health: " + player.getHp());
+				enemy.energyUse();
+				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+				if (player.getHp() <=0) {
+					enemyMove.setText("Enemy won!");
+					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
 				}
 			}
 		} else { playerMove.setText("Game is over, reset to start a new game");
