@@ -247,264 +247,125 @@ public class MainMenuController {
     // Random amount of damage between 1 and 5 dealt to enemy
     void attackEvent(ActionEvent attackEvent) {
     	
-    	// Checks to make sure player and enemy aren't dead, otherwise game has ended.
-    	if (player.getHp() > 0 && enemy.getHp() > 0) {
-    	
-    	// Player gets to go first, random number is generated as damage and dealt to enemy.
-    	int damageTaken = enemy.getHp() - (player.getDamage() + damageMultiplier);
-    	int damageDone = enemy.getHp() - damageTaken;
-    	enemy.setHp(damageTaken);
-    	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
-    	if (damageDone > 0) {
-    	playerMove.setText("You did " + damageDone + " damage");
-    	}
-    	else {
-    		playerMove.setText("Your attack missed, you did 0 damage");
-    	}
-    	
-    	// If enemy dies, win game and coins
-    	if (enemy.getHp() <= 0) {
-    		if (bossVal == false) {
-    		enemyMove.setText("You Won!");
-    		playerMove.setText("You did " + damageDone + " damage");
-    		Random r = new Random();
-    		int rand = r.nextInt((5 - 1) + 1) + 1;
-    		coins += rand;
-    		coinsEarned.setText("Coins: " + coins);
-    		coinLabel.setText("Coins: "+ coins);
-    		Random randomXP = new Random();
-    		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
-    		System.out.print("random = "+randXP);
-    		xp += randXP;
-    		System.out.print("xp ="+xp);
-    		experience.setXp(xp);
-    		xpEarned.setText("EXP: "+experience.getXp());
-    		xpLabel.setText("EXP: "+experience.getXp());
-    		}
-    		else if (bossVal == true) {
-    			enemyMove.setText("You Beat a Boss!!!");
-        		playerMove.setText("You did " + damageDone + " damage");
+    	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+    	if (pAttack.win == false) {
+    		enemy.setHp(pAttack.playerAttack());
+    		enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    		if (pAttack.getPlayerDamage() > 0) {
+    	    	playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
+    	    	}
+    	    	else {
+    	    		playerMove.setText("Your attack missed, you did 0 damage");
+    	    	}
+    		if (enemy.getHp() <=0 ) {
+    			enemyMove.setText("You Won!");
+        		playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
         		
-        		coins += 50;
+        		Coins coinReward = new Coins(coins);
+        		coins = coinReward.getCoins();
         		coinsEarned.setText("Coins: " + coins);
         		coinLabel.setText("Coins: "+ coins);
         		
-        		xp += 100;
+        		XP xpReward = new XP(xp);
+        		xp = xpReward.getXp();
         		experience.setXp(xp);
-        		xpEarned.setText("EXP: "+experience.getXp());
-        		xpLabel.setText("EXP: "+experience.getXp());
+        		xpEarned.setText("EXP: "+xp);
+        		xpLabel.setText("EXP: "+xp);
+
     		}
-    	}
-    	else {
-    		// enemies turn now, generates random value to decide enemies move
-    		Random r = new Random();
-    		int rand = r.nextInt((2 - 1) + 1) + 1;
-    		
-    		// regular attack, random damage between 1-5
-    		if (rand == 1) {
-    			if (bossVal == false) {
-    				int damageEnemy = player.getHp() - (enemy.getEnemyDamage() + enemyDamage);
-    				int enemyDamageDone = player.getHp() - damageEnemy;
-    				player.setHp(damageEnemy);
+    		else {
+    			int choice = enemy.getDecider();
+    			if (choice == 1) {
+    				player.setHp(pAttack.enemyAttack());
     				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				if (enemyDamageDone > 0) {
-    					enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    				if (pAttack.getEnemyDamage() > 0) {
+    					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
     				} else {
     					enemyMove.setText("Enemy attack missed, 0 damage taken");
-
     				}
-    	
     				if (player.getHp() <=0) {
     					enemyMove.setText("Enemy won!");
-    					playerMove.setText("Enemy did " + enemyDamageDone + " damage");
-    					}
-    				}
-    			else if (bossVal == true) {
-    				Random random = new Random();
-    				int bossDmg = random.nextInt((1-0)+1)+0;
-    				int damageEnemy = player.getHp() - (bossDmg);
-    				int enemyDamageDone = player.getHp() - damageEnemy;
-    				player.setHp(damageEnemy);
-    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				if (enemyDamageDone > 0) {
-    					enemyMove.setText("Boss did " + enemyDamageDone + " damage");
-    				} else {
-    					enemyMove.setText("Boss attack missed, 0 damage taken");
-
-    				}
-    	
-    				if (player.getHp() <=0) {
-    					enemyMove.setText("The Boss has won!");
-    					playerMove.setText("Boss did " + enemyDamageDone + " damage");
+    					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
     					}
     			}
-    		}
-    		// energy attack, guaranteed 3 damage at the cost of 5 energy
-    		else if (rand == 2 && enemy.getEp() >= 5){
-    			System.out.print(bossVal);
-    			if (bossVal == false) {
-    				int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
-    				int energyDamageDone = player.getHp() - energyDamage;
-    				int energyUsed = enemy.getEp() - 5;
-    				enemy.setEp(energyUsed);
-    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    				player.setHp(energyDamage);
+    			else if (choice == 2 && enemy.getEp() >=5) {
+    				player.setHp(pAttack.enemyEnergyAttack());
     				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
-        		
+    				enemy.energyUse();
+    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+    				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
     				if (player.getHp() <=0) {
     					enemyMove.setText("Enemy won!");
-    					playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    					}
-    				}
-    			else if (bossVal == true) {
-    				System.out.print(bossVal);
-    				int energyDamage = player.getHp() - (1);
-    				int energyDamageDone = player.getHp() - energyDamage;
-    				int energyUsed = enemy.getEp() - 5;
-    				enemy.setEp(energyUsed);
-    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    				player.setHp(energyDamage);
-    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				enemyMove.setText("The Boss did " + energyDamageDone + " energy damage");
-        		
-    				if (player.getHp() <=0) {
-    					enemyMove.setText("The Boss won!");
-    					playerMove.setText("The Boss did " + energyDamageDone + " energy damage");
-    					}
+    					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
     				}
     			}
-    		}
+    		}    		   		
     	}
-    	else { playerMove.setText("Game is over, reset to start a new game");
-    		 enemyMove.setText("");
+    	else {
+    		playerMove.setText("Game is over, reset to start a new game");
+    		enemyMove.setText("");
     	}
+    	
     }
     
     // Guaranteed 3 damage attack at the cost of 5 energy
     void specialAttack(ActionEvent specialAttackEvent) {
     	
-    	if (player.getHp() > 0 && enemy.getHp() > 0) {
-    		
+    	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+    	if (pAttack.win == false) {
     		if (player.getEp() >= 5) {
-    			
-    			int damageDone = enemy.getHp() - (player.getEnergyDamage() + damageMultiplier);
-    			int damageDelt = enemy.getHp() - damageDone;
-    			enemy.setHp(damageDone);
-    			int energyUsed = player.getEp() - 5;
-    			player.setEp(energyUsed);
+    			enemy.setHp(pAttack.energyAttack());
     			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    			player.energyUse();
     			playerEnergyLabel.setText("Player Energy: " + player.getEp());
-    	    	playerMove.setText("You did " + damageDelt + " energy damage");
-    	    	
-    	    	if (enemy.getHp() <= 0) {
-    	    		if (bossVal == false) {
-    	    		enemyMove.setText("You Won!");
-    	    		playerMove.setText("You did "+ damageDelt + " energy damage");
-    	    		Random r = new Random();
-    	    		int rand = r.nextInt((5 - 1) + 1) + 1;
-    	    		coins += rand;
+    			playerMove.setText("You did " + player.getEnergyDamage() + " energy damage");
+    			
+    			if (enemy.getHp() <= 0) {
+    				enemyMove.setText("You Won!");
+    	    		playerMove.setText("You did "+ player.getEnergyDamage() + " energy damage");
+    				
+    	    		Coins coinReward = new Coins(coins);
+    	    		coins = coinReward.getCoins();
     	    		coinsEarned.setText("Coins: " + coins);
     	    		coinLabel.setText("Coins: "+ coins);
-    	    		Random randomXP = new Random();
-    	    		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
-    	    		xp += randXP;
+    	    		
+    	    		XP xpReward = new XP(xp);
+    	    		xp = xpReward.getXp();
     	    		experience.setXp(xp);
     	    		xpEarned.setText("EXP: "+experience.getXp());
     	    		xpLabel.setText("EXP: "+experience.getXp());
-    	    		}
-    	    		else if (bossVal == true) {
-    	    			enemyMove.setText("You Defeated the Boss!!!");
-        	    		playerMove.setText("You did "+ damageDelt + " energy damage");
-        	    		
-        	    		coins += 50;
-        	    		coinsEarned.setText("Coins: " + coins);
-        	    		coinLabel.setText("Coins: "+ coins);
-
-        	    		xp += 100;
-        	    		experience.setXp(xp);
-        	    		xpEarned.setText("EXP: "+experience.getXp());
-        	    		xpLabel.setText("EXP: "+experience.getXp());
-    	    		}
     	    	}
-    	    	else {
-    	    		Random r = new Random();
-    	    		int rand = r.nextInt((2 - 1) + 1) + 1;
-    	    		
-    	    		if (rand == 1) {
-    	    			if (bossVal == false)  {
-    	    				int damageEnemy = player.getHp() - (enemy.getEnemyDamage()+enemyDamage);
-    	    				int enemyDamageDone = player.getHp() - damageEnemy;
-    	    				player.setHp(damageEnemy);
-    	    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    				if (enemyDamageDone > 0) {
-    	    					enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
-    	    				} 
-    	    				else {
-    	    					enemyMove.setText("Enemy attack missed, 0 damage taken");
-    	    				}
-    	    	
-    	    				if (player.getHp() <=0) {
-    	    					enemyMove.setText("Enemy won!");
-    	    					playerMove.setText("Enemy did " + enemyDamageDone + " damage");
-    	    					}
-    	    				}
-    	    			else if (bossVal == true) {
-    	    				Random random = new Random();
-    	    				int bossDmg = random.nextInt((1-0)+1)+0;
-    	    				int damageEnemy = player.getHp() - (bossDmg);
-    	    				int enemyDamageDone = player.getHp() - damageEnemy;
-    	    				player.setHp(damageEnemy);
-    	    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    				if (enemyDamageDone > 0) {
-    	    					enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
-    	    				} else {
-    	    					enemyMove.setText("Enemy attack missed, 0 damage taken");
-
-    	    				}
-    	    	
-    	    				if (player.getHp() <=0) {
-    	    					enemyMove.setText("The Boss has won!");
-    	    					playerMove.setText("Boss did " + enemyDamageDone + " damage");
-    	    					}
-    	    			}
-    	    		}
-    	    		else if (rand == 2 && enemy.getEp() >= 5){
-    	    			if (bossVal == false) {
-    	    			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
-    	    			int energyDamageDone = player.getHp() - energyDamage;
-    	    			int enemyEnergyUsed = enemy.getEp() - 5;
-    	    			enemy.setEp(enemyEnergyUsed);
-    	    			enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    	    			player.setHp(energyDamage);
-    	    			playerHealthLabel.setText("Player Health: " + player.getHp());
-    	        		enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    	        		
-    	        		if (player.getHp() <=0) {
-    	    				enemyMove.setText("Enemy won!");
-    	    				playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    	    				}
-    	    		}
-    	    			else if (bossVal == true) {
-    	    				int energyDamage = player.getHp() - (1);
-    	    				int energyDamageDone = player.getHp() - energyDamage;
-    	    				int energyUsedBoss = enemy.getEp() - 5;
-    	    				enemy.setEp(energyUsed);
-    	    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    	    				player.setHp(energyDamage);
-    	    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    				enemyMove.setText("The Boss did " + energyDamageDone + " energy damage");
-    	        		
-    	    				if (player.getHp() <=0) {
-    	    					enemyMove.setText("The Boss won!");
-    	    					playerMove.setText("The Boss did " + energyDamageDone + " energy damage");
-    	    					}
-    	    			}
-    	    			}
-    	    		}
+    			else {
+    				int choice = enemy.getDecider();
+        			if (choice == 1) {
+        				player.setHp(pAttack.enemyAttack());
+        				playerHealthLabel.setText("Player Health: " + player.getHp());
+        				if (pAttack.getEnemyDamage() > 0) {
+        					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
+        				} else {
+        					enemyMove.setText("Enemy attack missed, 0 damage taken");
+        				}
+        				if (player.getHp() <=0) {
+        					enemyMove.setText("Enemy won!");
+        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        					}
+        			}
+        			else if (choice == 2 && enemy.getEp() >=5) {
+        				player.setHp(pAttack.enemyEnergyAttack());
+        				playerHealthLabel.setText("Player Health: " + player.getHp());
+        				enemy.energyUse();
+        				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+        				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        				if (player.getHp() <=0) {
+        					enemyMove.setText("Enemy won!");
+        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        				}
+        			}
+        		} 
     		}
     		else {
     			playerMove.setText("Not enough energy, choose another option");
+    			enemyMove.setText("");
     		}
     	}
     	else { playerMove.setText("Game is over, reset to start a new game");
@@ -514,37 +375,34 @@ public class MainMenuController {
     
     // Do nothing method, skips the players turn and lets the enemy attack
     void doNothing(ActionEvent event) {
-    	Random r = new Random();
-		int rand = r.nextInt((2 - 1) + 1) + 1;
+    	
 		playerMove.setText("");
+		Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+		if (pAttack.win == false) {
 		
-		if (player.getHp() > 0 && enemy.getHp() > 0) {
-		
-		if (rand == 1) {
-		int damageEnemy = player.getHp() - (enemy.getEnemyDamage()+enemyDamage);
-		int enemyDamageDone = player.getHp() - damageEnemy;
-		player.setHp(damageEnemy);
-		playerHealthLabel.setText("Player Health: " + player.getHp());
-		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
-	
-			if (player.getHp() <=0) {
-				enemyMove.setText("Enemy won!");
-				playerMove.setText("Enemy did " + enemyDamageDone + " damage");
+			int choice = enemy.getDecider();
+			if (choice == 1) {
+				player.setHp(pAttack.enemyAttack());
+				playerHealthLabel.setText("Player Health: " + player.getHp());
+				if (pAttack.getEnemyDamage() > 0) {
+					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
+				} else {
+					enemyMove.setText("Enemy attack missed, 0 damage taken");
 				}
+				if (player.getHp() <=0) {
+					enemyMove.setText("Enemy won!");
+					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+					}
 			}
-		else if (rand == 2 && enemy.getEp() >= 5){
-			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
-			int energyDamageDone = player.getHp() - energyDamage;
-			int enemyEnergyUsed = enemy.getEp() - 5;
-			enemy.setEp(enemyEnergyUsed);
-			enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-			player.setHp(energyDamage);
-			playerHealthLabel.setText("Player Health: " + player.getHp());
-    		enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    		
-    		if (player.getHp() <=0) {
-				enemyMove.setText("Enemy won!");
-				playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
+			else if (choice == 2 && enemy.getEp() >=5) {
+				player.setHp(pAttack.enemyEnergyAttack());
+				playerHealthLabel.setText("Player Health: " + player.getHp());
+				enemy.energyUse();
+				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+				if (player.getHp() <=0) {
+					enemyMove.setText("Enemy won!");
+					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
 				}
 			}
 		} else { playerMove.setText("Game is over, reset to start a new game");
