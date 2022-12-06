@@ -280,6 +280,7 @@ public class MainMenuController {
     			enemyMove.setText("You Won!");
         		playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
         		
+        		if (bossVal = false) {
         		Coins coinReward = new Coins(coins);
         		coins = coinReward.getCoins();
         		coinsEarned.setText("Coins: " + coins);
@@ -290,7 +291,19 @@ public class MainMenuController {
         		experience.setXp(xp);
         		xpEarned.setText("EXP: "+xp);
         		xpLabel.setText("EXP: "+xp);
-
+        		}
+        		else if (bossVal = true) {
+        			Coins coinReward = new Coins(coins);
+            		coins = coinReward.getCoins()+50;
+            		coinsEarned.setText("Coins: " + coins);
+            		coinLabel.setText("Coins: "+ coins);
+            		
+            		XP xpReward = new XP(xp);
+            		xp = xpReward.getXp()+100;
+            		experience.setXp(xp);
+            		xpEarned.setText("EXP: "+xp);
+            		xpLabel.setText("EXP: "+xp);
+        		}
     		}
     		else {
     			int choice = enemy.getDecider();
