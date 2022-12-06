@@ -9,10 +9,11 @@ public class Player {
 	private int energyDamage = 3;
 	int[] weapons = new int[3];
 	public String[] getPlayersWeapons() {
-	String[] str;
+	//String[] cart;
 		
 		// look at weapons -> 
 	//look at indexes -> fill str
+	
 		return null;
 		
 	}
