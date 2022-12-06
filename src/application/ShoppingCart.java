@@ -4,42 +4,42 @@ import java.util.ArrayList;
 
 public class ShoppingCart {
 	
-private	ArrayList<Item>  cart = new ArrayList<>();
+public static	ArrayList<Weapon>cart = new ArrayList<>();
 
-    public int itemCount;   
-    public double totalPrice;
-    
-    public ShoppingCart() {
-    	
-    	itemCount = 0;
-        totalPrice = 0.0;
-    }
+public int itemCount;   
+public static int totalPrice;
 
-    public void addToCart(Item item, int quantityEntered) {
-    for (int i = 0;i<quantityEntered; i++) {
-    		cart.add(item);
-    		 totalPrice += (item.getPrice());
-    	}
+public ShoppingCart() {
+	
+	itemCount = 0;
+    totalPrice = 0;
+}
 
-    }
-
-	public int getItemCount() {
-		return itemCount;
+public int addToCart(Weapon weapon) {
+for (int i = 0;; i++) {
+		cart.add(weapon);
+		 totalPrice += (weapon.getPrice());
 	}
 
-	public void setItemCount(int itemCount) {
-		this.itemCount = itemCount;
-	}
+}
 
-	public double getTotalPrice() {
-		return totalPrice;
-	}
+public int getItemCount() {
+	return itemCount;
+}
+
+public void setItemCount(int itemCount) {
+	this.itemCount = itemCount;
+}
+
+public double getTotalPrice() {
+	return totalPrice;
+}
+
+public void setTotalPrice(int totalPrice) {
+	this.totalPrice = totalPrice;
+}
+
+
+}
 
 	
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
-    
-    
-}
-    

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import java.util.Random;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -19,11 +20,18 @@ import javafx.scene.Scene;
 
 public class MainMenuController {
 	private static final int numberOfItems = 0;
-
+	int totalPrice = 0;
 	Stage applicationStage;
+	
 
     @FXML
-    private Button ShopButton;
+    private Button swordButton;
+    
+    @FXML
+    private Button shotgunButton;
+    
+    @FXML
+    private Button axeButton;
 
     @FXML
     private Button UpgradesButton;
@@ -42,14 +50,19 @@ public class MainMenuController {
     private Label xpLabel;
 
     @FXML
-    private TextField item1TextField;
+    public TextField item1TextField;
     
     @FXML
-    private TextField item2TextField;
+    public TextField item2TextField;
     
     @FXML
-    private TextField item3TextField;
+    public TextField item3TextField;
     
+    @FXML
+    private Button purchaseButton;
+    
+    @FXML 
+    private ChoiceBox weaponChoiceBox;
     
     Player player = new Player(10, 10);
 	Enemy enemy = new Enemy("",10,10);
@@ -73,10 +86,10 @@ public class MainMenuController {
 	boolean bossVal = false;
 	
 	int enemyMultiplier = 0;
-	
+
 	int xp =0;
-	ExperiencePoints experience = new ExperiencePoints(xp);
 	Label xpEarned = new Label("EXP: "+xp);
+	private Button itemsButton;
 	
     @FXML
     void startGame(ActionEvent startGameEvent) {
@@ -86,8 +99,6 @@ public class MainMenuController {
     	
     	playerMove.setText("");
     	enemyMove.setText("");
-    	
-    	bossVal = false;
     	
     	// WINDOW LAYOUT
     	System.out.println("Button Clicked");
@@ -115,18 +126,21 @@ public class MainMenuController {
     	itemBox.setPadding(new Insets(0,0,0,25));
     	
     	// ALL PLAYER/ENEMY STATS 
+
     	player.setHp(10 + (5*player.getHpCounter()));
     	player.setEp(10+ (5*player.getEpCounter()));
     	
     	enemy.setHp(10);
     	enemy.setEp(10);
     	String[] nameArray = {"Bob", "Jack", "Chris", "Brett", "Nika"};
+
     	Random randomName = new Random();
     	int index = randomName.nextInt(nameArray.length);
     	String ename = nameArray[index];
     	
     	enemy.setName(ename);
     	
+
     	// Checking if player has upgraded at ALL
     	if (player.getHpCounter() <1 && player.getEpCounter() <1  && player.getDamageCounter() <1) {
     		System.out.print("default setup");
@@ -201,6 +215,7 @@ public class MainMenuController {
     		}
     	}
     	
+
     	// ALL PLAYER/ENEMY STATS DISPLAY
     	Label enemyNameLabel = new Label("Enemy Name: " + enemy.getName());
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
@@ -220,8 +235,21 @@ public class MainMenuController {
     	
     	Label itemsLabel = new Label("Items");
     	itemsLabel.setPadding(new Insets(5,0,0,0));
+
+
     	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
-    	Button itemsButton = new Button("Use Item");
+    	itemsChoiceBox.getItems().addAll("sword", "Shotgun", "Axe");
+    	
+
+    	HBox weaponRow = new HBox();
+    	VBox allRows = new VBox();
+    	allRows.getChildren().add(weaponRow);
+    	
+    	//ArrayList<TextField> WeaponsTextFields = new ArrayList<TextField>();
+    
+    	this.itemsButton = new Button("Use Item");
+    	itemsButton.setOnAction(ChoiceBoxEvent -> ItemButton(ChoiceBoxEvent));
+		
     	
     	//options2
     	this.specialAttackButton = new Button("Special Attack");
@@ -260,6 +288,7 @@ public class MainMenuController {
     // Random amount of damage between 1 and 5 dealt to enemy
     void attackEvent(ActionEvent attackEvent) {
     	
+
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
     	if (pAttack.win == false) {
     		if (bossVal == true) {
@@ -330,6 +359,8 @@ public class MainMenuController {
     				if (player.getHp() <=0) {
     					enemyMove.setText("Enemy won!");
     					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+
+
     				}
     			}
     		}    		   		
@@ -352,10 +383,13 @@ public class MainMenuController {
     			enemy = boss;
     		}
     		if (player.getEp() >= 5) {
+
     			enemy.setHp(pAttack.energyAttack(player.getDamageCounter()));
+
     			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     			player.energyUse();
     			playerEnergyLabel.setText("Player Energy: " + player.getEp());
+
     			playerMove.setText("You did " + (player.getEnergyDamage()+player.getDamageCounter()) + " energy damage");
     			
     			if (enemy.getHp() <= 0) {
@@ -400,6 +434,8 @@ public class MainMenuController {
         				}
         			}
         		} 
+
+
     		}
     		else {
     			playerMove.setText("Not enough energy, choose another option");
@@ -415,6 +451,7 @@ public class MainMenuController {
     void doNothing(ActionEvent event) {
     	
 		playerMove.setText("");
+
 		Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
 		if (pAttack.win == false) {
 			if (bossVal == true) {
@@ -430,12 +467,14 @@ public class MainMenuController {
 					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
 				} else {
 					enemyMove.setText("Enemy attack missed, 0 damage taken");
+
 				}
 				if (player.getHp() <=0) {
 					enemyMove.setText("Enemy won!");
 					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
 					}
 			}
+
 			else if (choice == 2 && enemy.getEp() >=5) {
 				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
 				playerHealthLabel.setText("Player Health: " + player.getHp());
@@ -445,6 +484,7 @@ public class MainMenuController {
 				if (player.getHp() <=0) {
 					enemyMove.setText("Enemy won!");
 					playerMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
+
 				}
 			}
 		} else { playerMove.setText("Game is over, reset to start a new game");
@@ -457,22 +497,21 @@ public class MainMenuController {
     	System.out.println("Button Clicked");
     	Scene mainScene = applicationStage.getScene();
     	
+    	//int numberOfWeapons = 3;
     	VBox mainScreenVbox = new VBox(10);
     	
     	VBox ItemNumber1VBox = new VBox(10);
-    	Button selectButton1 = new Button("Select");
-    	Label itemNumber1Label  = new Label("Item #1");
-    	TextField item1TextField = new TextField();
+    	Label itemNumber1Label  = new Label("Price: 1 coins   Health Damage:2    Energy Damage: 2");
+    	
 
     	VBox ItemNumber2VBox = new VBox(10);
-    	Button selectButton2 = new Button("Select");
-    	Label itemNumber2Label  = new Label("Item #2");
-    	TextField item2TextField = new TextField();
+    	Label itemNumber2Label  = new Label("Price: 2 coins   Health Damage: 3   Energy Damage: 3");
+    	
     	
     	VBox ItemNumber3VBox = new VBox(10);
-    	Button selectButton3 = new Button("Select");
-    	Label itemNumber3Label  = new Label("Item #3");
-    	TextField item3TextField = new TextField();
+    	
+    	Label itemNumber3Label  = new Label("Price: 3 coins   Health Damage: 4   Energy Damage: 4");
+    	
     	
     	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
     	
@@ -480,59 +519,108 @@ public class MainMenuController {
     	
     	mainScreenVbox.getChildren().addAll(menuButton,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
     	
-    	ItemNumber1VBox.getChildren().addAll(itemNumber1Label,item1TextField, selectButton1);
-    	ItemNumber2VBox.getChildren().addAll(itemNumber2Label,item2TextField, selectButton2);
-    	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,item3TextField,selectButton3,overallPurchaseLabel);
+    	this.swordButton = new Button("sword");
+    	swordButton.setOnAction(purchaseEvent -> swordPurchased(purchaseEvent));
+		
+    	
+    	this.shotgunButton = new Button("shotgun");
+    	shotgunButton.setOnAction(purchaseEvent -> shotgunPurchased(purchaseEvent));
+    	
+    	this.axeButton = new Button("Axe");
+    	axeButton.setOnAction(purchaseEvent -> axePurchased(purchaseEvent));
+
+    	
+    	ItemNumber1VBox.getChildren().addAll(swordButton,itemNumber1Label);
+    	ItemNumber2VBox.getChildren().addAll(shotgunButton,itemNumber2Label);
+    	ItemNumber3VBox.getChildren().addAll(axeButton,itemNumber3Label,overallPurchaseLabel);
     	
     	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
     	applicationStage.setScene(ShoppingScene);
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
-    	
 	}
-    	//if (totalPrice =< coins) {
-    		
-    	
-    	
-    	//double totalPrice = 0.0;
-	    //String quantityEntered = item1TextField.getText();
-	 	
+
+	void swordPurchased(ActionEvent swordEvent) {
+		swordButton.setOnAction(purchaseEvent -> swordPurchased(swordEvent));
 		
-  
-//                 item 1 
-//    			   //health - 500
-//    			   //if coin > 0 
-//    			   //else "health points not enough
-//    		       
-//    		       System.out.println("You have clicked the button 1 " + count + " times");
-//    		       //total price = count*itemPrice
-//    		
-//    			   item 2
-//    			   //coin - 300
-//    			   //if health > 0 
-//    			   //else "health points not enough
-//    			   
-//    			   //total price = count*itemPrice
-//    			   item 3
-//    			   //coin - 200
-//    			   //if health > 0 true
-//    			   //else "health points not enough
-//    			   
-//    			  
-//    		
-//    	
+		System.out.println("Sword is added");
+		 
+		Weapon weapon = new Weapon(1, 2, 2);
+		weapon.getPrice();
+		
+		if (coins >= weapon.getPrice()){
+			coins = coins - weapon.getPrice();
+		}else {
+			System.out.println("Not enough money");
+		}
+		
+		player.addWeapons(0, 1); 
+    	System.out.println("the total Price For Sword is" + totalPrice);}
+    	
+
+	void shotgunPurchased(ActionEvent shotgunEvent) {
+		shotgunButton.setOnAction(purchaseEvent -> swordPurchased(shotgunEvent));
+		System.out.println("Shotgun is added");
 	
+ 		Weapon weapon = new Weapon( 2, 3, 3);
+ 		weapon.getPrice();
+ 		
+		if (coins >= weapon.getPrice()) {
+			coins = coins - weapon.getPrice();
+		}else {
+			System.out.println("Not enough money");
+		}
+		player.addWeapons(1, 1);
+    	System.out.println("the total Price For shutgun is" + totalPrice);
+	}
 	
-	Label xpUpgrade = new Label("EXP: "+ experience.getXp());
-	Label description = new Label("placeholder");
+
+	void axePurchased(ActionEvent axeEvent) {
+		axeButton.setOnAction(purchaseEvent -> axePurchased(axeEvent));
+		System.out.println("Axe is added");
+		
+		Weapon Axe = null;
+		Weapon weapon = new Weapon( 3, 4, 4);
+ 		
+		weapon.getPrice();
+		
+		if (coins >= weapon.getPrice()) {
+			coins = coins - weapon.getPrice();
+		}else {
+			System.out.println("Not enough money");
+		}
+		player.addWeapons(2, 1); 
+		
+    	System.out.println("the total Price For Axe is" + totalPrice);
+ }
+	
+void weaponChoiceBoxgetValue() {
+	
+	ArrayList<Integer> weaponList = new ArrayList<>();
+	int weapon = (int) weaponChoiceBox.getValue();
+	
+	if (weapon ==Integer.parseInt("Sword")){
+		weaponList.add(0, 1);
+		System.out.printf("Weapon list so far :",weaponList);
+	}
+	if (weapon ==Integer.parseInt("Shotgun")){
+		weaponList.add(1, 1);
+		System.out.printf("Weapon list so far :",weaponList);
+	}
+	if (weapon ==Integer.parseInt("Axe")){
+		weaponList.add(2, 1);
+		System.out.printf("Weapon list so far :",weaponList);
+	}
+}
+
+void ItemButton(ActionEvent ItemButton) {
+	
+	System.out.println("item is added");
+}
 	
     @FXML
     void goUpgrades(ActionEvent event) {
-    	
-    	Scene mainScene = applicationStage.getScene();
-    	
-    	
-    	// WINDOW LAYOUT
     	System.out.println("Button Clicked");
+
     	VBox mainContainer = new VBox(10);
     	HBox topContainer = new HBox(10);
     	HBox secondaryUpgradeContainer = new HBox(10);
@@ -620,5 +708,6 @@ public class MainMenuController {
     	else {
     		description.setText("Not enough EXP");
     	}
+
     }
 }
