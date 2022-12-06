@@ -457,21 +457,22 @@ public class MainMenuController {
     	System.out.println("Button Clicked");
     	Scene mainScene = applicationStage.getScene();
     	
-    	//int numberOfWeapons = 3;
     	VBox mainScreenVbox = new VBox(10);
     	
     	VBox ItemNumber1VBox = new VBox(10);
-    	Label itemNumber1Label  = new Label("Price: 1 coins   Health Damage:2    Energy Damage: 2");
-    	
+    	Button selectButton1 = new Button("Select");
+    	Label itemNumber1Label  = new Label("Item #1");
+    	TextField item1TextField = new TextField();
 
     	VBox ItemNumber2VBox = new VBox(10);
-    	Label itemNumber2Label  = new Label("Price: 2 coins   Health Damage: 3   Energy Damage: 3");
-    	
+    	Button selectButton2 = new Button("Select");
+    	Label itemNumber2Label  = new Label("Item #2");
+    	TextField item2TextField = new TextField();
     	
     	VBox ItemNumber3VBox = new VBox(10);
-    	
-    	Label itemNumber3Label  = new Label("Price: 3 coins   Health Damage: 4   Energy Damage: 4");
-    	
+    	Button selectButton3 = new Button("Select");
+    	Label itemNumber3Label  = new Label("Item #3");
+    	TextField item3TextField = new TextField();
     	
     	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
     	
@@ -479,103 +480,50 @@ public class MainMenuController {
     	
     	mainScreenVbox.getChildren().addAll(menuButton,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
     	
-    	this.swordButton = new Button("sword");
-    	swordButton.setOnAction(purchaseEvent -> swordPurchased(purchaseEvent));
-		
-    	
-    	this.shotgunButton = new Button("shotgun");
-    	shotgunButton.setOnAction(purchaseEvent -> shotgunPurchased(purchaseEvent));
-    	
-    	this.axeButton = new Button("Axe");
-    	axeButton.setOnAction(purchaseEvent -> axePurchased(purchaseEvent));
-
-    	
-    	ItemNumber1VBox.getChildren().addAll(swordButton,itemNumber1Label);
-    	ItemNumber2VBox.getChildren().addAll(shotgunButton,itemNumber2Label);
-    	ItemNumber3VBox.getChildren().addAll(axeButton,itemNumber3Label,overallPurchaseLabel);
+    	ItemNumber1VBox.getChildren().addAll(itemNumber1Label,item1TextField, selectButton1);
+    	ItemNumber2VBox.getChildren().addAll(itemNumber2Label,item2TextField, selectButton2);
+    	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,item3TextField,selectButton3,overallPurchaseLabel);
     	
     	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
     	applicationStage.setScene(ShoppingScene);
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
-	}
-
-	void swordPurchased(ActionEvent swordEvent) {
-		swordButton.setOnAction(purchaseEvent -> swordPurchased(swordEvent));
-		
-		System.out.println("Sword is added");
-		 
-		Weapon weapon = new Weapon(1, 2, 2);
-		weapon.getPrice();
-		
-		if (coins >= weapon.getPrice()){
-			coins = coins - weapon.getPrice();
-		}else {
-			System.out.println("Not enough money");
-		}
-		
-		player.addWeapons(0, 1); 
-    	System.out.println("the total Price For Sword is" + totalPrice);}
     	
-
-	void shotgunPurchased(ActionEvent shotgunEvent) {
-		shotgunButton.setOnAction(purchaseEvent -> swordPurchased(shotgunEvent));
-		System.out.println("Shotgun is added");
-	
- 		Weapon weapon = new Weapon( 2, 3, 3);
- 		weapon.getPrice();
- 		
-		if (coins >= weapon.getPrice()) {
-			coins = coins - weapon.getPrice();
-		}else {
-			System.out.println("Not enough money");
-		}
-		player.addWeapons(1, 1);
-    	System.out.println("the total Price For shutgun is" + totalPrice);
 	}
-	
-
-	void axePurchased(ActionEvent axeEvent) {
-		axeButton.setOnAction(purchaseEvent -> axePurchased(axeEvent));
-		System.out.println("Axe is added");
+    	//if (totalPrice =< coins) {
+    		
+    	
+    	
+    	//double totalPrice = 0.0;
+	    //String quantityEntered = item1TextField.getText();
+	 	
 		
-		Weapon Axe = null;
-		Weapon weapon = new Weapon( 3, 4, 4);
- 		
-		weapon.getPrice();
-		
-		if (coins >= weapon.getPrice()) {
-			coins = coins - weapon.getPrice();
-		}else {
-			System.out.println("Not enough money");
-		}
-		player.addWeapons(2, 1); 
-		
-    	System.out.println("the total Price For Axe is" + totalPrice);
- }
+  
+//                 item 1 
+//    			   //health - 500
+//    			   //if coin > 0 
+//    			   //else "health points not enough
+//    		       
+//    		       System.out.println("You have clicked the button 1 " + count + " times");
+//    		       //total price = count*itemPrice
+//    		
+//    			   item 2
+//    			   //coin - 300
+//    			   //if health > 0 
+//    			   //else "health points not enough
+//    			   
+//    			   //total price = count*itemPrice
+//    			   item 3
+//    			   //coin - 200
+//    			   //if health > 0 true
+//    			   //else "health points not enough
+//    			   
+//    			  
+//    		
+//    	
 	
-void weaponChoiceBoxgetValue() {
 	
-	ArrayList<Integer> weaponList = new ArrayList<>();
-	int weapon = (int) weaponChoiceBox.getValue();
-	
-	if (weapon ==Integer.parseInt("Sword")){
-		weaponList.add(0, 1);
-		System.out.printf("Weapon list so far :",weaponList);
-	}
-	if (weapon ==Integer.parseInt("Shotgun")){
-		weaponList.add(1, 1);
-		System.out.printf("Weapon list so far :",weaponList);
-	}
-	if (weapon ==Integer.parseInt("Axe")){
-		weaponList.add(2, 1);
-		System.out.printf("Weapon list so far :",weaponList);
-	}
-}
-
-void ItemButton(ActionEvent ItemButton) {
-	
-	System.out.println("item is added");
-}
+	Label xpUpgrade = new Label("EXP: "+ experience.getXp());
+	Label description = new Label("placeholder");
 	
     @FXML
     void goUpgrades(ActionEvent event) {
