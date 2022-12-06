@@ -40,6 +40,7 @@ public class Player {
 	}
 
 	public int getDamage() {
+		
 		Random dodge = new Random();
 		int dodgeChance = dodge.nextInt((10-1)+1)+1;
 		if (dodgeChance > 1) {
@@ -48,11 +49,11 @@ public class Player {
 			damage = rand;
 			return damage;
 		}
+		 
 		else {
 			damage = 0;
 			return damage;
-		}
-		
+		}	
 	}
 
 	int getEnergyDamage() {

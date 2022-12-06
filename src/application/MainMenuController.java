@@ -395,7 +395,7 @@ public class MainMenuController {
     	VBox mainScreenVbox = new VBox(10);
     	
     	VBox ItemNumber1VBox = new VBox(10);
-    	Label itemNumber1Label  = new Label("Price: 1 coins   Health Damage:2    Energy Damage: 2");
+    	Label itemNumber1Label  = new Label("Price: 1 coin   Health Damage: 2    Energy Damage: 2");
     	
 
     	VBox ItemNumber2VBox = new VBox(10);
@@ -405,7 +405,6 @@ public class MainMenuController {
     	VBox ItemNumber3VBox = new VBox(10);
     	
     	Label itemNumber3Label  = new Label("Price: 3 coins   Health Damage: 4   Energy Damage: 4");
-    	
     	
     	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
     	
@@ -492,17 +491,31 @@ void weaponChoiceBoxgetValue() {
 	ArrayList<Integer> weaponList = new ArrayList<>();
 	int weapon = (int) weaponChoiceBox.getValue();
 	
-	if (weapon ==Integer.parseInt("Sword")){
-		weaponList.add(0, 1);
-		System.out.printf("Weapon list so far :",weaponList);
+	if (weapon == Integer.parseInt("Sword")){
+		
+		Integer removedStr = weaponList.remove(0);
+		
+		int damageTaken = enemy.getHp() - 2;
+		int energyDamageDone = enemy.getEnergyDamage() - 2;
+		
+		System.out.printf("Weapon list so far : ",weaponList);
 	}
-	if (weapon ==Integer.parseInt("Shotgun")){
-		weaponList.add(1, 1);
-		System.out.printf("Weapon list so far :",weaponList);
+	if (weapon == Integer.parseInt("Shotgun")){
+
+		Integer removedStr = weaponList.remove(1);
+		
+		int damageTaken = enemy.getHp() - 3;
+		int energyDamageDone = enemy.getEnergyDamage() - 3;
+		
+		System.out.printf("Weapon list so far : ",weaponList);
 	}
-	if (weapon ==Integer.parseInt("Axe")){
-		weaponList.add(2, 1);
-		System.out.printf("Weapon list so far :",weaponList);
+	if (weapon == Integer.parseInt("Axe")){
+		
+		Integer removedStr = weaponList.remove(2);
+		int damageTaken = enemy.getHp() - 4;
+		int energyDamageDone = enemy.getEnergyDamage() - 4;
+		
+		System.out.printf("Weapon list so far : ",weaponList);
 	}
 }
 
