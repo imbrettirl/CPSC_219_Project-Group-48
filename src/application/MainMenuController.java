@@ -163,7 +163,7 @@ public class MainMenuController {
     	VBox allRows = new VBox();
     	allRows.getChildren().add(weaponRow);
     	
-    	//ArrayList<TextField> WeaponsTextFields = new ArrayList<TextField>();
+    
     
     	this.itemsButton = new Button("Use Item");
     	itemsButton.setOnAction(ChoiceBoxEvent -> ItemButton(ChoiceBoxEvent));
@@ -391,20 +391,20 @@ public class MainMenuController {
     	System.out.println("Button Clicked");
     	Scene mainScene = applicationStage.getScene();
     	
-    	//int numberOfWeapons = 3;
+    	
     	VBox mainScreenVbox = new VBox(10);
     	
     	VBox ItemNumber1VBox = new VBox(10);
-    	Label itemNumber1Label  = new Label("Price: 1 coin   Health Damage: 2    Energy Damage: 2");
+    	Label swordLabel  = new Label("Price: 1 coin   Health Damage: 2    Energy Damage: 2");
     	
 
     	VBox ItemNumber2VBox = new VBox(10);
-    	Label itemNumber2Label  = new Label("Price: 2 coins   Health Damage: 3   Energy Damage: 3");
+    	Label shotgunLabel  = new Label("Price: 2 coins   Health Damage: 3   Energy Damage: 3");
     	
     	
     	VBox ItemNumber3VBox = new VBox(10);
     	
-    	Label itemNumber3Label  = new Label("Price: 3 coins   Health Damage: 4   Energy Damage: 4");
+    	Label axeLabel  = new Label("Price: 3 coins   Health Damage: 4   Energy Damage: 4");
     	
     	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
     	
@@ -412,20 +412,30 @@ public class MainMenuController {
     	
     	mainScreenVbox.getChildren().addAll(menuButton,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
     	
-    	this.swordButton = new Button("sword");
+    	this.swordButton = new Button("  sword  ");
     	swordButton.setOnAction(purchaseEvent -> swordPurchased(purchaseEvent));
 		
     	
     	this.shotgunButton = new Button("shotgun");
     	shotgunButton.setOnAction(purchaseEvent -> shotgunPurchased(purchaseEvent));
     	
-    	this.axeButton = new Button("Axe");
+    	this.axeButton = new Button("    Axe    ");
     	axeButton.setOnAction(purchaseEvent -> axePurchased(purchaseEvent));
 
     	
-    	ItemNumber1VBox.getChildren().addAll(swordButton,itemNumber1Label);
-    	ItemNumber2VBox.getChildren().addAll(shotgunButton,itemNumber2Label);
-    	ItemNumber3VBox.getChildren().addAll(axeButton,itemNumber3Label,overallPurchaseLabel);
+    	ItemNumber1VBox.getChildren().addAll(swordButton,swordLabel);
+    	ItemNumber2VBox.getChildren().addAll(shotgunButton,shotgunLabel);
+    	ItemNumber3VBox.getChildren().addAll(axeButton,axeLabel,overallPurchaseLabel);
+    	
+    	
+    	VBox.setMargin(swordLabel, new Insets(0,0,0,25));
+    	VBox.setMargin(swordButton, new Insets(0,0,0,25));
+    	VBox.setMargin(shotgunLabel, new Insets(0,0,0,25));
+    	VBox.setMargin(shotgunButton, new Insets(0,0,0,25));
+    	VBox.setMargin(axeLabel, new Insets(0,0,0,25));
+    	VBox.setMargin(axeButton, new Insets(0,0,0,25));
+    	VBox.setMargin(overallPurchaseLabel, new Insets(5,0,0,25));
+    	
     	
     	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
     	applicationStage.setScene(ShoppingScene);
