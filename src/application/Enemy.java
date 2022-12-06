@@ -3,13 +3,13 @@ package application;
 import java.util.Random;
 
 public class Enemy {
-	private String name;
-	private int hp;
-	private int ep;
-	private int enemyDamage;
-	private int energyDamage =3;
+	protected String name;
+	protected int hp;
+	protected int ep;
+	protected int enemyDamage;
+	protected int energyDamage =3;
 	private int decider;
-	private boolean boss = false;
+	protected boolean boss = false;
 	
 	Enemy(String name, int health, int energy) {
 		setName(name);
@@ -58,11 +58,8 @@ public class Enemy {
 		}
 		else {
 			Random dodge = new Random();
-			int dodgeChance = dodge.nextInt((1-0)+1)+0;
-			if (dodgeChance > 1) {
-				Random r = new Random();
-				int rand = r.nextInt((5 - 1) + 1) + 1;
-				enemyDamage = rand;
+			int dodgeChance = dodge.nextInt((2-0)+1)+0;
+			if (dodgeChance <=1) {
 				return enemyDamage;
 			}
 			else {
@@ -101,10 +98,10 @@ public class Enemy {
 		int rand = r.nextInt((4 - 1) + 1) + 1;
 		return rand;
 	}
-	void bossFight() {
-		boss = true;
-		this.hp = 100;
-		this.ep = 50;
-		this.name = "BOSS "+getName();
+	int bossChance() {
+		Random r = new Random();
+		int rand = r.nextInt((12 - 1) + 1) + 1;
+		return rand;
 	}
+	
 }
