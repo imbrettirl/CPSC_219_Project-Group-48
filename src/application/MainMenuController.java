@@ -72,6 +72,8 @@ public class MainMenuController {
 	int enemyDamage;
 	boolean bossVal = false;
 	
+	int enemyMultiplier = 0;
+	
 	int xp =0;
 	ExperiencePoints experience = new ExperiencePoints(xp);
 	Label xpEarned = new Label("EXP: "+xp);
@@ -113,8 +115,11 @@ public class MainMenuController {
     	itemBox.setPadding(new Insets(0,0,0,25));
     	
     	// ALL PLAYER/ENEMY STATS 
-    	player.setHp(10);
-    	player.setEp(10);
+    	player.setHp(10 + (5*player.getHpCounter()));
+    	player.setEp(10+ (5*player.getEpCounter()));
+    	
+    	enemy.setHp(10);
+    	enemy.setEp(10);
     	String[] nameArray = {"Bob", "Jack", "Chris", "Brett", "Nika"};
     	Random randomName = new Random();
     	int index = randomName.nextInt(nameArray.length);
@@ -123,14 +128,15 @@ public class MainMenuController {
     	enemy.setName(ename);
     	
     	// Checking if player has upgraded at ALL
-    	if (player.getHp() <= 10 && player.getEp() <= 10 && player.getDamage() <=1) {
+    	if (player.getHpCounter() <1 && player.getEpCounter() <1  && player.getDamageCounter() <1) {
     		System.out.print("default setup");
     		enemy.setHp(10);
     		enemy.setEp(10);
     	}
-    	else if (player.getHp() ==15 || player.getEp()==15 || player.getDamage() ==2){
+    	else if (player.getHpCounter() <=1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1){
     		if (enemy.randomStat() == 1) {
     			enemy.damageUpgrade(2);
+    			enemyMultiplier = 1;
     		}
     		else if (enemy.randomStat() == 2) {
     			enemy.energyUpgrade(15);
@@ -140,23 +146,26 @@ public class MainMenuController {
     		}
     	}
     	else {
-    		if (player.getHp() > 15 && player.getEp() <=15 && player.getDamage() <=2) {
+    		if (player.getHpCounter() > 1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1) {
     			System.out.print("bighealthboost");
     			enemy.healthUpgrade(player.getHp()*2);
-    			enemy.energyUpgrade(player.getHp());
-    			enemy.damageUpgrade(player.getDamage());
+    			enemy.energyUpgrade(player.getEp()/2);
+    			enemy.damageUpgrade(player.getDamage()/2);
+    			enemyMultiplier = player.getDamageCounter();
     		}
-    		else if (player.getEp() > 15 && player.getHp() <=15 && player.getDamage() <=2) {
+    		else if (player.getEpCounter() >1 && player.getHpCounter() <=1 && player.getDamageCounter() <=1) {
     			System.out.print("bigenergyboost");
     			enemy.energyUpgrade(player.getEp()*2);
-    			enemy.healthUpgrade(player.getHp());
-    			enemy.damageUpgrade(player.getDamage());
+    			enemy.healthUpgrade(player.getHp()/2);
+    			enemy.damageUpgrade(player.getDamage()/2);
+    			enemyMultiplier = player.getDamageCounter();
     		}
-    		else if (player.getDamage() >= 2 && player.getHp() <=15 && player.getEp() <=15) {
+    		else if (player.getDamageCounter() >1 && player.getHpCounter() <=1 && player.getEpCounter() <=1) {
     			System.out.print("bigattackboost");
     			enemy.damageUpgrade(player.getDamage()*2);
-    			enemy.healthUpgrade(player.getHp());
-    			enemy.energyUpgrade(player.getEp());
+    			enemy.healthUpgrade(player.getHp()/2);
+    			enemy.energyUpgrade(player.getEp()/2);
+    			enemyMultiplier = player.getDamageCounter()*2;
     		}
     		else {
     			if (enemy.randomStat() == 1) {
@@ -164,23 +173,27 @@ public class MainMenuController {
     				enemy.healthUpgrade(player.getHp()*2);
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp());
+        			enemyMultiplier = player.getDamageCounter();
         		}
         		else if (enemy.randomStat() == 2) {
         			System.out.print("bigenergyboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp()*2);
+        			enemyMultiplier = player.getDamageCounter();
         		}
         		else if (enemy.randomStat() == 3){
         			System.out.print("bigattackboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage()*2);
         			enemy.energyUpgrade(player.getEp());
+        			enemyMultiplier = player.getDamageCounter()*2;
         		}
         		else {
         			System.out.print("boss fight");
         			enemy.bossFight();
         			bossVal = true;
+        			
         		}
     		}
     	}
@@ -286,11 +299,11 @@ public class MainMenuController {
     					}
     			}
     			else if (choice == 2 && enemy.getEp() >=5) {
-    				player.setHp(pAttack.enemyEnergyAttack());
+    				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
     				playerHealthLabel.setText("Player Health: " + player.getHp());
     				enemy.energyUse();
     				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+    				enemyMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
     				if (player.getHp() <=0) {
     					enemyMove.setText("Enemy won!");
     					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
@@ -311,11 +324,11 @@ public class MainMenuController {
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
     	if (pAttack.win == false) {
     		if (player.getEp() >= 5) {
-    			enemy.setHp(pAttack.energyAttack());
+    			enemy.setHp(pAttack.energyAttack(player.getDamageCounter()));
     			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     			player.energyUse();
     			playerEnergyLabel.setText("Player Energy: " + player.getEp());
-    			playerMove.setText("You did " + player.getEnergyDamage() + " energy damage");
+    			playerMove.setText("You did " + (player.getEnergyDamage()+player.getDamageCounter()) + " energy damage");
     			
     			if (enemy.getHp() <= 0) {
     				enemyMove.setText("You Won!");
@@ -348,14 +361,14 @@ public class MainMenuController {
         					}
         			}
         			else if (choice == 2 && enemy.getEp() >=5) {
-        				player.setHp(pAttack.enemyEnergyAttack());
+        				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
         				playerHealthLabel.setText("Player Health: " + player.getHp());
         				enemy.energyUse();
         				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-        				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        				enemyMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
         				if (player.getHp() <=0) {
         					enemyMove.setText("Enemy won!");
-        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        					playerMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
         				}
         			}
         		} 
@@ -392,14 +405,14 @@ public class MainMenuController {
 					}
 			}
 			else if (choice == 2 && enemy.getEp() >=5) {
-				player.setHp(pAttack.enemyEnergyAttack());
+				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
 				playerHealthLabel.setText("Player Health: " + player.getHp());
 				enemy.energyUse();
 				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-				enemyMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+				enemyMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
 				if (player.getHp() <=0) {
 					enemyMove.setText("Enemy won!");
-					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+					playerMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
 				}
 			}
 		} else { playerMove.setText("Game is over, reset to start a new game");

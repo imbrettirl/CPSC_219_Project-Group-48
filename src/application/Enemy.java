@@ -12,7 +12,7 @@ public class Enemy {
 	private boolean boss = false;
 	
 	Enemy(String name, int health, int energy) {
-		this.setName(name);
+		setName(name);
 		setHp(health);
 		setEp(energy);
 	}
@@ -85,17 +85,14 @@ public class Enemy {
 		this.ep = this.ep -5;
 	}
 	void healthUpgrade(int health) {
-		health = health - 10;
 		System.out.print("health upgraded by "+ health);
-		this.hp += health;
+		this.hp = health;
 	}
 	void energyUpgrade(int energy) {
-		energy = energy - 10;
 		System.out.print("energy upgraded by "+ energy);
-		this.ep += energy;
+		this.ep = energy;
 	}
 	void damageUpgrade(int damage) {
-		damage = damage -1;
 		System.out.print("damage upgraded by "+ damage);
 		this.enemyDamage = damage; 
 	}
@@ -108,5 +105,6 @@ public class Enemy {
 		boss = true;
 		this.hp = 100;
 		this.ep = 50;
+		this.name = "BOSS "+getName();
 	}
 }
