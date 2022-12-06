@@ -1,5 +1,5 @@
 package application;
-import java.util.ArrayList;
+
 import java.util.Random;
 
 public class Player {
@@ -7,20 +7,16 @@ public class Player {
 	private int ep;
 	private int damage;
 	private int energyDamage = 3;
-	int[] weapons = new int[3];
-	public String[] getPlayersWeapons() {
-	//String[] cart;
-		
-		// look at weapons -> 
-	//look at indexes -> fill str
-	
-		return null;
-		
-	}
+	private int hpCounter =0;
+	private int epCounter=0;
+	private int damageCounter=0;
 	
 	Player(int health, int energy) {
 		setHp(health);
 		setEp(energy);
+		hpCounter =0;
+		epCounter=0;
+		damageCounter=0;
 	}
 
 	int getHp() {
@@ -45,7 +41,7 @@ public class Player {
 		if (dodgeChance > 1) {
 			Random r = new Random();
 			int rand = r.nextInt((5 - 1) + 1) + 1;
-			damage = rand;
+			damage = rand + damageCounter;
 			return damage;
 		}
 		else {
@@ -58,16 +54,34 @@ public class Player {
 	int getEnergyDamage() {
 		return energyDamage;
 	}
-	public void setWeapons(int[] weapons) {
-		this.weapons = weapons;
+	void energyUse() {
+		this.ep = this.ep - 5;
+	}
+	void healthUpgrade() {
+		this.hp = this.hp + 5;
+		hpCounter = getHpCounter() + 1;
+		System.out.print("counter = " +hpCounter);
+	}
+	void energyUpgrade() {
+		this.ep = this.ep + 5;
+		epCounter = getEpCounter() + 1;
+		System.out.print("counter = " +epCounter);
+	}
+	void attackUpgrade() {
+		this.damage = this.getDamage() + 1;
+		damageCounter = getDamageCounter() + 1;
+		System.out.print("counter = " +damageCounter);
 	}
 
-	public int[] getWeapons() {
-		return weapons;
+	int getHpCounter() {
+		return hpCounter;
 	}
 
-	public void addWeapons(int index, int value) {
-		this.weapons[index] = this.weapons[index] + value;
+	int getEpCounter() {
+		return epCounter;
 	}
 
+	int getDamageCounter() {
+		return damageCounter;
+	}
 }
