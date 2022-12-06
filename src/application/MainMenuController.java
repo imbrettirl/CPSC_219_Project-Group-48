@@ -168,21 +168,22 @@ public class MainMenuController {
     			enemyMultiplier = player.getDamageCounter()*2;
     		}
     		else {
-    			if (enemy.randomStat() == 1) {
+    			
+    			if (enemy.bossChance() <0) {
     				System.out.print("bighealthboost");
     				enemy.healthUpgrade(player.getHp()*2);
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp());
         			enemyMultiplier = player.getDamageCounter();
         		}
-        		else if (enemy.randomStat() == 2) {
+        		else if (enemy.bossChance() <0) {
         			System.out.print("bigenergyboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp()*2);
         			enemyMultiplier = player.getDamageCounter();
         		}
-        		else if (enemy.randomStat() == 3){
+        		else if (enemy.bossChance() <0){
         			System.out.print("bigattackboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage()*2);
@@ -191,7 +192,9 @@ public class MainMenuController {
         		}
         		else {
         			System.out.print("boss fight");
-        			enemy.bossFight();
+        			Boss boss = new Boss(ename, 10,10);
+        			enemy = boss;
+        			boss.bossFight();
         			bossVal = true;
         			
         		}
@@ -259,6 +262,12 @@ public class MainMenuController {
     	
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
     	if (pAttack.win == false) {
+    		if (bossVal == true) {
+    			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
+    			boss.bossFight();
+    			enemy = boss;
+
+    		}
     		enemy.setHp(pAttack.playerAttack());
     		enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     		if (pAttack.getPlayerDamage() > 0) {
@@ -285,7 +294,7 @@ public class MainMenuController {
     		}
     		else {
     			int choice = enemy.getDecider();
-    			if (choice == 1) {
+    			if (choice == 1 || enemy.getEp() <5) {
     				player.setHp(pAttack.enemyAttack());
     				playerHealthLabel.setText("Player Health: " + player.getHp());
     				if (pAttack.getEnemyDamage() > 0) {
@@ -299,6 +308,7 @@ public class MainMenuController {
     					}
     			}
     			else if (choice == 2 && enemy.getEp() >=5) {
+    				
     				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
     				playerHealthLabel.setText("Player Health: " + player.getHp());
     				enemy.energyUse();
@@ -323,6 +333,11 @@ public class MainMenuController {
     	
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
     	if (pAttack.win == false) {
+    		if (bossVal == true) {
+    			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
+    			boss.bossFight();
+    			enemy = boss;
+    		}
     		if (player.getEp() >= 5) {
     			enemy.setHp(pAttack.energyAttack(player.getDamageCounter()));
     			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
@@ -347,7 +362,7 @@ public class MainMenuController {
     	    	}
     			else {
     				int choice = enemy.getDecider();
-        			if (choice == 1) {
+        			if (choice == 1 || enemy.getEp() <5) {
         				player.setHp(pAttack.enemyAttack());
         				playerHealthLabel.setText("Player Health: " + player.getHp());
         				if (pAttack.getEnemyDamage() > 0) {
@@ -389,7 +404,11 @@ public class MainMenuController {
 		playerMove.setText("");
 		Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
 		if (pAttack.win == false) {
-		
+			if (bossVal == true) {
+    			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
+    			boss.bossFight();
+    			enemy = boss;
+    		}
 			int choice = enemy.getDecider();
 			if (choice == 1) {
 				player.setHp(pAttack.enemyAttack());
