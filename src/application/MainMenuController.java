@@ -169,21 +169,21 @@ public class MainMenuController {
     		}
     		else {
     			
-    			if (enemy.bossChance() <0) {
+    			if (enemy.bossChance() <5) {
     				System.out.print("bighealthboost");
     				enemy.healthUpgrade(player.getHp()*2);
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp());
         			enemyMultiplier = player.getDamageCounter();
         		}
-        		else if (enemy.bossChance() <0) {
+        		else if (enemy.bossChance() <9) {
         			System.out.print("bigenergyboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp()*2);
         			enemyMultiplier = player.getDamageCounter();
         		}
-        		else if (enemy.bossChance() <0){
+        		else if (enemy.bossChance() <12){
         			System.out.print("bigattackboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage()*2);
@@ -280,7 +280,7 @@ public class MainMenuController {
     			enemyMove.setText("You Won!");
         		playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
         		
-        		if (bossVal = false) {
+        		if (bossVal == false) {
         		Coins coinReward = new Coins(coins);
         		coins = coinReward.getCoins();
         		coinsEarned.setText("Coins: " + coins);
@@ -292,7 +292,7 @@ public class MainMenuController {
         		xpEarned.setText("EXP: "+xp);
         		xpLabel.setText("EXP: "+xp);
         		}
-        		else if (bossVal = true) {
+        		else if (bossVal == true) {
         			Coins coinReward = new Coins(coins);
             		coins = coinReward.getCoins()+50;
             		coinsEarned.setText("Coins: " + coins);
@@ -362,16 +362,30 @@ public class MainMenuController {
     				enemyMove.setText("You Won!");
     	    		playerMove.setText("You did "+ player.getEnergyDamage() + " energy damage");
     				
-    	    		Coins coinReward = new Coins(coins);
-    	    		coins = coinReward.getCoins();
-    	    		coinsEarned.setText("Coins: " + coins);
-    	    		coinLabel.setText("Coins: "+ coins);
-    	    		
-    	    		XP xpReward = new XP(xp);
-    	    		xp = xpReward.getXp();
-    	    		experience.setXp(xp);
-    	    		xpEarned.setText("EXP: "+experience.getXp());
-    	    		xpLabel.setText("EXP: "+experience.getXp());
+    	    		if (bossVal == false) {
+    	        		Coins coinReward = new Coins(coins);
+    	        		coins = coinReward.getCoins();
+    	        		coinsEarned.setText("Coins: " + coins);
+    	        		coinLabel.setText("Coins: "+ coins);
+    	        		
+    	        		XP xpReward = new XP(xp);
+    	        		xp = xpReward.getXp();
+    	        		experience.setXp(xp);
+    	        		xpEarned.setText("EXP: "+xp);
+    	        		xpLabel.setText("EXP: "+xp);
+    	        		}
+    	        		else if (bossVal == true) {
+    	        			Coins coinReward = new Coins(coins);
+    	            		coins = coinReward.getCoins()+50;
+    	            		coinsEarned.setText("Coins: " + coins);
+    	            		coinLabel.setText("Coins: "+ coins);
+    	            		
+    	            		XP xpReward = new XP(xp);
+    	            		xp = xpReward.getXp()+100;
+    	            		experience.setXp(xp);
+    	            		xpEarned.setText("EXP: "+xp);
+    	            		xpLabel.setText("EXP: "+xp);
+    	        		}
     	    	}
     			else {
     				int choice = enemy.getDecider();
