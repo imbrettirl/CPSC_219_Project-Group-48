@@ -55,13 +55,13 @@ public class Attack {
 		return damageDone;
 	}
 	
-	int energyAttack() {
-		int energyDamage = enemyHealth - 3;
+	int energyAttack(int multiplier) {
+		int energyDamage = enemyHealth - (3 + multiplier);
 		this.enemyHealth = energyDamage;
 		return energyDamage;
 	}
-	int enemyEnergyAttack() {
-		int energyDamage = playerHealth - 3;
+	int enemyEnergyAttack(int multiplier) {
+		int energyDamage = playerHealth - (3+multiplier);
 		this.playerHealth = energyDamage;
 		return energyDamage;
 	}
