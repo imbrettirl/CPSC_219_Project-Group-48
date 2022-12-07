@@ -19,9 +19,20 @@ import javafx.scene.Scene;
 
 public class MainMenuController {
 	private static final int numberOfItems = 0;
+	int totalPrice = 0;
+	
 
 	Stage applicationStage;
-
+	
+	@FXML
+    private Button swordButton;
+    
+    @FXML
+    private Button shotgunButton;
+    
+    @FXML
+    private Button axeButton;
+	
     @FXML
     private Button ShopButton;
 
@@ -35,7 +46,6 @@ public class MainMenuController {
     private TextField nameTextField;
     
     @FXML
-
     private Label coinLabel;
     
     @FXML
@@ -50,6 +60,11 @@ public class MainMenuController {
     @FXML
     private TextField item3TextField;
     
+    @FXML
+    private Button purchaseButton;
+    
+    @FXML 
+    private ChoiceBox weaponChoiceBox;
     
     Player player = new Player(10, 10);
 	Enemy enemy = new Enemy("",10,10);
@@ -57,7 +72,13 @@ public class MainMenuController {
     private Button attackButton;
     private Button specialAttackButton;
 	
-	
+	boolean sword = false;
+    boolean shotgun = false;
+    boolean axe = false;
+    boolean swordAdded = false;
+    boolean shotgunAdded = false;
+    boolean axeAdded = false;
+    
 	Label playerMove = new Label("");
 	Label enemyMove = new Label("");
 	
@@ -66,7 +87,7 @@ public class MainMenuController {
 	Label enemyHealthLabel = new Label("");
 	Label enemyEnergyLabel = new Label("");
 	
-	int coins =0;
+	int coins =100;
 	Label coinsEarned = new Label("Coins: " + coins);
 	
 	int enemyDamage;
@@ -78,10 +99,10 @@ public class MainMenuController {
 	ExperiencePoints experience = new ExperiencePoints(xp);
 	Label xpEarned = new Label("EXP: "+xp);
 	
+	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
     @FXML
     void startGame(ActionEvent startGameEvent) {
     	Scene mainScene = applicationStage.getScene();
-    	
     	String playerName = nameTextField.getText();
     	
     	playerMove.setText("");
@@ -100,7 +121,7 @@ public class MainMenuController {
     	//contains specific stats for player
     	VBox playerStats = new VBox(10);
     	// next level after stats, contains the first set of options for player
-    	HBox options1 = new HBox(10);
+    	HBox options1 = new HBox(50);
     	options1.setPadding(new Insets(30,0,0,25));
     	options1.setAlignment(Pos.CENTER_LEFT);
     	HBox options2 = new HBox(10);
@@ -168,22 +189,22 @@ public class MainMenuController {
     			enemyMultiplier = player.getDamageCounter()*2;
     		}
     		else {
-    			
-    			if (enemy.bossChance() <0) {
+
+    			if (enemy.bossChance() <5) {
     				System.out.print("bighealthboost");
     				enemy.healthUpgrade(player.getHp()*2);
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp());
         			enemyMultiplier = player.getDamageCounter();
         		}
-        		else if (enemy.bossChance() <0) {
+        		else if (enemy.bossChance() <9) {
         			System.out.print("bigenergyboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage());
         			enemy.energyUpgrade(player.getEp()*2);
         			enemyMultiplier = player.getDamageCounter();
         		}
-        		else if (enemy.bossChance() <0){
+        		else if (enemy.bossChance() <12){
         			System.out.print("bigattackboost");
         			enemy.healthUpgrade(player.getHp());
         			enemy.damageUpgrade(player.getDamage()*2);
@@ -220,8 +241,19 @@ public class MainMenuController {
     	
     	Label itemsLabel = new Label("Items");
     	itemsLabel.setPadding(new Insets(5,0,0,0));
-    	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
-    	Button itemsButton = new Button("Use Item");
+    	  	
+    	if (sword == true && swordAdded == false) {
+    		swordAdded = true;
+    		itemsChoiceBox.getItems().add("Sword");
+    	}
+    	if (shotgun == true && shotgunAdded == false) {
+    		shotgunAdded = true;
+    		itemsChoiceBox.getItems().add("Shotgun");
+    	}
+    	if (axe == true && axeAdded == false) {
+    		axeAdded = true;
+    		itemsChoiceBox.getItems().add("Axe");
+    	}
     	
     	//options2
     	this.specialAttackButton = new Button("Special Attack");
@@ -246,7 +278,7 @@ public class MainMenuController {
     	// POSITIONING
     	startGameContainer.getChildren().addAll(menuButton, stats, options1, options2, moves);
     	moves.getChildren().addAll(playerMove, enemyMove, coinsEarned, xpEarned);
-    	itemBox.getChildren().addAll(itemsLabel, itemsChoiceBox, itemsButton);
+    	itemBox.getChildren().addAll(itemsLabel, itemsChoiceBox);
     	options1.getChildren().addAll( attackButton, itemBox);
     	turnEnd.getChildren().addAll(endTurn);
     	options2.getChildren().addAll(specialAttackButton, turnEnd);
@@ -254,13 +286,30 @@ public class MainMenuController {
     	playerStats.getChildren().addAll(playerNameLabel, playerHealthLabel, playerEnergyLabel);
     	stats.getChildren().addAll(playerStats, enemyStats);
     	applicationStage.setScene(startGameScene);
-
+    	   	
     }
 
     // Random amount of damage between 1 and 5 dealt to enemy
     void attackEvent(ActionEvent attackEvent) {
-    	
+    	if (itemsChoiceBox.getValue() == "Sword") {
+    		System.out.print("sword added attack");
+
+        	player.weaponBought(1);
+    	}
+    	else if (itemsChoiceBox.getValue() == "Shotgun") {
+    		System.out.print("shotgun added attack");
+
+        	player.weaponBought(2);
+    	}
+    	else if (itemsChoiceBox.getValue() == "Axe") {
+    		System.out.print("axe added attack");
+        	player.weaponBought(3);
+    	}
+    	else {
+    		System.out.print("DEFAUTL ATTACK");
+    	}
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+    	System.out.print(bossVal);
     	if (pAttack.win == false) {
     		if (bossVal == true) {
     			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
@@ -280,7 +329,7 @@ public class MainMenuController {
     			enemyMove.setText("You Won!");
         		playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
         		
-        		if (bossVal = false) {
+        		if (bossVal == false) {
         		Coins coinReward = new Coins(coins);
         		coins = coinReward.getCoins();
         		coinsEarned.setText("Coins: " + coins);
@@ -292,7 +341,7 @@ public class MainMenuController {
         		xpEarned.setText("EXP: "+xp);
         		xpLabel.setText("EXP: "+xp);
         		}
-        		else if (bossVal = true) {
+        		else if (bossVal == true) {
         			Coins coinReward = new Coins(coins);
             		coins = coinReward.getCoins()+50;
             		coinsEarned.setText("Coins: " + coins);
@@ -338,12 +387,12 @@ public class MainMenuController {
     		playerMove.setText("Game is over, reset to start a new game");
     		enemyMove.setText("");
     	}
-    	
+    	System.out.print(bossVal);
     }
     
     // Guaranteed 3 damage attack at the cost of 5 energy
     void specialAttack(ActionEvent specialAttackEvent) {
-    	
+
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
     	if (pAttack.win == false) {
     		if (bossVal == true) {
@@ -362,16 +411,30 @@ public class MainMenuController {
     				enemyMove.setText("You Won!");
     	    		playerMove.setText("You did "+ player.getEnergyDamage() + " energy damage");
     				
-    	    		Coins coinReward = new Coins(coins);
-    	    		coins = coinReward.getCoins();
-    	    		coinsEarned.setText("Coins: " + coins);
-    	    		coinLabel.setText("Coins: "+ coins);
-    	    		
-    	    		XP xpReward = new XP(xp);
-    	    		xp = xpReward.getXp();
-    	    		experience.setXp(xp);
-    	    		xpEarned.setText("EXP: "+experience.getXp());
-    	    		xpLabel.setText("EXP: "+experience.getXp());
+    	    		if (bossVal == false) {
+    	        		Coins coinReward = new Coins(coins);
+    	        		coins = coinReward.getCoins();
+    	        		coinsEarned.setText("Coins: " + coins);
+    	        		coinLabel.setText("Coins: "+ coins);
+    	        		
+    	        		XP xpReward = new XP(xp);
+    	        		xp = xpReward.getXp();
+    	        		experience.setXp(xp);
+    	        		xpEarned.setText("EXP: "+xp);
+    	        		xpLabel.setText("EXP: "+xp);
+    	        		}
+    	        		else if (bossVal == true) {
+    	        			Coins coinReward = new Coins(coins);
+    	            		coins = coinReward.getCoins()+50;
+    	            		coinsEarned.setText("Coins: " + coins);
+    	            		coinLabel.setText("Coins: "+ coins);
+    	            		
+    	            		XP xpReward = new XP(xp);
+    	            		xp = xpReward.getXp()+100;
+    	            		experience.setXp(xp);
+    	            		xpEarned.setText("EXP: "+xp);
+    	            		xpLabel.setText("EXP: "+xp);
+    	        		}
     	    	}
     			else {
     				int choice = enemy.getDecider();
@@ -451,80 +514,108 @@ public class MainMenuController {
 		 enemyMove.setText("");
 		}
     }
-    
-	@FXML
+    Label shopFeedback = new Label("");
+    Label coinShop = new Label("Coins: "+coins);
+    @FXML
     void goShop(ActionEvent shoppingEvent) {
     	System.out.println("Button Clicked");
     	Scene mainScene = applicationStage.getScene();
-    	
-    	VBox mainScreenVbox = new VBox(10);
-    	
+    	//int numberOfWeapons = 3;
+    	VBox mainScreenVbox = new VBox(10);  	
+    	HBox topHalf = new HBox(30);
+    	shopFeedback.setText("");
+        coinShop.setText("Coins: "+coins);
     	VBox ItemNumber1VBox = new VBox(10);
-    	Button selectButton1 = new Button("Select");
-    	Label itemNumber1Label  = new Label("Item #1");
-    	TextField item1TextField = new TextField();
-
+    	Label itemNumber1Label  = new Label("Price: 25 coins (Gives a chance to attack twice!)");    	
     	VBox ItemNumber2VBox = new VBox(10);
-    	Button selectButton2 = new Button("Select");
-    	Label itemNumber2Label  = new Label("Item #2");
-    	TextField item2TextField = new TextField();
-    	
+    	Label itemNumber2Label  = new Label("Price: 50 coins (Gives a chance to attack multiple times!)");
     	VBox ItemNumber3VBox = new VBox(10);
-    	Button selectButton3 = new Button("Select");
-    	Label itemNumber3Label  = new Label("Item #3");
-    	TextField item3TextField = new TextField();
-    	
-    	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
-    	
+    	Label itemNumber3Label  = new Label("Price: 100 coins (Gives a chance for massive damage!)");
+    		
     	Button menuButton = new Button("Back to Menu");
+    	topHalf.getChildren().addAll(menuButton, coinShop);
+    	mainScreenVbox.getChildren().addAll(topHalf,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
     	
-    	mainScreenVbox.getChildren().addAll(menuButton,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
+    	this.swordButton = new Button("Sword");
+    	swordButton.setOnAction(purchaseEvent -> swordPurchased(purchaseEvent));
+		
+    	this.shotgunButton = new Button("Shotgun");
+    	shotgunButton.setOnAction(purchaseEvent -> shotgunPurchased(purchaseEvent));
     	
-    	ItemNumber1VBox.getChildren().addAll(itemNumber1Label,item1TextField, selectButton1);
-    	ItemNumber2VBox.getChildren().addAll(itemNumber2Label,item2TextField, selectButton2);
-    	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,item3TextField,selectButton3,overallPurchaseLabel);
+    	this.axeButton = new Button("Axe");
+    	axeButton.setOnAction(purchaseEvent -> axePurchased(purchaseEvent));
+  	
     	
-    	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
+    	ItemNumber1VBox.getChildren().addAll(swordButton,itemNumber1Label);
+    	ItemNumber2VBox.getChildren().addAll(shotgunButton,itemNumber2Label);
+    	ItemNumber3VBox.getChildren().addAll(axeButton,itemNumber3Label, shopFeedback);
+    	
+    	Scene ShoppingScene = new Scene(mainScreenVbox, 375, 300);
     	applicationStage.setScene(ShoppingScene);
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
-    	
 	}
-    	//if (totalPrice =< coins) {
-    		
-    	
-    	
-    	//double totalPrice = 0.0;
-	    //String quantityEntered = item1TextField.getText();
-	 	
-		
-  
-//                 item 1 
-//    			   //health - 500
-//    			   //if coin > 0 
-//    			   //else "health points not enough
-//    		       
-//    		       System.out.println("You have clicked the button 1 " + count + " times");
-//    		       //total price = count*itemPrice
-//    		
-//    			   item 2
-//    			   //coin - 300
-//    			   //if health > 0 
-//    			   //else "health points not enough
-//    			   
-//    			   //total price = count*itemPrice
-//    			   item 3
-//    			   //coin - 200
-//    			   //if health > 0 true
-//    			   //else "health points not enough
-//    			   
-//    			  
-//    		
-//    	
+
+	void swordPurchased(ActionEvent swordEvent) {
+
+		if (coins >= 25 && sword == false){
+			System.out.println("Sword is added");
+			shopFeedback.setText("You bought a Sword!");
+			coins = coins - 25;
+			coinShop.setText("Coins: "+coins);
+			coinLabel.setText("Coins: "+coins);
+			coinsEarned.setText("Coins: " + coins);
+			sword = true;
+
+		}
+		else if (sword == true) {
+			shopFeedback.setText("You already own this!");
+		}else {
+			shopFeedback.setText("Sorry! Not enough Coins");
+			System.out.println("Not enough money");
+		}
+	}
 	
+	void shotgunPurchased(ActionEvent shotgunEvent) {
+		if (coins >= 50 && shotgun == false){
+			System.out.println("Shotgun is added");
+			shopFeedback.setText("You bought a Shotgun!");
+			coins = coins - 50;
+			coinShop.setText("Coins: "+coins);
+			coinLabel.setText("Coins: "+coins);
+			coinsEarned.setText("Coins: " + coins);
+			shotgun = true;
+
+		}
+		else if (shotgun == true) {
+			shopFeedback.setText("You already own this!");
+		}else {
+			shopFeedback.setText("Sorry! Not enough Coins");
+			System.out.println("Not enough money");
+		}
+	}
+	
+
+	void axePurchased(ActionEvent axeEvent) {
+		if (coins >= 100 && axe == false){
+			System.out.println("Axe is added");
+			shopFeedback.setText("You bought a Axe!");
+			coins = coins - 100;
+			coinShop.setText("Coins: "+coins);
+			coinLabel.setText("Coins: "+coins);
+			coinsEarned.setText("Coins: " + coins);
+			axe = true;
+
+		}
+		else if (axe == true) {
+			shopFeedback.setText("You already own this!");
+		}else {
+			shopFeedback.setText("Sorry! Not enough Coins");
+			System.out.println("Not enough money");
+		}
+ }
 	
 	Label xpUpgrade = new Label("EXP: "+ experience.getXp());
 	Label description = new Label("placeholder");
-	
     @FXML
     void goUpgrades(ActionEvent event) {
     	

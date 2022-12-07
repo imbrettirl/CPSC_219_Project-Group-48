@@ -10,6 +10,10 @@ public class Player {
 	private int hpCounter =0;
 	private int epCounter=0;
 	private int damageCounter=0;
+	private boolean sword;
+	private boolean shotgun;
+	private boolean axe;
+	private int currentWeapon =0;
 	
 	Player(int health, int energy) {
 		setHp(health);
@@ -36,6 +40,68 @@ public class Player {
 	}
 
 	public int getDamage() {
+		System.out.print("stats: "+currentWeapon);
+		System.out.print(axe);
+		System.out.print(sword);
+		System.out.print(shotgun);
+		if (sword == true && currentWeapon ==1) {
+			System.out.print("sword used");
+			//sword adds chance to do double damage instead of miss
+			Random dodge = new Random();
+			int dodgeChance = dodge.nextInt((10-1)+1)+1;
+			if (dodgeChance > 1) {
+				Random r = new Random();
+				int rand = r.nextInt((5-1) + 1) + 1;
+				damage = rand + damageCounter;
+				return damage;
+			}
+			else {
+				Random r = new Random();
+				int rand = r.nextInt((10-2) + 1) + 2;
+				damage = rand + damageCounter;
+				return damage;
+				}
+		}
+		else if (axe == true && currentWeapon ==3) {
+			System.out.print("axe used");
+			//axe replaces dodge chance with massive damage chance
+			Random dodge = new Random();
+			int dodgeChance = dodge.nextInt((10-1)+1)+1;
+			if (dodgeChance > 1) {
+				Random r = new Random();
+				int rand = r.nextInt((5 - 1) + 1) + 1;
+				damage = rand + damageCounter;
+				return damage;
+			}
+			else {
+				damage = 20;
+				damage = damage + damageCounter;
+				return damage;
+				}
+		}
+		else if (shotgun == true && currentWeapon ==2) {
+			System.out.print("shotgun used");
+			//shotgun adds chance to triple damage, can still miss
+			Random dodge = new Random();
+			int dodgeChance = dodge.nextInt((10-1)+1)+1;
+			if (dodgeChance < 6) {
+				Random r = new Random();
+				int rand = r.nextInt((5-1) + 1) + 1;
+				damage = rand + damageCounter;
+				return damage;
+			}
+			else if (dodgeChance < 10) {
+				Random r = new Random();
+				int rand = r.nextInt((15-3) + 1) + 3;
+				damage = rand + damageCounter;
+				return damage;
+			}
+			else {
+				damage = 0;
+				return damage;
+				}
+		}else {
+			System.out.print("default attack");
 		Random dodge = new Random();
 		int dodgeChance = dodge.nextInt((10-1)+1)+1;
 		if (dodgeChance > 1) {
@@ -47,8 +113,8 @@ public class Player {
 		else {
 			damage = 0;
 			return damage;
-		}
-		
+			}
+		}		
 	}
 
 	int getEnergyDamage() {
@@ -84,4 +150,20 @@ public class Player {
 	int getDamageCounter() {
 		return damageCounter;
 	}
+	public void weaponBought(int name) {
+		System.out.print("weaponbought: "+name);
+		if (name == 1) {
+			sword = true;
+			currentWeapon =1;
+		}
+		else if (name == 2) {
+			shotgun = true;
+			currentWeapon =2;
+		}
+		else {
+			axe = true;
+			currentWeapon =3;
+		}
+	}
+
 }
