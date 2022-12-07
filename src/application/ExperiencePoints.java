@@ -14,4 +14,5 @@ public class ExperiencePoints {
 	void setXp(int xp) {
 		this.xp = xp;
 	}
+	
 }
