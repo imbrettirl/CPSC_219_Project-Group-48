@@ -136,7 +136,7 @@ public class MainMenuController {
     	HBox itemBox = new HBox(5);
     	itemBox.setPadding(new Insets(0,0,0,25));
     	
-    	// ALL PLAYER/ENEMY STATS 
+    	// ALL PLAYER/ENEMY STATS (DEFAULT SETUP)
     	player.setHp(10 + (5*player.getHpCounter()));
     	player.setEp(10+ (5*player.getEpCounter()));
     	
@@ -149,13 +149,16 @@ public class MainMenuController {
     	
     	enemy.setName(ename);
     	
-    	// Checking if player has upgraded at ALL
+    	//SCALING AI CODE
+    	// Checking if player has upgraded at ALL and checks the players weapon
     	if (player.getHpCounter() <1 && player.getEpCounter() <1  && player.getDamageCounter() <1 && player.getCurrentWeapon() == 0) {
     		System.out.print("default setup");
     		enemy.setHp(10);
     		enemy.setEp(10);
     	}
+    	// if player has upgraded no further than 1 point in each category along with only having the basic sword
     	else if (player.getHpCounter() <=1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1){
+    		//gives the AI a random stat boost to match the player
     		if (enemy.randomStat() == 1) {
     			enemy.damageUpgrade(2);
     			enemyMultiplier = 1;
@@ -167,7 +170,9 @@ public class MainMenuController {
     			enemy.healthUpgrade(15);
     		}
     	}
+    	// if player has upgraded beyond 1 in any category
     	else {
+    		// checks which stat has the predominant points put into them, then decides how to buff AI
     		if (player.getHpCounter() > 1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1) {
     			System.out.print("bighealthboost");
     			enemy.healthUpgrade(player.getHp()*2);
@@ -190,7 +195,8 @@ public class MainMenuController {
     			enemyMultiplier = player.getDamageCounter()*2;
     		}
     		else {
-
+    			// if all 2 or more upgrades go beyond 1 point (example, 2,2,1) goes to new scaling system, also skips to here if shotgun or axe is being used
+    			// also generates random chance to encounter a boss fight
     			if (enemy.bossChance() <5) {
     				System.out.print("bighealthboost");
     				enemy.healthUpgrade(player.getHp()*2);
@@ -213,6 +219,7 @@ public class MainMenuController {
         			enemyMultiplier = player.getDamageCounter()*2;
         		}
         		else {
+        			// generates a new enemy with boosted health but lower attack
         			System.out.print("boss fight");
         			Boss boss = new Boss(ename, player.getHp(),10);
         			enemy = boss;
@@ -242,7 +249,8 @@ public class MainMenuController {
     	
     	Label itemsLabel = new Label("Items");
     	itemsLabel.setPadding(new Insets(5,0,0,0));
-    	  	
+    	  
+    	// checks what weapons have been purchased and adds to choicebox
     	if (sword == true && swordAdded == false) {
     		swordAdded = true;
     		itemsChoiceBox.getItems().add("Sword");
@@ -292,6 +300,7 @@ public class MainMenuController {
 
     // Random amount of damage between 1 and 5 dealt to enemy
     void attackEvent(ActionEvent attackEvent) {
+    	// checks what item is in the choice box and changes the damage values based on this
     	if (itemsChoiceBox.getValue() == "Sword") {
     		System.out.print("sword added attack");
 
@@ -309,19 +318,25 @@ public class MainMenuController {
     	else {
     		System.out.print("DEFAUTL ATTACK");
     	}
+    	// generates a new attack, stores current health, damage of both player and AI
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
-    	System.out.print(bossVal);
+    	// checks if player or AI health is already at 0, then checks if the fight is a boss fight
     	if (pAttack.win == false) {
     		if (bossVal == true) {
+    			//replaces current default enemy with boss
     			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
     			boss.bossFight();
     			enemy = boss;
 
     		}
+    		// does the damage through the attack class
     		enemy.setHp(pAttack.playerAttack());
+    		// changes labels
     		enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     		if (pAttack.getPlayerDamage() > 0) {
+    			// if damage is done, changes label to tell player, also checks if a weapon effect has been used
     	    	playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
+    	    	// checks the value set in the player class
     	    	if (player.getWeaponEffect() == 1) {
     	    		weaponEffect.setText("Sword struck twice!");
     	    	}
@@ -338,6 +353,7 @@ public class MainMenuController {
     	    	else {
     	    		playerMove.setText("Your attack missed, you did 0 damage");
     	    	}
+    		// if enemy health reaches 0, display winning message and give rewards
     		if (enemy.getHp() <=0 ) {
     			enemyMove.setText("You Won!");
         		playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
@@ -354,6 +370,7 @@ public class MainMenuController {
         		xpEarned.setText("EXP: "+xp);
         		xpLabel.setText("EXP: "+xp);
         		}
+        		// gives extra rewards if boss is defeated
         		else if (bossVal == true) {
         			Coins coinReward = new Coins(coins);
             		coins = coinReward.getCoins()+50;
@@ -367,6 +384,8 @@ public class MainMenuController {
             		xpLabel.setText("EXP: "+xp);
         		}
     		}
+    		//if enemy doesn't die, it has a 50/50 chance of choosing either regular attack or energy attack
+    		//both methods check if player has died, displays appropriate labels
     		else {
     			int choice = enemy.getDecider();
     			if (choice == 1 || enemy.getEp() <5) {
@@ -403,7 +422,7 @@ public class MainMenuController {
     	System.out.print(bossVal);
     }
     
-    // Guaranteed 3 damage attack at the cost of 5 energy
+    // Guaranteed 3 damage attack at the cost of 5 energy, this is not effected by weapons
     void specialAttack(ActionEvent specialAttackEvent) {
 
     	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
@@ -569,7 +588,7 @@ public class MainMenuController {
 	}
 
 	void swordPurchased(ActionEvent swordEvent) {
-
+		// checks if player has the right amount of coins, and if the item has been purchased already
 		if (coins >= 25 && sword == false){
 			System.out.println("Sword is added");
 			shopFeedback.setText("You bought a Sword!");
@@ -577,6 +596,7 @@ public class MainMenuController {
 			coinShop.setText("Coins: "+coins);
 			coinLabel.setText("Coins: "+coins);
 			coinsEarned.setText("Coins: " + coins);
+			// sets value to true to confirm the item is already owned by player
 			sword = true;
 
 		}
