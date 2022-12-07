@@ -50,7 +50,7 @@ public class MainMenuController {
     private Label xpLabel;
     
     @FXML
-    private Button itemsButton;
+    private Button weaponButton;
     
     @FXML 
     private ChoiceBox<String> weaponChoiceBox = new ChoiceBox<String>();
@@ -147,8 +147,8 @@ public class MainMenuController {
     	this.attackButton = new Button("Attack");
     	attackButton.setOnAction(attack -> attackEvent(attack));
     	
-    	Label itemsLabel = new Label("Items");
-    	itemsLabel.setPadding(new Insets(5,0,0,0));
+    	Label weaponsLabel = new Label("Weapons");
+    	weaponsLabel.setPadding(new Insets(5,0,0,0));
 
 
 //    	ChoiceBox<String> weaponChoiceBox = new ChoiceBox<String>();
@@ -163,8 +163,8 @@ public class MainMenuController {
     	allRows.getChildren().add(weaponRow);
     	
 
-    	this.itemsButton = new Button("Use Item");
-    	itemsButton.setOnAction(selectItem -> selectedItemEvent(selectItem));
+    	this.weaponButton = new Button("Use weapon");
+    	weaponButton.setOnAction(selectItem -> selectWeaponEvent(selectItem));
     	
     	//options2
     	this.specialAttackButton = new Button("Special Attack");
@@ -189,7 +189,7 @@ public class MainMenuController {
     	// POSITIONING
     	startGameContainer.getChildren().addAll(menuButton, stats, options1, options2, moves);
     	moves.getChildren().addAll(playerMove, enemyMove, coinsEarned, xpEarned);
-    	itemBox.getChildren().addAll(itemsLabel, weaponChoiceBox, itemsButton);
+    	itemBox.getChildren().addAll(weaponsLabel, weaponChoiceBox, weaponButton);
     	options1.getChildren().addAll( attackButton, itemBox);
     	turnEnd.getChildren().addAll(endTurn);
     	options2.getChildren().addAll(specialAttackButton, turnEnd);
@@ -454,14 +454,14 @@ public class MainMenuController {
 			System.out.println("Price For Sword is: " + sword.getPrice());
 			
 		}else {
+			
 			System.out.println("Not enough coins");
 			errorLabel.setText("Not enough coins.");
 		}
 		
     	overallPurchaseLabel.setText("New total coins: " + player.getCoins());
     }
-    	
-
+    
 	void shotgunPurchased(ActionEvent shotgunEvent) {
 		
 		shotgunButton.setOnAction(purchaseEvent -> swordPurchased(shotgunEvent));
@@ -507,24 +507,49 @@ public class MainMenuController {
     	overallPurchaseLabel.setText("New total coins: " + player.getCoins());
  }
 	
-void selectedItemEvent (ActionEvent selectedItemEvent) {
+void selectWeaponEvent (ActionEvent selectWeaponEvent) {
 		
 	String selectedWeapon = weaponChoiceBox.getValue();
+	System.out.println("Selected weapon is: " + selectedWeapon);
 
-	if (selectedWeapon == "Sword"){
-		player.removeWeapon(0);
+	for (int i=0; i<3; i++) {
+		if(player.weapons[i]>0) {
+		int	weaponNum = 0;
 		
+		String[] WeaponList = new String[weaponNum];
+		if (i==0) {
+			player.removeWeapon(0);
+			Weapon sword = new Weapon(1, 2, 2);
+			sword.getWeaponHealthDamage();
+			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+	     	enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+			
+			//sword.getWeaponEnergyDamage();
 	}
-	if (selectedWeapon == "Shotgun"){
-		player.removeWeapon(1);
+		if (i==1){
+			player.removeWeapon(1);
+			Weapon shotgun = new Weapon(1, 2, 2);
+			shotgun.getWeaponHealthDamage();
+			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+	     	enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+			
+			//shotgun.getWeaponEnergyDamage();
 	}
-	if (selectedWeapon == "Axe"){
-		player.removeWeapon(2);
+		if (i==2){
+			player.removeWeapon(2);
+			Weapon axe = new Weapon(1, 2, 2);
+			axe.getWeaponHealthDamage();
+
+			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+	     	enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+			//axe.getWeaponEnergyDamage();
+			}
+		}
+			
 	}
-	System.out.println("Use item clicked");
-	
-}
-	
+
+	System.out.println("Use weapon clicked");
+	}
     @FXML
     void goUpgrades(ActionEvent event) {
     	

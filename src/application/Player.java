@@ -85,9 +85,11 @@ public class Player {
 		
 		for (int i=0; i<3; i++) {
 			if(weapons[i]>0) {
+				
 				if (i==0) {
 					WeaponList[j] = "Sword";
 					j += 1;
+					
 				}
 				if (i==1) {
 					WeaponList[j] = "Shotgun";

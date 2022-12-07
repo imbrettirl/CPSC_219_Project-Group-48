@@ -8,7 +8,7 @@ public class Weapon {
 		private String name;
 	    private int price;
 	    private int WeaponHealthDamage;
-		private int WeaponErgyDamage;
+		private int WeaponEnergyDamage;
 	    private int healthDamage;
 		private int energyDamage;
 	  
@@ -24,24 +24,18 @@ public class Weapon {
 		return WeaponHealthDamage;
 	}
 
-	public int setWeaponHealthDamage(int weaponHealthDamage) {
+	public int getWeaponHealthDamage(int weaponHealthDamage) {
 		
 		WeaponHealthDamage = Enemy.getHp() - healthDamage;
 		
 		return WeaponHealthDamage;
 	}
 
-	public int getWeaponErgyDamage() {
+	public int getWeaponEnergyDamage(int WeaponEnergyDamage) {
 		
-		return WeaponErgyDamage;
-	}
-
-
-	public int setWeaponErgyDamage(int weaponErgyDamage) {
+		WeaponEnergyDamage = Enemy.getEp() - energyDamage ;
 		
-		weaponErgyDamage = Enemy.getEp() - energyDamage ;
-		
-		return weaponErgyDamage;
+		return WeaponEnergyDamage;
 	}
 
 	public String  getName() {
@@ -65,5 +59,5 @@ public class Weapon {
 	int getEnergyDamage() {
 		return energyDamage;
 	}
-
 }
+	
