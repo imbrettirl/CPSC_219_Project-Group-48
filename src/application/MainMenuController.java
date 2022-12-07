@@ -545,7 +545,6 @@ void selectWeaponEvent (ActionEvent selectWeaponEvent) {
 			//axe.getWeaponEnergyDamage();
 			}
 		}
-			
 	}
 
 	System.out.println("Use weapon clicked");

@@ -40,7 +40,6 @@ public class Weapon {
 
 	public String  getName() {
 		return name;
-		
 	}
 
 	public void setName(String name) {
