@@ -19,9 +19,20 @@ import javafx.scene.Scene;
 
 public class MainMenuController {
 	private static final int numberOfItems = 0;
+	int totalPrice = 0;
+	
 
 	Stage applicationStage;
-
+	
+	@FXML
+    private Button swordButton;
+    
+    @FXML
+    private Button shotgunButton;
+    
+    @FXML
+    private Button axeButton;
+	
     @FXML
     private Button ShopButton;
 
@@ -35,7 +46,6 @@ public class MainMenuController {
     private TextField nameTextField;
     
     @FXML
-
     private Label coinLabel;
     
     @FXML
@@ -50,6 +60,11 @@ public class MainMenuController {
     @FXML
     private TextField item3TextField;
     
+    @FXML
+    private Button purchaseButton;
+    
+    @FXML 
+    private ChoiceBox weaponChoiceBox;
     
     Player player = new Player(10, 10);
 	Enemy enemy = new Enemy("",10,10);
@@ -57,7 +72,13 @@ public class MainMenuController {
     private Button attackButton;
     private Button specialAttackButton;
 	
-	
+	boolean sword = false;
+    boolean shotgun = false;
+    boolean axe = false;
+    boolean swordAdded = false;
+    boolean shotgunAdded = false;
+    boolean axeAdded = false;
+    
 	Label playerMove = new Label("");
 	Label enemyMove = new Label("");
 	
@@ -66,23 +87,22 @@ public class MainMenuController {
 	Label enemyHealthLabel = new Label("");
 	Label enemyEnergyLabel = new Label("");
 	
-	int coins =0;
+	int coins =200;
 	Label coinsEarned = new Label("Coins: " + coins);
 	
-	int healthMultiplier;
-	int energyMultiplier;
-	int damageMultiplier;
 	int enemyDamage;
 	boolean bossVal = false;
+	
+	int enemyMultiplier = 0;
 	
 	int xp =0;
 	ExperiencePoints experience = new ExperiencePoints(xp);
 	Label xpEarned = new Label("EXP: "+xp);
 	
+	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
     @FXML
     void startGame(ActionEvent startGameEvent) {
     	Scene mainScene = applicationStage.getScene();
-    	
     	String playerName = nameTextField.getText();
     	
     	playerMove.setText("");
@@ -101,7 +121,7 @@ public class MainMenuController {
     	//contains specific stats for player
     	VBox playerStats = new VBox(10);
     	// next level after stats, contains the first set of options for player
-    	HBox options1 = new HBox(10);
+    	HBox options1 = new HBox(50);
     	options1.setPadding(new Insets(30,0,0,25));
     	options1.setAlignment(Pos.CENTER_LEFT);
     	HBox options2 = new HBox(10);
@@ -116,8 +136,11 @@ public class MainMenuController {
     	itemBox.setPadding(new Insets(0,0,0,25));
     	
     	// ALL PLAYER/ENEMY STATS 
-    	player.setHp(10 + (5 * healthMultiplier));
-    	player.setEp(10 + (5 * energyMultiplier));
+    	player.setHp(10 + (5*player.getHpCounter()));
+    	player.setEp(10+ (5*player.getEpCounter()));
+    	
+    	enemy.setHp(10);
+    	enemy.setEp(10);
     	String[] nameArray = {"Bob", "Jack", "Chris", "Brett", "Nika"};
     	Random randomName = new Random();
     	int index = randomName.nextInt(nameArray.length);
@@ -126,67 +149,78 @@ public class MainMenuController {
     	enemy.setName(ename);
     	
     	// Checking if player has upgraded at ALL
-    	if (healthMultiplier == 0 && energyMultiplier == 0 && damageMultiplier == 0) {
+    	if (player.getHpCounter() <1 && player.getEpCounter() <1  && player.getDamageCounter() <1 && player.getCurrentWeapon() == 0) {
     		System.out.print("default setup");
     		enemy.setHp(10);
     		enemy.setEp(10);
     	}
-    	else if (healthMultiplier <= 1 && energyMultiplier <= 1 && damageMultiplier <= 1){
-    		Random rng = new Random();
-    		int eu = rng.nextInt((3-1)+1)+1;
-    		if (eu == 1) {
-    			System.out.print("enemyhealthupgraded");
-    			enemy.setHp(10 + (5 * 1));
-    			enemy.setEp(10);
+    	else if (player.getHpCounter() <=1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1){
+    		if (enemy.randomStat() == 1) {
+    			enemy.damageUpgrade(2);
+    			enemyMultiplier = 1;
     		}
-    		else if (eu == 2) {
-    			System.out.print("enemyenergyupgraded");
-    			enemy.setEp(10 + (5 * 1));
-    			enemy.setHp(10);
+    		else if (enemy.randomStat() == 2) {
+    			enemy.energyUpgrade(15);
     		}
-    		else if (eu == 3) {
-    			System.out.print("enemydamageupgraded");
-    			enemy.setHp(10);
-    			enemy.setEp(10);
-    			enemyDamage = 1;
+    		else {
+    			enemy.healthUpgrade(15);
     		}
     	}
-    	// Picks a random stat to boost
     	else {
-    		Random rng = new Random();
-    		int eu = rng.nextInt((3-1)+1)+1;
-    		if (eu == 1) {
+    		if (player.getHpCounter() > 1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1) {
     			System.out.print("bighealthboost");
-    			enemy.setHp(10 + (10 * damageMultiplier));
-    			enemy.setEp(10 + (5 * energyMultiplier));
-    			enemyDamage = healthMultiplier /2;
+    			enemy.healthUpgrade(player.getHp()*2);
+    			enemy.energyUpgrade(player.getEp()/2);
+    			enemy.damageUpgrade(player.getDamage()/2);
+    			enemyMultiplier = player.getDamageCounter();
     		}
-    		else if (eu == 2) {
-    			Random boss = new Random();
-    			int bossn = boss.nextInt((10-1)+1)+1;
-    			if (bossn < 10) {
+    		else if (player.getEpCounter() >1 && player.getHpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1) {
     			System.out.print("bigenergyboost");
-    			enemy.setEp(10 + (10 * energyMultiplier));
-    			enemy.setHp(10+ (5 * damageMultiplier));
-    			enemyDamage = healthMultiplier;
-    			}
-    			else if (bossn == 10) {
-    				enemy.setName("BOSS");
-    				enemy.setHp(100);
-    				enemy.setEp(20);
-    				enemyDamage = 0;
-    				bossVal = true;
-    			}
+    			enemy.energyUpgrade(player.getEp()*2);
+    			enemy.healthUpgrade(player.getHp()/2);
+    			enemy.damageUpgrade(player.getDamage()/2);
+    			enemyMultiplier = player.getDamageCounter();
     		}
-    		else if (eu == 3) {
+    		else if (player.getDamageCounter() >1 && player.getHpCounter() <=1 && player.getEpCounter() <=1 && player.getCurrentWeapon() <=1) {
     			System.out.print("bigattackboost");
-    			enemy.setHp(10+ (2 * damageMultiplier));
-    			enemy.setEp(10+ (3 * energyMultiplier));
-    			enemyDamage = healthMultiplier * 2;
+    			enemy.damageUpgrade(player.getDamage()*2);
+    			enemy.healthUpgrade(player.getHp()/2);
+    			enemy.energyUpgrade(player.getEp()/2);
+    			enemyMultiplier = player.getDamageCounter()*2;
+    		}
+    		else {
+
+    			if (enemy.bossChance() <5) {
+    				System.out.print("bighealthboost");
+    				enemy.healthUpgrade(player.getHp()*2);
+        			enemy.damageUpgrade(player.getDamage());
+        			enemy.energyUpgrade(player.getEp());
+        			enemyMultiplier = player.getDamageCounter();
+        		}
+        		else if (enemy.bossChance() <9) {
+        			System.out.print("bigenergyboost");
+        			enemy.healthUpgrade(player.getHp());
+        			enemy.damageUpgrade(player.getDamage());
+        			enemy.energyUpgrade(player.getEp()*2);
+        			enemyMultiplier = player.getDamageCounter();
+        		}
+        		else if (enemy.bossChance() <12){
+        			System.out.print("bigattackboost");
+        			enemy.healthUpgrade(player.getHp());
+        			enemy.damageUpgrade(player.getDamage()*2);
+        			enemy.energyUpgrade(player.getEp());
+        			enemyMultiplier = player.getDamageCounter()*2;
+        		}
+        		else {
+        			System.out.print("boss fight");
+        			Boss boss = new Boss(ename, 10,10);
+        			enemy = boss;
+        			boss.bossFight();
+        			bossVal = true;
+        			
+        		}
     		}
     	}
-    	  
-        
     	
     	// ALL PLAYER/ENEMY STATS DISPLAY
     	Label enemyNameLabel = new Label("Enemy Name: " + enemy.getName());
@@ -207,8 +241,19 @@ public class MainMenuController {
     	
     	Label itemsLabel = new Label("Items");
     	itemsLabel.setPadding(new Insets(5,0,0,0));
-    	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
-    	Button itemsButton = new Button("Use Item");
+    	  	
+    	if (sword == true && swordAdded == false) {
+    		swordAdded = true;
+    		itemsChoiceBox.getItems().add("Sword");
+    	}
+    	if (shotgun == true && shotgunAdded == false) {
+    		shotgunAdded = true;
+    		itemsChoiceBox.getItems().add("Shotgun");
+    	}
+    	if (axe == true && axeAdded == false) {
+    		axeAdded = true;
+    		itemsChoiceBox.getItems().add("Axe");
+    	}
     	
     	//options2
     	this.specialAttackButton = new Button("Special Attack");
@@ -233,7 +278,7 @@ public class MainMenuController {
     	// POSITIONING
     	startGameContainer.getChildren().addAll(menuButton, stats, options1, options2, moves);
     	moves.getChildren().addAll(playerMove, enemyMove, coinsEarned, xpEarned);
-    	itemBox.getChildren().addAll(itemsLabel, itemsChoiceBox, itemsButton);
+    	itemBox.getChildren().addAll(itemsLabel, itemsChoiceBox);
     	options1.getChildren().addAll( attackButton, itemBox);
     	turnEnd.getChildren().addAll(endTurn);
     	options2.getChildren().addAll(specialAttackButton, turnEnd);
@@ -241,270 +286,187 @@ public class MainMenuController {
     	playerStats.getChildren().addAll(playerNameLabel, playerHealthLabel, playerEnergyLabel);
     	stats.getChildren().addAll(playerStats, enemyStats);
     	applicationStage.setScene(startGameScene);
-
+    	   	
     }
 
     // Random amount of damage between 1 and 5 dealt to enemy
     void attackEvent(ActionEvent attackEvent) {
-    	
-    	// Checks to make sure player and enemy aren't dead, otherwise game has ended.
-    	if (player.getHp() > 0 && enemy.getHp() > 0) {
-    	
-    	// Player gets to go first, random number is generated as damage and dealt to enemy.
-    	int damageTaken = enemy.getHp() - (player.getDamage() + damageMultiplier);
-    	int damageDone = enemy.getHp() - damageTaken;
-    	enemy.setHp(damageTaken);
-    	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
-    	if (damageDone > 0) {
-    	playerMove.setText("You did " + damageDone + " damage");
+    	if (itemsChoiceBox.getValue() == "Sword") {
+    		System.out.print("sword added attack");
+
+        	player.weaponBought(1);
+    	}
+    	else if (itemsChoiceBox.getValue() == "Shotgun") {
+    		System.out.print("shotgun added attack");
+
+        	player.weaponBought(2);
+    	}
+    	else if (itemsChoiceBox.getValue() == "Axe") {
+    		System.out.print("axe added attack");
+        	player.weaponBought(3);
     	}
     	else {
-    		playerMove.setText("Your attack missed, you did 0 damage");
+    		System.out.print("DEFAUTL ATTACK");
     	}
-    	
-    	// If enemy dies, win game and coins
-    	if (enemy.getHp() <= 0) {
-    		if (bossVal == false) {
-    		enemyMove.setText("You Won!");
-    		playerMove.setText("You did " + damageDone + " damage");
-    		Random r = new Random();
-    		int rand = r.nextInt((5 - 1) + 1) + 1;
-    		coins += rand;
-    		coinsEarned.setText("Coins: " + coins);
-    		coinLabel.setText("Coins: "+ coins);
-    		Random randomXP = new Random();
-    		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
-    		System.out.print("random = "+randXP);
-    		xp += randXP;
-    		System.out.print("xp ="+xp);
-    		experience.setXp(xp);
-    		xpEarned.setText("EXP: "+experience.getXp());
-    		xpLabel.setText("EXP: "+experience.getXp());
+    	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+    	System.out.print(bossVal);
+    	if (pAttack.win == false) {
+    		if (bossVal == true) {
+    			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
+    			boss.bossFight();
+    			enemy = boss;
+
     		}
-    		else if (bossVal == true) {
-    			enemyMove.setText("You Beat a Boss!!!");
-        		playerMove.setText("You did " + damageDone + " damage");
+    		enemy.setHp(pAttack.playerAttack());
+    		enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    		if (pAttack.getPlayerDamage() > 0) {
+    	    	playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
+    	    	}
+    	    	else {
+    	    		playerMove.setText("Your attack missed, you did 0 damage");
+    	    	}
+    		if (enemy.getHp() <=0 ) {
+    			enemyMove.setText("You Won!");
+        		playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
         		
-        		coins += 50;
+        		if (bossVal == false) {
+        		Coins coinReward = new Coins(coins);
+        		coins = coinReward.getCoins();
         		coinsEarned.setText("Coins: " + coins);
         		coinLabel.setText("Coins: "+ coins);
         		
-        		xp += 100;
+        		XP xpReward = new XP(xp);
+        		xp = xpReward.getXp();
         		experience.setXp(xp);
-        		xpEarned.setText("EXP: "+experience.getXp());
-        		xpLabel.setText("EXP: "+experience.getXp());
+        		xpEarned.setText("EXP: "+xp);
+        		xpLabel.setText("EXP: "+xp);
+        		}
+        		else if (bossVal == true) {
+        			Coins coinReward = new Coins(coins);
+            		coins = coinReward.getCoins()+50;
+            		coinsEarned.setText("Coins: " + coins);
+            		coinLabel.setText("Coins: "+ coins);
+            		
+            		XP xpReward = new XP(xp);
+            		xp = xpReward.getXp()+100;
+            		experience.setXp(xp);
+            		xpEarned.setText("EXP: "+xp);
+            		xpLabel.setText("EXP: "+xp);
+        		}
     		}
-    	}
-    	else {
-    		// enemies turn now, generates random value to decide enemies move
-    		Random r = new Random();
-    		int rand = r.nextInt((2 - 1) + 1) + 1;
-    		
-    		// regular attack, random damage between 1-5
-    		if (rand == 1) {
-    			if (bossVal == false) {
-    				int damageEnemy = player.getHp() - (enemy.getEnemyDamage() + enemyDamage);
-    				int enemyDamageDone = player.getHp() - damageEnemy;
-    				player.setHp(damageEnemy);
+    		else {
+    			int choice = enemy.getDecider();
+    			if (choice == 1 || enemy.getEp() <5) {
+    				player.setHp(pAttack.enemyAttack());
     				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				if (enemyDamageDone > 0) {
-    					enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
+    				if (pAttack.getEnemyDamage() > 0) {
+    					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
     				} else {
     					enemyMove.setText("Enemy attack missed, 0 damage taken");
-
     				}
-    	
     				if (player.getHp() <=0) {
     					enemyMove.setText("Enemy won!");
-    					playerMove.setText("Enemy did " + enemyDamageDone + " damage");
-    					}
-    				}
-    			else if (bossVal == true) {
-    				Random random = new Random();
-    				int bossDmg = random.nextInt((1-0)+1)+0;
-    				int damageEnemy = player.getHp() - (bossDmg);
-    				int enemyDamageDone = player.getHp() - damageEnemy;
-    				player.setHp(damageEnemy);
-    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				if (enemyDamageDone > 0) {
-    					enemyMove.setText("Boss did " + enemyDamageDone + " damage");
-    				} else {
-    					enemyMove.setText("Boss attack missed, 0 damage taken");
-
-    				}
-    	
-    				if (player.getHp() <=0) {
-    					enemyMove.setText("The Boss has won!");
-    					playerMove.setText("Boss did " + enemyDamageDone + " damage");
+    					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
     					}
     			}
-    		}
-    		// energy attack, guaranteed 3 damage at the cost of 5 energy
-    		else if (rand == 2 && enemy.getEp() >= 5){
-    			System.out.print(bossVal);
-    			if (bossVal == false) {
-    				int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
-    				int energyDamageDone = player.getHp() - energyDamage;
-    				int energyUsed = enemy.getEp() - 5;
-    				enemy.setEp(energyUsed);
-    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    				player.setHp(energyDamage);
+    			else if (choice == 2 && enemy.getEp() >=5) {
+    				
+    				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
     				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
-        		
+    				enemy.energyUse();
+    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+    				enemyMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
     				if (player.getHp() <=0) {
     					enemyMove.setText("Enemy won!");
-    					playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    					}
-    				}
-    			else if (bossVal == true) {
-    				System.out.print(bossVal);
-    				int energyDamage = player.getHp() - (1);
-    				int energyDamageDone = player.getHp() - energyDamage;
-    				int energyUsed = enemy.getEp() - 5;
-    				enemy.setEp(energyUsed);
-    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    				player.setHp(energyDamage);
-    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    				enemyMove.setText("The Boss did " + energyDamageDone + " energy damage");
-        		
-    				if (player.getHp() <=0) {
-    					enemyMove.setText("The Boss won!");
-    					playerMove.setText("The Boss did " + energyDamageDone + " energy damage");
-    					}
+    					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
     				}
     			}
-    		}
+    		}    		   		
     	}
-    	else { playerMove.setText("Game is over, reset to start a new game");
-    		 enemyMove.setText("");
+    	else {
+    		playerMove.setText("Game is over, reset to start a new game");
+    		enemyMove.setText("");
     	}
+    	System.out.print(bossVal);
     }
     
     // Guaranteed 3 damage attack at the cost of 5 energy
     void specialAttack(ActionEvent specialAttackEvent) {
-    	
-    	if (player.getHp() > 0 && enemy.getHp() > 0) {
-    		
+
+    	Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+    	if (pAttack.win == false) {
+    		if (bossVal == true) {
+    			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
+    			boss.bossFight();
+    			enemy = boss;
+    		}
     		if (player.getEp() >= 5) {
-    			
-    			int damageDone = enemy.getHp() - (player.getEnergyDamage() + damageMultiplier);
-    			int damageDelt = enemy.getHp() - damageDone;
-    			enemy.setHp(damageDone);
-    			int energyUsed = player.getEp() - 5;
-    			player.setEp(energyUsed);
+    			enemy.setHp(pAttack.energyAttack(player.getDamageCounter()));
     			enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    			player.energyUse();
     			playerEnergyLabel.setText("Player Energy: " + player.getEp());
-    	    	playerMove.setText("You did " + damageDelt + " energy damage");
-    	    	
-    	    	if (enemy.getHp() <= 0) {
+    			playerMove.setText("You did " + (player.getEnergyDamage()+player.getDamageCounter()) + " energy damage");
+    			
+    			if (enemy.getHp() <= 0) {
+    				enemyMove.setText("You Won!");
+    	    		playerMove.setText("You did "+ player.getEnergyDamage() + " energy damage");
+    				
     	    		if (bossVal == false) {
-    	    		enemyMove.setText("You Won!");
-    	    		playerMove.setText("You did "+ damageDelt + " energy damage");
-    	    		Random r = new Random();
-    	    		int rand = r.nextInt((5 - 1) + 1) + 1;
-    	    		coins += rand;
-    	    		coinsEarned.setText("Coins: " + coins);
-    	    		coinLabel.setText("Coins: "+ coins);
-    	    		Random randomXP = new Random();
-    	    		int randXP = randomXP.nextInt((20 - 10)+1) + 10;
-    	    		xp += randXP;
-    	    		experience.setXp(xp);
-    	    		xpEarned.setText("EXP: "+experience.getXp());
-    	    		xpLabel.setText("EXP: "+experience.getXp());
-    	    		}
-    	    		else if (bossVal == true) {
-    	    			enemyMove.setText("You Defeated the Boss!!!");
-        	    		playerMove.setText("You did "+ damageDelt + " energy damage");
-        	    		
-        	    		coins += 50;
-        	    		coinsEarned.setText("Coins: " + coins);
-        	    		coinLabel.setText("Coins: "+ coins);
-
-        	    		xp += 100;
-        	    		experience.setXp(xp);
-        	    		xpEarned.setText("EXP: "+experience.getXp());
-        	    		xpLabel.setText("EXP: "+experience.getXp());
-    	    		}
+    	        		Coins coinReward = new Coins(coins);
+    	        		coins = coinReward.getCoins();
+    	        		coinsEarned.setText("Coins: " + coins);
+    	        		coinLabel.setText("Coins: "+ coins);
+    	        		
+    	        		XP xpReward = new XP(xp);
+    	        		xp = xpReward.getXp();
+    	        		experience.setXp(xp);
+    	        		xpEarned.setText("EXP: "+xp);
+    	        		xpLabel.setText("EXP: "+xp);
+    	        		}
+    	        		else if (bossVal == true) {
+    	        			Coins coinReward = new Coins(coins);
+    	            		coins = coinReward.getCoins()+50;
+    	            		coinsEarned.setText("Coins: " + coins);
+    	            		coinLabel.setText("Coins: "+ coins);
+    	            		
+    	            		XP xpReward = new XP(xp);
+    	            		xp = xpReward.getXp()+100;
+    	            		experience.setXp(xp);
+    	            		xpEarned.setText("EXP: "+xp);
+    	            		xpLabel.setText("EXP: "+xp);
+    	        		}
     	    	}
-    	    	else {
-    	    		Random r = new Random();
-    	    		int rand = r.nextInt((2 - 1) + 1) + 1;
-    	    		
-    	    		if (rand == 1) {
-    	    			if (bossVal == false)  {
-    	    				int damageEnemy = player.getHp() - (enemy.getEnemyDamage()+enemyDamage);
-    	    				int enemyDamageDone = player.getHp() - damageEnemy;
-    	    				player.setHp(damageEnemy);
-    	    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    				if (enemyDamageDone > 0) {
-    	    					enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
-    	    				} 
-    	    				else {
-    	    					enemyMove.setText("Enemy attack missed, 0 damage taken");
-    	    				}
-    	    	
-    	    				if (player.getHp() <=0) {
-    	    					enemyMove.setText("Enemy won!");
-    	    					playerMove.setText("Enemy did " + enemyDamageDone + " damage");
-    	    					}
-    	    				}
-    	    			else if (bossVal == true) {
-    	    				Random random = new Random();
-    	    				int bossDmg = random.nextInt((1-0)+1)+0;
-    	    				int damageEnemy = player.getHp() - (bossDmg);
-    	    				int enemyDamageDone = player.getHp() - damageEnemy;
-    	    				player.setHp(damageEnemy);
-    	    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    				if (enemyDamageDone > 0) {
-    	    					enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
-    	    				} else {
-    	    					enemyMove.setText("Enemy attack missed, 0 damage taken");
-
-    	    				}
-    	    	
-    	    				if (player.getHp() <=0) {
-    	    					enemyMove.setText("The Boss has won!");
-    	    					playerMove.setText("Boss did " + enemyDamageDone + " damage");
-    	    					}
-    	    			}
-    	    		}
-    	    		else if (rand == 2 && enemy.getEp() >= 5){
-    	    			if (bossVal == false) {
-    	    			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
-    	    			int energyDamageDone = player.getHp() - energyDamage;
-    	    			int enemyEnergyUsed = enemy.getEp() - 5;
-    	    			enemy.setEp(enemyEnergyUsed);
-    	    			enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    	    			player.setHp(energyDamage);
-    	    			playerHealthLabel.setText("Player Health: " + player.getHp());
-    	        		enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    	        		
-    	        		if (player.getHp() <=0) {
-    	    				enemyMove.setText("Enemy won!");
-    	    				playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    	    				}
-    	    		}
-    	    			else if (bossVal == true) {
-    	    				int energyDamage = player.getHp() - (1);
-    	    				int energyDamageDone = player.getHp() - energyDamage;
-    	    				int energyUsedBoss = enemy.getEp() - 5;
-    	    				enemy.setEp(energyUsed);
-    	    				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-    	    				player.setHp(energyDamage);
-    	    				playerHealthLabel.setText("Player Health: " + player.getHp());
-    	    				enemyMove.setText("The Boss did " + energyDamageDone + " energy damage");
-    	        		
-    	    				if (player.getHp() <=0) {
-    	    					enemyMove.setText("The Boss won!");
-    	    					playerMove.setText("The Boss did " + energyDamageDone + " energy damage");
-    	    					}
-    	    			}
-    	    			}
-    	    		}
+    			else {
+    				int choice = enemy.getDecider();
+        			if (choice == 1 || enemy.getEp() <5) {
+        				player.setHp(pAttack.enemyAttack());
+        				playerHealthLabel.setText("Player Health: " + player.getHp());
+        				if (pAttack.getEnemyDamage() > 0) {
+        					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
+        				} else {
+        					enemyMove.setText("Enemy attack missed, 0 damage taken");
+        				}
+        				if (player.getHp() <=0) {
+        					enemyMove.setText("Enemy won!");
+        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        					}
+        			}
+        			else if (choice == 2 && enemy.getEp() >=5) {
+        				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
+        				playerHealthLabel.setText("Player Health: " + player.getHp());
+        				enemy.energyUse();
+        				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+        				enemyMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
+        				if (player.getHp() <=0) {
+        					enemyMove.setText("Enemy won!");
+        					playerMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
+        				}
+        			}
+        		} 
     		}
     		else {
     			playerMove.setText("Not enough energy, choose another option");
+    			enemyMove.setText("");
     		}
     	}
     	else { playerMove.setText("Game is over, reset to start a new game");
@@ -514,117 +476,146 @@ public class MainMenuController {
     
     // Do nothing method, skips the players turn and lets the enemy attack
     void doNothing(ActionEvent event) {
-    	Random r = new Random();
-		int rand = r.nextInt((2 - 1) + 1) + 1;
+    	
 		playerMove.setText("");
-		
-		if (player.getHp() > 0 && enemy.getHp() > 0) {
-		
-		if (rand == 1) {
-		int damageEnemy = player.getHp() - (enemy.getEnemyDamage()+enemyDamage);
-		int enemyDamageDone = player.getHp() - damageEnemy;
-		player.setHp(damageEnemy);
-		playerHealthLabel.setText("Player Health: " + player.getHp());
-		enemyMove.setText("Enemy did " + enemyDamageDone + " damage");
-	
-			if (player.getHp() <=0) {
-				enemyMove.setText("Enemy won!");
-				playerMove.setText("Enemy did " + enemyDamageDone + " damage");
+		Attack pAttack = new Attack(player.getDamage(), enemy.getEnemyDamage(),player.getHp(), enemy.getHp());
+		if (pAttack.win == false) {
+			if (bossVal == true) {
+    			Boss boss = new Boss(enemy.getName(), enemy.getHp(),enemy.getEp());
+    			boss.bossFight();
+    			enemy = boss;
+    		}
+			int choice = enemy.getDecider();
+			if (choice == 1) {
+				player.setHp(pAttack.enemyAttack());
+				playerHealthLabel.setText("Player Health: " + player.getHp());
+				if (pAttack.getEnemyDamage() > 0) {
+					enemyMove.setText("Enemy did " + pAttack.getEnemyDamage() + " damage");
+				} else {
+					enemyMove.setText("Enemy attack missed, 0 damage taken");
 				}
+				if (player.getHp() <=0) {
+					enemyMove.setText("Enemy won!");
+					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+					}
 			}
-		else if (rand == 2 && enemy.getEp() >= 5){
-			int energyDamage = player.getHp() - (enemy.getEnergyDamage()+enemyDamage);
-			int energyDamageDone = player.getHp() - energyDamage;
-			int enemyEnergyUsed = enemy.getEp() - 5;
-			enemy.setEp(enemyEnergyUsed);
-			enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
-			player.setHp(energyDamage);
-			playerHealthLabel.setText("Player Health: " + player.getHp());
-    		enemyMove.setText("Enemy did " + energyDamageDone + " energy damage");
-    		
-    		if (player.getHp() <=0) {
-				enemyMove.setText("Enemy won!");
-				playerMove.setText("Enemy did " + energyDamageDone + " energy damage");
+			else if (choice == 2 && enemy.getEp() >=5) {
+				player.setHp(pAttack.enemyEnergyAttack(enemyMultiplier));
+				playerHealthLabel.setText("Player Health: " + player.getHp());
+				enemy.energyUse();
+				enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+				enemyMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
+				if (player.getHp() <=0) {
+					enemyMove.setText("Enemy won!");
+					playerMove.setText("Enemy did " + (enemy.getEnergyDamage()+enemyMultiplier) + " energy damage");
 				}
 			}
 		} else { playerMove.setText("Game is over, reset to start a new game");
 		 enemyMove.setText("");
 		}
     }
-    
-	@FXML
+    Label shopFeedback = new Label("");
+    Label coinShop = new Label("Coins: "+coins);
+    @FXML
     void goShop(ActionEvent shoppingEvent) {
     	System.out.println("Button Clicked");
     	Scene mainScene = applicationStage.getScene();
-    	
-    	VBox mainScreenVbox = new VBox(10);
-    	
+    	//int numberOfWeapons = 3;
+    	VBox mainScreenVbox = new VBox(10);  	
+    	HBox topHalf = new HBox(30);
+    	shopFeedback.setText("");
+        coinShop.setText("Coins: "+coins);
     	VBox ItemNumber1VBox = new VBox(10);
-    	Button selectButton1 = new Button("Select");
-    	Label itemNumber1Label  = new Label("Item #1");
-    	TextField item1TextField = new TextField();
-
+    	Label itemNumber1Label  = new Label("Price: 25 coins (Gives a chance to attack twice!)");    	
     	VBox ItemNumber2VBox = new VBox(10);
-    	Button selectButton2 = new Button("Select");
-    	Label itemNumber2Label  = new Label("Item #2");
-    	TextField item2TextField = new TextField();
-    	
+    	Label itemNumber2Label  = new Label("Price: 50 coins (Gives a chance to attack multiple times!)");
     	VBox ItemNumber3VBox = new VBox(10);
-    	Button selectButton3 = new Button("Select");
-    	Label itemNumber3Label  = new Label("Item #3");
-    	TextField item3TextField = new TextField();
-    	
-    	Label overallPurchaseLabel  = new Label("Overall Purchase is: ");
-    	
+    	Label itemNumber3Label  = new Label("Price: 100 coins (Gives a chance for massive damage!)");
+    		
     	Button menuButton = new Button("Back to Menu");
+    	topHalf.getChildren().addAll(menuButton, coinShop);
+    	mainScreenVbox.getChildren().addAll(topHalf,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
     	
-    	mainScreenVbox.getChildren().addAll(menuButton,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
+    	this.swordButton = new Button("Sword");
+    	swordButton.setOnAction(purchaseEvent -> swordPurchased(purchaseEvent));
+		
+    	this.shotgunButton = new Button("Shotgun");
+    	shotgunButton.setOnAction(purchaseEvent -> shotgunPurchased(purchaseEvent));
     	
-    	ItemNumber1VBox.getChildren().addAll(itemNumber1Label,item1TextField, selectButton1);
-    	ItemNumber2VBox.getChildren().addAll(itemNumber2Label,item2TextField, selectButton2);
-    	ItemNumber3VBox.getChildren().addAll(itemNumber3Label,item3TextField,selectButton3,overallPurchaseLabel);
+    	this.axeButton = new Button("Axe");
+    	axeButton.setOnAction(purchaseEvent -> axePurchased(purchaseEvent));
+  	
     	
-    	Scene ShoppingScene = new Scene(mainScreenVbox, 400, 400);
+    	ItemNumber1VBox.getChildren().addAll(swordButton,itemNumber1Label);
+    	ItemNumber2VBox.getChildren().addAll(shotgunButton,itemNumber2Label);
+    	ItemNumber3VBox.getChildren().addAll(axeButton,itemNumber3Label, shopFeedback);
+    	
+    	Scene ShoppingScene = new Scene(mainScreenVbox, 375, 300);
     	applicationStage.setScene(ShoppingScene);
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));
-    	
 	}
-    	//if (totalPrice =< coins) {
-    		
-    	
-    	
-    	//double totalPrice = 0.0;
-	    //String quantityEntered = item1TextField.getText();
-	 	
-		
-  
-//                 item 1 
-//    			   //health - 500
-//    			   //if coin > 0 
-//    			   //else "health points not enough
-//    		       
-//    		       System.out.println("You have clicked the button 1 " + count + " times");
-//    		       //total price = count*itemPrice
-//    		
-//    			   item 2
-//    			   //coin - 300
-//    			   //if health > 0 
-//    			   //else "health points not enough
-//    			   
-//    			   //total price = count*itemPrice
-//    			   item 3
-//    			   //coin - 200
-//    			   //if health > 0 true
-//    			   //else "health points not enough
-//    			   
-//    			  
-//    		
-//    	
+
+	void swordPurchased(ActionEvent swordEvent) {
+
+		if (coins >= 25 && sword == false){
+			System.out.println("Sword is added");
+			shopFeedback.setText("You bought a Sword!");
+			coins = coins - 25;
+			coinShop.setText("Coins: "+coins);
+			coinLabel.setText("Coins: "+coins);
+			coinsEarned.setText("Coins: " + coins);
+			sword = true;
+
+		}
+		else if (sword == true) {
+			shopFeedback.setText("You already own this!");
+		}else {
+			shopFeedback.setText("Sorry! Not enough Coins");
+			System.out.println("Not enough money");
+		}
+	}
 	
+	void shotgunPurchased(ActionEvent shotgunEvent) {
+		if (coins >= 50 && shotgun == false){
+			System.out.println("Shotgun is added");
+			shopFeedback.setText("You bought a Shotgun!");
+			coins = coins - 50;
+			coinShop.setText("Coins: "+coins);
+			coinLabel.setText("Coins: "+coins);
+			coinsEarned.setText("Coins: " + coins);
+			shotgun = true;
+
+		}
+		else if (shotgun == true) {
+			shopFeedback.setText("You already own this!");
+		}else {
+			shopFeedback.setText("Sorry! Not enough Coins");
+			System.out.println("Not enough money");
+		}
+	}
+	
+
+	void axePurchased(ActionEvent axeEvent) {
+		if (coins >= 100 && axe == false){
+			System.out.println("Axe is added");
+			shopFeedback.setText("You bought a Axe!");
+			coins = coins - 100;
+			coinShop.setText("Coins: "+coins);
+			coinLabel.setText("Coins: "+coins);
+			coinsEarned.setText("Coins: " + coins);
+			axe = true;
+
+		}
+		else if (axe == true) {
+			shopFeedback.setText("You already own this!");
+		}else {
+			shopFeedback.setText("Sorry! Not enough Coins");
+			System.out.println("Not enough money");
+		}
+ }
 	
 	Label xpUpgrade = new Label("EXP: "+ experience.getXp());
 	Label description = new Label("placeholder");
-	
     @FXML
     void goUpgrades(ActionEvent event) {
     	
@@ -678,7 +669,7 @@ public class MainMenuController {
     	xpEarned.setText("EXP: "+experience.getXp());
 		xpLabel.setText("EXP: "+experience.getXp());
     	
-    	healthMultiplier +=1;
+    	player.healthUpgrade();
     	description.setText("Health has been increased by 5!");
     	}
     	else {
@@ -696,7 +687,7 @@ public class MainMenuController {
     	xpEarned.setText("EXP: "+experience.getXp());
 		xpLabel.setText("EXP: "+experience.getXp());
     	
-    	energyMultiplier +=1;
+    	player.energyUpgrade();
     	description.setText("Energy has been increased by 5!");
     	}
     	else {
@@ -714,7 +705,7 @@ public class MainMenuController {
     	xpEarned.setText("EXP: "+experience.getXp());
 		xpLabel.setText("EXP: "+experience.getXp());
     	
-    	damageMultiplier +=1;
+    	player.attackUpgrade();
     	description.setText("Damage has been increased by 1!");
     	}
     	else {
