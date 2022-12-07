@@ -447,23 +447,17 @@ public class MainMenuController {
 		 
 		Weapon sword = new Weapon(1, 2, 2);
 		sword.getPrice();
-		
-			System.out.println(sword.getPrice());
-			
 			
 		if (player.getCoins() >= sword.getPrice()){
 			player.setCoins(player.getCoins() - sword.getPrice());
 			player.addWeapons(0, 1); 
+			System.out.println("Price For Sword is: " + sword.getPrice());
 			
 		}else {
 			System.out.println("Not enough coins");
 			errorLabel.setText("Not enough coins.");
 		}
 		
-		
-		System.out.println(player.getWeapons());
-		
-    	System.out.println("the total Price For Sword is: " + sword.getPrice());
     	overallPurchaseLabel.setText("New total coins: " + player.getCoins());
     }
     	
@@ -476,18 +470,18 @@ public class MainMenuController {
 	
  		Weapon shotgun = new Weapon( 2, 3, 3);
  		shotgun.getPrice();
- 		System.out.println(shotgun.getPrice());
  		
 		if (player.getCoins() >= shotgun.getPrice()) {
 			player.setCoins(player.getCoins() - shotgun.getPrice());
 			player.addWeapons(1, 1);
+			System.out.println("Price For shotgun is: " + shotgun.getPrice());
+			
 		}else {
 			System.out.println("Not enough coins");
 			errorLabel.setText("Not enough coins.");
 		}
 		
-    	System.out.println("the total Price For shotgun is: " + shotgun.getPrice());
-    	overallPurchaseLabel.setText("New total coins: " + player.getCoins());
+		overallPurchaseLabel.setText("New total coins: " + player.getCoins());
 	}
 	
 
@@ -499,18 +493,17 @@ public class MainMenuController {
 		Weapon axe = new Weapon( 3, 4, 4);
  		
 		axe.getPrice();
-		System.out.println(axe.getPrice());
-		
+	
 		if (player.getCoins() >= axe.getPrice()) {
 			player.setCoins(player.getCoins() - axe.getPrice());
 			player.addWeapons(2, 1); 
+			System.out.println("Price For Axe is: " + axe.getPrice());
+			
 		}else {
 			System.out.println("Not enough coins");
 			errorLabel.setText("Not enough coins.");
 		}
 		
-		
-    	System.out.println("the total Price For Axe is: " + axe.getPrice());
     	overallPurchaseLabel.setText("New total coins: " + player.getCoins());
  }
 	
