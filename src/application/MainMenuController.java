@@ -87,7 +87,7 @@ public class MainMenuController {
 	Label enemyHealthLabel = new Label("");
 	Label enemyEnergyLabel = new Label("");
 	
-	int coins =100;
+	int coins =200;
 	Label coinsEarned = new Label("Coins: " + coins);
 	
 	int enemyDamage;
@@ -149,12 +149,12 @@ public class MainMenuController {
     	enemy.setName(ename);
     	
     	// Checking if player has upgraded at ALL
-    	if (player.getHpCounter() <1 && player.getEpCounter() <1  && player.getDamageCounter() <1) {
+    	if (player.getHpCounter() <1 && player.getEpCounter() <1  && player.getDamageCounter() <1 && player.getCurrentWeapon() == 0) {
     		System.out.print("default setup");
     		enemy.setHp(10);
     		enemy.setEp(10);
     	}
-    	else if (player.getHpCounter() <=1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1){
+    	else if (player.getHpCounter() <=1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1){
     		if (enemy.randomStat() == 1) {
     			enemy.damageUpgrade(2);
     			enemyMultiplier = 1;
@@ -167,21 +167,21 @@ public class MainMenuController {
     		}
     	}
     	else {
-    		if (player.getHpCounter() > 1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1) {
+    		if (player.getHpCounter() > 1 && player.getEpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1) {
     			System.out.print("bighealthboost");
     			enemy.healthUpgrade(player.getHp()*2);
     			enemy.energyUpgrade(player.getEp()/2);
     			enemy.damageUpgrade(player.getDamage()/2);
     			enemyMultiplier = player.getDamageCounter();
     		}
-    		else if (player.getEpCounter() >1 && player.getHpCounter() <=1 && player.getDamageCounter() <=1) {
+    		else if (player.getEpCounter() >1 && player.getHpCounter() <=1 && player.getDamageCounter() <=1 && player.getCurrentWeapon() <=1) {
     			System.out.print("bigenergyboost");
     			enemy.energyUpgrade(player.getEp()*2);
     			enemy.healthUpgrade(player.getHp()/2);
     			enemy.damageUpgrade(player.getDamage()/2);
     			enemyMultiplier = player.getDamageCounter();
     		}
-    		else if (player.getDamageCounter() >1 && player.getHpCounter() <=1 && player.getEpCounter() <=1) {
+    		else if (player.getDamageCounter() >1 && player.getHpCounter() <=1 && player.getEpCounter() <=1 && player.getCurrentWeapon() <=1) {
     			System.out.print("bigattackboost");
     			enemy.damageUpgrade(player.getDamage()*2);
     			enemy.healthUpgrade(player.getHp()/2);

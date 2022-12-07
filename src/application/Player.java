@@ -40,11 +40,11 @@ public class Player {
 	}
 
 	public int getDamage() {
-		System.out.print("stats: "+currentWeapon);
+		System.out.print("stats: "+getCurrentWeapon());
 		System.out.print(axe);
 		System.out.print(sword);
 		System.out.print(shotgun);
-		if (sword == true && currentWeapon ==1) {
+		if (sword == true && getCurrentWeapon() ==1) {
 			System.out.print("sword used");
 			//sword adds chance to do double damage instead of miss
 			Random dodge = new Random();
@@ -62,7 +62,7 @@ public class Player {
 				return damage;
 				}
 		}
-		else if (axe == true && currentWeapon ==3) {
+		else if (axe == true && getCurrentWeapon() ==3) {
 			System.out.print("axe used");
 			//axe replaces dodge chance with massive damage chance
 			Random dodge = new Random();
@@ -79,7 +79,7 @@ public class Player {
 				return damage;
 				}
 		}
-		else if (shotgun == true && currentWeapon ==2) {
+		else if (shotgun == true && getCurrentWeapon() ==2) {
 			System.out.print("shotgun used");
 			//shotgun adds chance to triple damage, can still miss
 			Random dodge = new Random();
@@ -164,6 +164,10 @@ public class Player {
 			axe = true;
 			currentWeapon =3;
 		}
+	}
+
+	public int getCurrentWeapon() {
+		return currentWeapon;
 	}
 
 }
