@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Enemy {
 	private String name;
-	private int hp;
-	private int ep;
+	public static int hp;
+	public static int ep;
 	private int enemyDamage;
 	private int energyDamage =3;
 	
@@ -15,7 +15,7 @@ public class Enemy {
 		setEp(energy);
 	}
 
-	int getHp() {
+	static int getHp() {
 		return hp;
 	}
 
@@ -23,7 +23,7 @@ public class Enemy {
 		this.hp = hp;
 	}
 
-	int getEp() {
+	static int getEp() {
 		return ep;
 	}
 

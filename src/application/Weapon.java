@@ -14,29 +14,34 @@ public class Weapon {
 	  
 	public Weapon(int price, int healthDamage, int energyDamage) {
 			super();
-			
-			this.name = name;
 			this.price = price;
 			this.healthDamage = healthDamage;
 			this.energyDamage = energyDamage;
 		}
 		
 	public int getWeaponHealthDamage() {
+		
 		return WeaponHealthDamage;
 	}
 
-	public void setWeaponHealthDamage(int weaponHealthDamage) {
+	public int setWeaponHealthDamage(int weaponHealthDamage) {
 		
-		WeaponHealthDamage = weaponHealthDamage;
+		WeaponHealthDamage = Enemy.getHp() - healthDamage;
+		
+		return WeaponHealthDamage;
 	}
 
 	public int getWeaponErgyDamage() {
+		
 		return WeaponErgyDamage;
 	}
 
 
-	public void setWeaponErgyDamage(int weaponErgyDamage) {
-		WeaponErgyDamage = weaponErgyDamage;
+	public int setWeaponErgyDamage(int weaponErgyDamage) {
+		
+		weaponErgyDamage = Enemy.getEp() - energyDamage ;
+		
+		return weaponErgyDamage;
 	}
 
 	public String  getName() {
@@ -57,17 +62,8 @@ public class Weapon {
 		this.price = price;
 	}
 
-//	public int getDamage() {
-//		Random r = new Random();
-//		int rand = r.nextInt((5 - 1) + 1) + 1;
-//		healthDamage = rand;
-//		return healthDamage;
-//	}
-
 	int getEnergyDamage() {
 		return energyDamage;
 	}
 
-
-	
 }
