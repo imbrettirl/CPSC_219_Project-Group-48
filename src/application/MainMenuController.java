@@ -550,6 +550,7 @@ void selectWeaponEvent (ActionEvent selectWeaponEvent) {
 
 	System.out.println("Use weapon clicked");
 	}
+
     @FXML
     void goUpgrades(ActionEvent event) {
     	

@@ -60,4 +60,3 @@ public class Weapon {
 		return energyDamage;
 	}
 }
-	

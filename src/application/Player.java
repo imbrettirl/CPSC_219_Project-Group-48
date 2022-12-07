@@ -105,6 +105,7 @@ public class Player {
 		return WeaponList;
 	}
 
+	
 	public int[] addWeapons(int index, int value) {
 		this.weapons[index] = this.weapons[index] + value;
 		return weapons;
