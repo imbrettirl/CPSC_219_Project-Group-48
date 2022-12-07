@@ -8,7 +8,7 @@ public class Boss extends Enemy{
 	}
 	void bossFight() {
 		super.boss = true;
-		super.hp = 100;
+		super.hp = super.hp + 100;
 		super.ep = 0;
 		super.name = "BOSS "+getName();
 		super.enemyDamage = 1;

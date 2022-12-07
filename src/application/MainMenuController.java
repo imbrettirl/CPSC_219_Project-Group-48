@@ -81,13 +81,14 @@ public class MainMenuController {
     
 	Label playerMove = new Label("");
 	Label enemyMove = new Label("");
+	Label weaponEffect = new Label("");
 	
 	Label playerHealthLabel = new Label("");
 	Label playerEnergyLabel = new Label("");
 	Label enemyHealthLabel = new Label("");
 	Label enemyEnergyLabel = new Label("");
 	
-	int coins =200;
+	int coins =175;
 	Label coinsEarned = new Label("Coins: " + coins);
 	
 	int enemyDamage;
@@ -95,7 +96,7 @@ public class MainMenuController {
 	
 	int enemyMultiplier = 0;
 	
-	int xp =0;
+	int xp =200;
 	ExperiencePoints experience = new ExperiencePoints(xp);
 	Label xpEarned = new Label("EXP: "+xp);
 	
@@ -107,7 +108,7 @@ public class MainMenuController {
     	
     	playerMove.setText("");
     	enemyMove.setText("");
-    	
+    	weaponEffect = new Label("");
     	bossVal = false;
     	
     	// WINDOW LAYOUT
@@ -129,7 +130,7 @@ public class MainMenuController {
     	options2.setAlignment(Pos.CENTER_LEFT);
     	HBox turnEnd = new HBox(0);
     	turnEnd.setPadding(new Insets(0,0,0,25));
-    	VBox moves = new VBox(20);
+    	VBox moves = new VBox(10);
     	moves.setPadding(new Insets(50,0,0,25));
     	Scene startGameScene = new Scene(startGameContainer, 400, 400);
     	HBox itemBox = new HBox(5);
@@ -213,7 +214,7 @@ public class MainMenuController {
         		}
         		else {
         			System.out.print("boss fight");
-        			Boss boss = new Boss(ename, 10,10);
+        			Boss boss = new Boss(ename, player.getHp(),10);
         			enemy = boss;
         			boss.bossFight();
         			bossVal = true;
@@ -277,7 +278,7 @@ public class MainMenuController {
     	
     	// POSITIONING
     	startGameContainer.getChildren().addAll(menuButton, stats, options1, options2, moves);
-    	moves.getChildren().addAll(playerMove, enemyMove, coinsEarned, xpEarned);
+    	moves.getChildren().addAll(weaponEffect, playerMove, enemyMove, coinsEarned, xpEarned);
     	itemBox.getChildren().addAll(itemsLabel, itemsChoiceBox);
     	options1.getChildren().addAll( attackButton, itemBox);
     	turnEnd.getChildren().addAll(endTurn);
@@ -321,6 +322,18 @@ public class MainMenuController {
     		enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
     		if (pAttack.getPlayerDamage() > 0) {
     	    	playerMove.setText("You did " + pAttack.getPlayerDamage() + " damage");
+    	    	if (player.getWeaponEffect() == 1) {
+    	    		weaponEffect.setText("Sword struck twice!");
+    	    	}
+    	    	else if (player.getWeaponEffect() == 2) {
+    	    		weaponEffect.setText("Shotgun hit multiple bullets!");
+    	    	}
+    	    	else if (player.getWeaponEffect() == 3) {
+    	    		weaponEffect.setText("Axe did massive damage!");
+    	    	}
+    	    	else {
+    	    		weaponEffect.setText("");
+    	    	}
     	    	}
     	    	else {
     	    		playerMove.setText("Your attack missed, you did 0 damage");

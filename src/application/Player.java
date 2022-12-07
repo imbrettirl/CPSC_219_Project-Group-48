@@ -14,6 +14,7 @@ public class Player {
 	private boolean shotgun;
 	private boolean axe;
 	private int currentWeapon =0;
+	private int weaponEffect =0;
 	
 	Player(int health, int energy) {
 		setHp(health);
@@ -40,10 +41,7 @@ public class Player {
 	}
 
 	public int getDamage() {
-		System.out.print("stats: "+getCurrentWeapon());
-		System.out.print(axe);
-		System.out.print(sword);
-		System.out.print(shotgun);
+		weaponEffect = 0;
 		if (sword == true && getCurrentWeapon() ==1) {
 			System.out.print("sword used");
 			//sword adds chance to do double damage instead of miss
@@ -58,6 +56,7 @@ public class Player {
 			else {
 				Random r = new Random();
 				int rand = r.nextInt((10-2) + 1) + 2;
+				weaponEffect = 1;
 				damage = rand + damageCounter;
 				return damage;
 				}
@@ -74,6 +73,7 @@ public class Player {
 				return damage;
 			}
 			else {
+				weaponEffect = 3;
 				damage = 20;
 				damage = damage + damageCounter;
 				return damage;
@@ -91,6 +91,7 @@ public class Player {
 				return damage;
 			}
 			else if (dodgeChance < 10) {
+				weaponEffect = 2;
 				Random r = new Random();
 				int rand = r.nextInt((15-3) + 1) + 3;
 				damage = rand + damageCounter;
@@ -169,5 +170,10 @@ public class Player {
 	public int getCurrentWeapon() {
 		return currentWeapon;
 	}
+
+	public int getWeaponEffect() {
+		return weaponEffect;
+	}
+
 
 }
