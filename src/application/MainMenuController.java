@@ -97,7 +97,6 @@ public class MainMenuController {
 	int enemyMultiplier = 0;
 	
 	int xp =200;
-	ExperiencePoints experience = new ExperiencePoints(xp);
 	Label xpEarned = new Label("EXP: "+xp);
 	
 	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
@@ -366,7 +365,6 @@ public class MainMenuController {
         		
         		XP xpReward = new XP(xp);
         		xp = xpReward.getXp();
-        		experience.setXp(xp);
         		xpEarned.setText("EXP: "+xp);
         		xpLabel.setText("EXP: "+xp);
         		}
@@ -379,7 +377,6 @@ public class MainMenuController {
             		
             		XP xpReward = new XP(xp);
             		xp = xpReward.getXp()+100;
-            		experience.setXp(xp);
             		xpEarned.setText("EXP: "+xp);
             		xpLabel.setText("EXP: "+xp);
         		}
@@ -451,7 +448,6 @@ public class MainMenuController {
     	        		
     	        		XP xpReward = new XP(xp);
     	        		xp = xpReward.getXp();
-    	        		experience.setXp(xp);
     	        		xpEarned.setText("EXP: "+xp);
     	        		xpLabel.setText("EXP: "+xp);
     	        		}
@@ -463,7 +459,6 @@ public class MainMenuController {
     	            		
     	            		XP xpReward = new XP(xp);
     	            		xp = xpReward.getXp()+100;
-    	            		experience.setXp(xp);
     	            		xpEarned.setText("EXP: "+xp);
     	            		xpLabel.setText("EXP: "+xp);
     	        		}
@@ -647,7 +642,7 @@ public class MainMenuController {
 		}
  }
 	
-	Label xpUpgrade = new Label("EXP: "+ experience.getXp());
+	Label xpUpgrade = new Label("EXP: "+ xp);
 	Label description = new Label("placeholder");
     @FXML
     void goUpgrades(ActionEvent event) {
@@ -675,7 +670,7 @@ public class MainMenuController {
     	Label damageLabel = new Label("Cost: 30 EXP");
     	Label energyLabel = new Label("   Cost: 20 EXP");
     	
-    	xpUpgrade.setText("EXP: "+ experience.getXp());
+    	xpUpgrade.setText("EXP: "+ xp);
     	xpUpgrade.setPadding(new Insets(5,0,0,0));
     	description.setText("");
     	
@@ -693,14 +688,12 @@ public class MainMenuController {
     }
     
     void healthIncrease(ActionEvent event) {
-    	if (experience.getXp() >= 15) {
-    	int xpLeft = experience.getXp() - 15;
-    	experience.setXp(xpLeft);
-    	xpUpgrade.setText("EXP: "+xpLeft);
-    	xp = xpLeft;
+    	if (xp >= 15) {
+    	xp = xp - 15;
+    	xpUpgrade.setText("EXP: "+xp);
     	
-    	xpEarned.setText("EXP: "+experience.getXp());
-		xpLabel.setText("EXP: "+experience.getXp());
+    	xpEarned.setText("EXP: "+xp);
+		xpLabel.setText("EXP: "+xp);
     	
     	player.healthUpgrade();
     	description.setText("Health has been increased by 5!");
@@ -711,14 +704,13 @@ public class MainMenuController {
     }
     
     void energyIncrease(ActionEvent event) {
-    	if (experience.getXp() >= 20) {
-    	int xpLeft = experience.getXp() - 20;
-    	experience.setXp(xpLeft);
-    	xpUpgrade.setText("EXP: "+xpLeft);
-    	xp = xpLeft;
+    	if (xp >= 20) {
+    	xp = xp - 20;
+    	xpUpgrade.setText("EXP: "+xp);
+
     	
-    	xpEarned.setText("EXP: "+experience.getXp());
-		xpLabel.setText("EXP: "+experience.getXp());
+    	xpEarned.setText("EXP: "+xp);
+		xpLabel.setText("EXP: "+xp);
     	
     	player.energyUpgrade();
     	description.setText("Energy has been increased by 5!");
@@ -729,14 +721,12 @@ public class MainMenuController {
     }
     
     void damageIncrease(ActionEvent event) {
-    	if (experience.getXp() >= 30) {
-    	int xpLeft = experience.getXp() - 30;
-    	experience.setXp(xpLeft);
-    	xpUpgrade.setText("EXP: "+xpLeft);
-    	xp = xpLeft;
+    	if (xp >= 30) {
+    	xp = xp -30;
+    	xpUpgrade.setText("EXP: "+xp);
     	
-    	xpEarned.setText("EXP: "+experience.getXp());
-		xpLabel.setText("EXP: "+experience.getXp());
+    	xpEarned.setText("EXP: "+xp);
+		xpLabel.setText("EXP: "+xp);
     	
     	player.attackUpgrade();
     	description.setText("Damage has been increased by 1!");
