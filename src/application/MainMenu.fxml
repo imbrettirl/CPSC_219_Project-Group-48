@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -8,46 +9,67 @@
 
 <VBox alignment="TOP_CENTER" maxWidth="400.0" prefHeight="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainMenuController">
    <children>
-      <Label prefHeight="33.0" prefWidth="61.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="Main Menu">
+      <Label prefHeight="33.0" prefWidth="103.0" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="Main Menu">
          <VBox.margin>
             <Insets top="10.0" />
          </VBox.margin>
+         <font>
+            <Font name="Arial Black" size="17.0" />
+         </font>
       </Label>
       <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Button fx:id="StartButton" mnemonicParsing="false" onAction="#startGame" text="Start">
+            <Button fx:id="StartButton" mnemonicParsing="false" onAction="#startGame" text="Start" textFill="#a81d1d">
                <HBox.margin>
                   <Insets left="0.0" />
-               </HBox.margin></Button>
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font></Button>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Button fx:id="ShopButton" mnemonicParsing="false" onAction="#goShop" text="Shop">
+            <Button fx:id="ShopButton" mnemonicParsing="false" onAction="#goShop" text="Shop" textFill="#e49a23">
                <HBox.margin>
                   <Insets left="0.0" />
-               </HBox.margin></Button>
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font></Button>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Button fx:id="UpgradesButton" mnemonicParsing="false" onAction="#goUpgrades" text="Upgrades">
+            <Button fx:id="UpgradesButton" mnemonicParsing="false" onAction="#goUpgrades" text="Upgrades" textFill="#da7c3e">
                <HBox.margin>
                   <Insets left="0.0" />
-               </HBox.margin></Button>
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font></Button>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="226.0">
          <children>
-            <Label text="Enter Your Name:" />
-            <TextField fx:id="nameTextField" prefHeight="25.0" prefWidth="114.0" />
+            <Label text="Enter Your Name:">
+               <opaqueInsets>
+                  <Insets left="5.0" />
+               </opaqueInsets></Label>
+            <TextField fx:id="nameTextField" prefHeight="25.0" prefWidth="94.0" />
          </children>
       </HBox>
-      <Label fx:id="coinLabel" text="Coins: " />
-      <Label text="EXP: " fx:id="xpLabel">
+      <Label fx:id="coinLabel" text="Coins: " textFill="#f8b52e">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></Label>
+      <Label text="EXP: " textFill="#72d734" fx:id="xpLabel">
          <VBox.margin>
             <Insets top="10.0" />
          </VBox.margin>
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
       </Label>
    </children>
    <padding>

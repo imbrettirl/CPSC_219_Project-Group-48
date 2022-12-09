@@ -14,6 +14,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
@@ -104,6 +108,12 @@ public class MainMenuController {
     void startGame(ActionEvent startGameEvent) {
     	Scene mainScene = applicationStage.getScene();
     	String playerName = nameTextField.getText();
+    	
+    	coinsEarned.setTextFill(Color.rgb(248, 181, 46));
+    	coinsEarned.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+    	
+    	xpEarned.setTextFill(Color.rgb(114, 215, 52));
+    	xpEarned.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	
     	playerMove.setText("");
     	enemyMove.setText("");
@@ -244,9 +254,13 @@ public class MainMenuController {
     	
     	//options1
     	this.attackButton = new Button("Attack");
+    	attackButton.setTextFill(Color.rgb(168, 29, 29));
+    	attackButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	attackButton.setOnAction(attack -> attackEvent(attack));
     	
     	Label itemsLabel = new Label("Items");
+    	itemsLabel.setTextFill(Color.rgb(164, 104, 59));
+    	itemsLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	itemsLabel.setPadding(new Insets(5,0,0,0));
     	  
     	// checks what weapons have been purchased and adds to choicebox
@@ -265,9 +279,13 @@ public class MainMenuController {
     	
     	//options2
     	this.specialAttackButton = new Button("Special Attack");
+    	specialAttackButton.setTextFill(Color.rgb(31, 216, 215));
+    	specialAttackButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	specialAttackButton.setOnAction(special -> specialAttack(special));
     	
     	Button endTurn = new Button("Do Nothing");
+    	endTurn.setTextFill(Color.rgb(101, 101, 101));
+    	endTurn.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	endTurn.setOnAction(nothing -> doNothing(nothing));
     	endTurn.setLayoutX(80);
     	
@@ -513,7 +531,7 @@ public class MainMenuController {
     			enemy = boss;
     		}
 			int choice = enemy.getDecider();
-			if (choice == 1) {
+			if (choice == 1 || enemy.getEp() <5) {
 				player.setHp(pAttack.enemyAttack());
 				playerHealthLabel.setText("Player Health: " + player.getHp());
 				if (pAttack.getEnemyDamage() > 0) {
@@ -523,7 +541,7 @@ public class MainMenuController {
 				}
 				if (player.getHp() <=0) {
 					enemyMove.setText("Enemy won!");
-					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+					playerMove.setText("Enemy did " + enemy.getEnemyDamage() + " damage");
 					}
 			}
 			else if (choice == 2 && enemy.getEp() >=5) {
@@ -546,6 +564,9 @@ public class MainMenuController {
     @FXML
     void goShop(ActionEvent shoppingEvent) {
     	System.out.println("Button Clicked");
+    	coinShop.setTextFill(Color.rgb(248, 181, 46));
+    	coinShop.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+    	coinShop.setPadding(new Insets(7, 0,0,0));
     	Scene mainScene = applicationStage.getScene();
     	//int numberOfWeapons = 3;
     	VBox mainScreenVbox = new VBox(10);  	
