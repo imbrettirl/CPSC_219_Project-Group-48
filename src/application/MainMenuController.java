@@ -106,9 +106,11 @@ public class MainMenuController {
 	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
     @FXML
     void startGame(ActionEvent startGameEvent) {
+    	String playerName = "";
     	Scene mainScene = applicationStage.getScene();
-    	String playerName = nameTextField.getText();
-    	
+    	if (nameTextField.getText().length() < 10) {
+    	playerName = nameTextField.getText();
+    	}
     	coinsEarned.setTextFill(Color.rgb(248, 181, 46));
     	coinsEarned.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	
@@ -125,7 +127,7 @@ public class MainMenuController {
     	// main container that contains all elements moving downwards
     	VBox startGameContainer = new VBox(10);
     	// contains all stats, both enemy and player
-    	HBox stats = new HBox(75);
+    	HBox stats = new HBox(50);
     	// contains specific stats for enemy
     	VBox enemyStats = new VBox(10);
     	//contains specific stats for player
@@ -241,11 +243,33 @@ public class MainMenuController {
     	
     	// ALL PLAYER/ENEMY STATS DISPLAY
     	Label enemyNameLabel = new Label("Enemy Name: " + enemy.getName());
+     	enemyNameLabel.setTextFill(Color.rgb(102, 102, 102));
+     	enemyNameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
+     	
+     	if (bossVal == true) {
+     		enemyNameLabel.setTextFill(Color.rgb(193, 0, 0));
+     	}
+     	
     	enemyHealthLabel.setText("Enemy Health: " + enemy.getHp());
+    	enemyHealthLabel.setTextFill(Color.rgb(102, 102, 102));
+     	enemyHealthLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
+     	
      	enemyEnergyLabel.setText("Enemy Energy: " + enemy.getEp());
+     	enemyEnergyLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
+     	enemyEnergyLabel.setTextFill(Color.rgb(102, 102, 102));
+     	
     	Label playerNameLabel = new Label("Player Name: " + playerName);
+    	playerNameLabel.setTextFill(Color.rgb(102, 102, 102));
+    	playerNameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
+    	
     	playerHealthLabel.setText("Player Health: " + player.getHp());
+    	playerHealthLabel.setTextFill(Color.rgb(102, 102, 102));
+    	playerHealthLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
+    	
     	playerEnergyLabel.setText("Player Energy: " + player.getEp());
+    	playerEnergyLabel.setTextFill(Color.rgb(102, 102, 102));
+    	playerEnergyLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
+    	
     	applicationStage.setTitle("Started Game");
     	
     	// BACK TO MENU
@@ -563,40 +587,56 @@ public class MainMenuController {
     Label coinShop = new Label("Coins: "+coins);
     @FXML
     void goShop(ActionEvent shoppingEvent) {
+    	applicationStage.setTitle("Shop");
     	System.out.println("Button Clicked");
     	coinShop.setTextFill(Color.rgb(248, 181, 46));
     	coinShop.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-    	coinShop.setPadding(new Insets(7, 0,0,0));
+    	coinShop.setPadding(new Insets(7,0,0,150));
     	Scene mainScene = applicationStage.getScene();
     	//int numberOfWeapons = 3;
     	VBox mainScreenVbox = new VBox(10);  	
     	HBox topHalf = new HBox(30);
     	shopFeedback.setText("");
         coinShop.setText("Coins: "+coins);
-    	VBox ItemNumber1VBox = new VBox(10);
-    	Label itemNumber1Label  = new Label("Price: 25 coins (Gives a chance to attack twice!)");    	
-    	VBox ItemNumber2VBox = new VBox(10);
-    	Label itemNumber2Label  = new Label("Price: 50 coins (Gives a chance to attack multiple times!)");
-    	VBox ItemNumber3VBox = new VBox(10);
-    	Label itemNumber3Label  = new Label("Price: 100 coins (Gives a chance for massive damage!)");
+    	VBox itemVBox = new VBox(5);
+    	itemVBox.setAlignment(Pos.CENTER);
+    	itemVBox.setPadding(new Insets(0,0,0,0));
+    	Label swordLabel  = new Label("Price: 25 coins");
+    	swordLabel.setTextFill(Color.rgb(248, 181, 46));
+    	swordLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 11));
+    	Label swordEffect = new Label("(Gives a chance to attack twice!)");
+    	Label shotgunLabel  = new Label("Price: 50 coins");
+    	shotgunLabel.setTextFill(Color.rgb(248, 181, 46));
+    	shotgunLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 11));
+    	Label shotgunEffect = new Label("(Gives a chance to attack multiple times!)");
+    	Label axeLabel  = new Label("Price: 100 coins");
+    	axeLabel.setTextFill(Color.rgb(248, 181, 46));
+    	axeLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 11));
+    	Label axeEffect = new Label("(Gives a chance for massive damage!)");
+    	swordEffect.setFont(Font.font(null, FontPosture.ITALIC, 12));
+    	shotgunEffect.setFont(Font.font(null, FontPosture.ITALIC, 12));
+    	axeEffect.setFont(Font.font(null, FontPosture.ITALIC, 12));
     		
+    	shopFeedback.setTextFill(Color.rgb(250,154,39));
+    	
     	Button menuButton = new Button("Back to Menu");
     	topHalf.getChildren().addAll(menuButton, coinShop);
-    	mainScreenVbox.getChildren().addAll(topHalf,ItemNumber1VBox, ItemNumber2VBox, ItemNumber3VBox);
+    	mainScreenVbox.getChildren().addAll(topHalf,itemVBox);
     	
     	this.swordButton = new Button("Sword");
     	swordButton.setOnAction(purchaseEvent -> swordPurchased(purchaseEvent));
-		
+    	swordButton.setTextFill(Color.rgb(255, 110, 110));
+    	swordButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	this.shotgunButton = new Button("Shotgun");
     	shotgunButton.setOnAction(purchaseEvent -> shotgunPurchased(purchaseEvent));
-    	
+    	shotgunButton.setTextFill(Color.rgb(201, 61, 61));
+    	shotgunButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	this.axeButton = new Button("Axe");
     	axeButton.setOnAction(purchaseEvent -> axePurchased(purchaseEvent));
+    	axeButton.setTextFill(Color.rgb(101, 1, 1));
+    	axeButton.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
   	
-    	
-    	ItemNumber1VBox.getChildren().addAll(swordButton,itemNumber1Label);
-    	ItemNumber2VBox.getChildren().addAll(shotgunButton,itemNumber2Label);
-    	ItemNumber3VBox.getChildren().addAll(axeButton,itemNumber3Label, shopFeedback);
+    	itemVBox.getChildren().addAll(swordButton, swordLabel,swordEffect, shotgunButton, shotgunLabel,shotgunEffect, axeButton, axeLabel,axeEffect, shopFeedback);
     	
     	Scene ShoppingScene = new Scene(mainScreenVbox, 375, 300);
     	applicationStage.setScene(ShoppingScene);
@@ -607,6 +647,7 @@ public class MainMenuController {
 		// checks if player has the right amount of coins, and if the item has been purchased already
 		if (coins >= 25 && sword == false){
 			System.out.println("Sword is added");
+			shopFeedback.setTextFill(Color.rgb(250,154,39));
 			shopFeedback.setText("You bought a Sword!");
 			coins = coins - 25;
 			coinShop.setText("Coins: "+coins);
@@ -618,8 +659,10 @@ public class MainMenuController {
 		}
 		else if (sword == true) {
 			shopFeedback.setText("You already own this!");
+			shopFeedback.setTextFill(Color.rgb(39, 56, 250));
 		}else {
 			shopFeedback.setText("Sorry! Not enough Coins");
+			shopFeedback.setTextFill(Color.rgb(39, 56, 250));
 			System.out.println("Not enough money");
 		}
 	}
@@ -627,6 +670,7 @@ public class MainMenuController {
 	void shotgunPurchased(ActionEvent shotgunEvent) {
 		if (coins >= 50 && shotgun == false){
 			System.out.println("Shotgun is added");
+			shopFeedback.setTextFill(Color.rgb(250,154,39));
 			shopFeedback.setText("You bought a Shotgun!");
 			coins = coins - 50;
 			coinShop.setText("Coins: "+coins);
@@ -637,8 +681,10 @@ public class MainMenuController {
 		}
 		else if (shotgun == true) {
 			shopFeedback.setText("You already own this!");
+			shopFeedback.setTextFill(Color.rgb(39, 56, 250));
 		}else {
 			shopFeedback.setText("Sorry! Not enough Coins");
+			shopFeedback.setTextFill(Color.rgb(39, 56, 250));
 			System.out.println("Not enough money");
 		}
 	}
@@ -647,6 +693,7 @@ public class MainMenuController {
 	void axePurchased(ActionEvent axeEvent) {
 		if (coins >= 100 && axe == false){
 			System.out.println("Axe is added");
+			shopFeedback.setTextFill(Color.rgb(250,154,39));
 			shopFeedback.setText("You bought a Axe!");
 			coins = coins - 100;
 			coinShop.setText("Coins: "+coins);
@@ -657,8 +704,10 @@ public class MainMenuController {
 		}
 		else if (axe == true) {
 			shopFeedback.setText("You already own this!");
+			shopFeedback.setTextFill(Color.rgb(39, 56, 250));
 		}else {
 			shopFeedback.setText("Sorry! Not enough Coins");
+			shopFeedback.setTextFill(Color.rgb(39, 56, 250));
 			System.out.println("Not enough money");
 		}
  }
@@ -667,8 +716,11 @@ public class MainMenuController {
 	Label description = new Label("placeholder");
     @FXML
     void goUpgrades(ActionEvent event) {
-    	
+    	applicationStage.setTitle("Upgrades");
     	Scene mainScene = applicationStage.getScene();
+    	
+    	xpUpgrade.setTextFill(Color.rgb(114, 215, 52));
+    	xpUpgrade.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	
     	
     	// WINDOW LAYOUT
@@ -676,20 +728,38 @@ public class MainMenuController {
     	VBox mainContainer = new VBox(10);
     	HBox topContainer = new HBox(10);
     	HBox secondaryUpgradeContainer = new HBox(10);
-    	HBox cost = new HBox(40);
-    	cost.setPadding(new Insets(0,0,0,10));
-    	Scene startGameScene = new Scene(mainContainer, 350, 150);
+    	VBox healthBox = new VBox();
+    	healthBox.setAlignment(Pos.CENTER);
+    	VBox energyBox = new VBox();
+    	energyBox.setAlignment(Pos.CENTER);
+    	VBox damageBox = new VBox();
+    	damageBox.setAlignment(Pos.CENTER);
+    	secondaryUpgradeContainer.setAlignment(Pos.CENTER);
+    	Scene startGameScene = new Scene(mainContainer, 440, 150);
     	
     	Button healthUpgrade = new Button("Increase Health");
+    	healthUpgrade.setTextFill(Color.rgb(254, 72, 72));
+    	healthUpgrade.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	healthUpgrade.setOnAction(health -> healthIncrease(health));
     	Button damageUpgrade = new Button("Increase Damage");
+    	damageUpgrade.setTextFill(Color.rgb(175, 11, 11));
+    	damageUpgrade.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	damageUpgrade.setOnAction(damage -> damageIncrease(damage));
     	Button energyUpgrade = new Button("Increase Energy");
+    	energyUpgrade.setTextFill(Color.rgb(83, 228, 221));
+    	energyUpgrade.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	energyUpgrade.setOnAction(energy -> energyIncrease(energy));
     	
     	Label healthLabel = new Label("Cost: 15 EXP");
+    	healthLabel.setFont(Font.font(null, FontPosture.ITALIC, 12));
     	Label damageLabel = new Label("Cost: 30 EXP");
-    	Label energyLabel = new Label("   Cost: 20 EXP");
+    	damageLabel.setFont(Font.font(null, FontPosture.ITALIC, 12));
+    	Label energyLabel = new Label("Cost: 20 EXP");
+    	energyLabel.setFont(Font.font(null, FontPosture.ITALIC, 12));
+    	
+    	healthBox.getChildren().addAll(healthUpgrade, healthLabel);
+    	energyBox.getChildren().addAll(energyUpgrade, energyLabel);
+    	damageBox.getChildren().addAll(damageUpgrade, damageLabel);
     	
     	xpUpgrade.setText("EXP: "+ xp);
     	xpUpgrade.setPadding(new Insets(5,0,0,0));
@@ -700,10 +770,9 @@ public class MainMenuController {
     	menuButton.setOnAction(menuEvent -> applicationStage.setScene(mainScene));    	
     	    	   	
     	// POSITIONING
-    	mainContainer.getChildren().addAll(topContainer, secondaryUpgradeContainer, cost, description);
+    	mainContainer.getChildren().addAll(topContainer, secondaryUpgradeContainer, description);
     	topContainer.getChildren().addAll(menuButton, xpUpgrade);
-    	cost.getChildren().addAll(healthLabel, energyLabel, damageLabel);
-    	secondaryUpgradeContainer.getChildren().addAll(healthUpgrade, energyUpgrade, damageUpgrade);
+    	secondaryUpgradeContainer.getChildren().addAll(healthBox, energyBox, damageBox);
     	applicationStage.setScene(startGameScene);
 
     }
@@ -717,10 +786,16 @@ public class MainMenuController {
 		xpLabel.setText("EXP: "+xp);
     	
     	player.healthUpgrade();
+    	
+    	description.setTextFill(Color.rgb(254, 72, 72));
+    	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	description.setText("Health has been increased by 5!");
+    	
     	}
     	else {
     		description.setText("Not enough EXP");
+    		description.setTextFill(Color.rgb(255, 184, 26));
+        	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	}
     }
     
@@ -735,9 +810,13 @@ public class MainMenuController {
     	
     	player.energyUpgrade();
     	description.setText("Energy has been increased by 5!");
+    	description.setTextFill(Color.rgb(83, 228, 221));
+    	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	}
     	else {
     		description.setText("Not enough EXP");
+    		description.setTextFill(Color.rgb(255, 184, 26));
+        	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	}
     }
     
@@ -751,9 +830,13 @@ public class MainMenuController {
     	
     	player.attackUpgrade();
     	description.setText("Damage has been increased by 1!");
+    	description.setTextFill(Color.rgb(175, 11, 11));
+    	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	}
     	else {
     		description.setText("Not enough EXP");
+    		description.setTextFill(Color.rgb(255, 184, 26));
+        	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	}
     }
 }
