@@ -46,8 +46,8 @@ public class Player {
 			System.out.print("sword used");
 			//sword adds chance to do double damage instead of miss
 			Random dodge = new Random();
-			int dodgeChance = dodge.nextInt((10-1)+1)+1;
-			if (dodgeChance > 1) {
+			int swordChance = dodge.nextInt((10-1)+1)+1;
+			if (swordChance > 1) {
 				Random r = new Random();
 				int rand = r.nextInt((5-1) + 1) + 1;
 				damage = rand + damageCounter;
@@ -65,8 +65,8 @@ public class Player {
 			System.out.print("axe used");
 			//axe replaces dodge chance with massive damage chance
 			Random dodge = new Random();
-			int dodgeChance = dodge.nextInt((10-1)+1)+1;
-			if (dodgeChance > 1) {
+			int axeChance = dodge.nextInt((10-1)+1)+1;
+			if (axeChance > 1) {
 				Random r = new Random();
 				int rand = r.nextInt((5 - 1) + 1) + 1;
 				damage = rand + damageCounter;
