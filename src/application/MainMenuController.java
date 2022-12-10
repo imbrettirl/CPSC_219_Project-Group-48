@@ -100,7 +100,7 @@ public class MainMenuController {
 	
 	int enemyMultiplier = 0;
 	
-	int xp =200;
+	int xp =250;
 	Label xpEarned = new Label("EXP: "+xp);
 	
 	ChoiceBox<String> itemsChoiceBox = new ChoiceBox<String>();
