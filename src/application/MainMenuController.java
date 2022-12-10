@@ -437,7 +437,7 @@ public class MainMenuController {
     				}
     				if (player.getHp() <=0) {
     					enemyMove.setText("Enemy won!");
-    					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+    					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " damage");
     					}
     			}
     			else if (choice == 2 && enemy.getEp() >=5) {
@@ -517,7 +517,7 @@ public class MainMenuController {
         				}
         				if (player.getHp() <=0) {
         					enemyMove.setText("Enemy won!");
-        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " energy damage");
+        					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " damage");
         					}
         			}
         			else if (choice == 2 && enemy.getEp() >=5) {
@@ -565,7 +565,7 @@ public class MainMenuController {
 				}
 				if (player.getHp() <=0) {
 					enemyMove.setText("Enemy won!");
-					playerMove.setText("Enemy did " + enemy.getEnemyDamage() + " damage");
+					playerMove.setText("Enemy did " + enemy.getEnergyDamage() + " damage");
 					}
 			}
 			else if (choice == 2 && enemy.getEp() >=5) {
