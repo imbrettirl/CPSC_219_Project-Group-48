@@ -779,17 +779,17 @@ public class MainMenuController {
     
     void healthIncrease(ActionEvent event) {
     	if (xp >= 15) {
-    	xp = xp - 15;
-    	xpUpgrade.setText("EXP: "+xp);
+    		xp = xp - 15;
+    		xpUpgrade.setText("EXP: "+xp);
     	
-    	xpEarned.setText("EXP: "+xp);
-		xpLabel.setText("EXP: "+xp);
+    		xpEarned.setText("EXP: "+xp);
+    		xpLabel.setText("EXP: "+xp);
     	
-    	player.healthUpgrade();
+    		player.healthUpgrade();
     	
-    	description.setTextFill(Color.rgb(254, 72, 72));
-    	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-    	description.setText("Health has been increased by 5!");
+    		description.setTextFill(Color.rgb(254, 72, 72));
+    		description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+    		description.setText("Health has been increased by 5!");
     	
     	}
     	else {
@@ -801,17 +801,17 @@ public class MainMenuController {
     
     void energyIncrease(ActionEvent event) {
     	if (xp >= 20) {
-    	xp = xp - 20;
-    	xpUpgrade.setText("EXP: "+xp);
-
+    		xp = xp - 20;
+    		xpUpgrade.setText("EXP: "+xp);
     	
-    	xpEarned.setText("EXP: "+xp);
-		xpLabel.setText("EXP: "+xp);
+    		xpEarned.setText("EXP: "+xp);
+    		xpLabel.setText("EXP: "+xp);
     	
-    	player.energyUpgrade();
-    	description.setText("Energy has been increased by 5!");
-    	description.setTextFill(Color.rgb(83, 228, 221));
-    	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+    		player.energyUpgrade();
+    		
+    		description.setText("Energy has been increased by 5!");
+    		description.setTextFill(Color.rgb(83, 228, 221));
+    		description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	}
     	else {
     		description.setText("Not enough EXP");
@@ -822,16 +822,16 @@ public class MainMenuController {
     
     void damageIncrease(ActionEvent event) {
     	if (xp >= 30) {
-    	xp = xp -30;
-    	xpUpgrade.setText("EXP: "+xp);
+    		xp = xp -30;
+    		xpUpgrade.setText("EXP: "+xp);
     	
-    	xpEarned.setText("EXP: "+xp);
-		xpLabel.setText("EXP: "+xp);
+    		xpEarned.setText("EXP: "+xp);
+    		xpLabel.setText("EXP: "+xp);
     	
-    	player.attackUpgrade();
-    	description.setText("Damage has been increased by 1!");
-    	description.setTextFill(Color.rgb(175, 11, 11));
-    	description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+    		player.attackUpgrade();
+    		description.setText("Damage has been increased by 1!");
+    		description.setTextFill(Color.rgb(175, 11, 11));
+    		description.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
     	}
     	else {
     		description.setText("Not enough EXP");
